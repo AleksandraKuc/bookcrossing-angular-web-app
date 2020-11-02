@@ -1,0 +1,36 @@
+<script src="book-details.component.ts"></script><p>book-details works!</p>
+<!--<div *ngIf="getDetails() | async">-->
+<div>
+  <div>
+    <div>
+      <label>Tytuł : </label> {{getDetails()?.title}}
+    </div>
+    <div>
+      <label>Autor : </label> {{getDetails()?.author}}
+    </div>
+    <div>
+      <label>Description : </label> {{getDetails()?.description}}
+    </div>
+    <div>
+      <label>ISBN : </label> {{getDetails()?.isbn}}
+    </div>
+    <div>
+      <label>Categoria : </label> {{getDetails()?.category}}
+    </div>
+    <div>
+      <label>Start date : </label> {{getDetails()?.history.start_date | date: 'dd/MM/yyyy'}}
+    </div>
+    <div>
+      <label>Last hired : </label> {{getDetails()?.history.last_hire | date: 'dd/MM/yyyy'}}
+    </div>
+    <div>
+      <label>First user : </label> <span (click)="showUserProfile(firstUser?.id)"> {{firstUser?.username}} </span>
+    </div>
+    <div>
+      <label>Current user : </label> <span (click)="showUserProfile(currentUser?.id)"> {{currentUser?.username}} </span>
+    </div>
+    <button mat-raised-button color="accent" (click)="editBook()">Edit book</button>
+    <button mat-raised-button color="accent" (click)="addToFavourites()">Add to favourites</button>
+    <button mat-raised-button color="accent" (click)="reserveBook()">Reserve book</button>
+  </div>
+</div>

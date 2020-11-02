@@ -1,0 +1,56 @@
+<h1 *ngIf="isAddMode">Add User</h1>
+<h1 *ngIf="!isAddMode">Edit User</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="form-row">
+    <div class="form-group col">
+<!--      <mat-form-field class="example-full-width">-->
+<!--        <mat-label>Favorite food</mat-label>-->
+<!--        <input matInput placeholder="Ex. Pizza" value="Sushi">-->
+<!--      </mat-form-field>-->
+      <mat-form-field appearance="fill">
+        <mat-label>Enter your name</mat-label>
+        <input matInput formControlName="firstName">
+      </mat-form-field>
+    </div>
+    <div class="form-group col">
+      <mat-form-field appearance="fill">
+        <mat-label>Enter your last name</mat-label>
+        <input matInput formControlName="lastName">
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col">
+      <mat-form-field appearance="fill">
+        <mat-label>Enter your username</mat-label>
+        <input matInput formControlName="username">
+      </mat-form-field>
+    </div>
+    <div class="form-group col">
+      <mat-form-field appearance="fill">
+        <mat-label>Enter your password</mat-label>
+        <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'">
+        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+          <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+      <!--        <em *ngIf="!isAddMode">(Leave blank to keep the same password)</em>-->
+      <!--        <div *ngIf="f.password.errors.required">Password is required</div>-->
+      <!--        <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>-->
+    </div>
+    <div class="form-group col">
+      <mat-form-field appearance="fill">
+        <mat-label>Enter your email</mat-label>
+        <input matInput placeholder="pat@example.com" formControlName="email" required>
+        <mat-error *ngIf="f.email.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="form-group">
+    <button [disabled]="loading" class="btn btn-primary">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+      Save
+    </button>
+    <a routerLink="/users" class="btn btn-link">Cancel</a>
+  </div>
+</form>

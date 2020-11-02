@@ -9,9 +9,11 @@ import {HttpClientModule} from "@angular/common/http";
 import { AboutBookcrossingComponent } from './about-bookcrossing/about-bookcrossing.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import {RouterModule} from "@angular/router";
-import {SharedModule} from "./shared.module";
+import {SharedModule} from "./shared/shared.module";
 import { ContactComponent } from './contact/contact.component';
-import {RouterOutletModule} from "../../framework/app/router-outlet/router-outlet.module";
+import { LoginComponent } from './login/login.component';
+import {BooksModule} from "./books/books.module";
+import {UsersModule} from "./users/users.module";
 
 @NgModule({
   declarations: [
@@ -20,6 +22,7 @@ import {RouterOutletModule} from "../../framework/app/router-outlet/router-outle
     AboutBookcrossingComponent,
     MainPageComponent,
     ContactComponent,
+    LoginComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -27,7 +30,6 @@ import {RouterOutletModule} from "../../framework/app/router-outlet/router-outle
     BrowserModule,
     HttpClientModule,
     SharedModule.forRoot(),
-    RouterOutletModule,
     RouterModule
   ],
   providers: [],
