@@ -1,4 +1,4 @@
-import {BookHistoryDefinition} from "../core/models/bookHistory-definition.model";
+import {BookHistoryDefinition} from "./bookHistory-definition.model";
 
 export class BookDefinition {
   id_book: number;

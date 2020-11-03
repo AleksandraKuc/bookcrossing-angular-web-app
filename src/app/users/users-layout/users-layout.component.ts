@@ -4,4 +4,8 @@ import { Component } from '@angular/core';
   selector: 'app-users-layout',
   templateUrl: './users-layout.component.html',
 })
-export class UsersLayoutComponent { }
+export class UsersLayoutComponent {
+  constructor() {
+    console.log('users layout');
+  }
+}

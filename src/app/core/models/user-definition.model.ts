@@ -11,4 +11,5 @@ export class UserDefinition {
   phoneNumber: number;
   addedBooks: number;
   usertype: number;
+  token: string;
 }

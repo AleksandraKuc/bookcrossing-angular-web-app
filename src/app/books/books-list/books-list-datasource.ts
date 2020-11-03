@@ -4,7 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
 
-import {BookDefinition} from "../book-definition.model";
+import {BookDefinition} from "../../core/models/book-definition.model";
 
 /**
  * Data source for the BooksList view. This class should

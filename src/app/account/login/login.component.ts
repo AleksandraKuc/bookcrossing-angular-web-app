@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Router} from "@angular/router";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+
+import { AccountService } from "../../core/services/account.service";
+import {first} from "rxjs/operators";
 
 @Component({
   selector: 'app-login',
@@ -9,32 +12,51 @@ import {Router} from "@angular/router";
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;
+  loading = false;
+  submitted = false;
+  returnUrl: string;
   errorMessage: string;
   isPasswordHidden: boolean = true;
 
-  constructor(protected fb: FormBuilder,
+  constructor(protected formBuilder: FormBuilder,
+              private route: ActivatedRoute,
               protected router: Router,
-              // protected authService: AuthService
+              private accountService: AccountService,
   ) { }
 
   ngOnInit(): void {
-    this.form = this.fb.group({
-      login: ['', [Validators.required]],
+    this.form = this.formBuilder.group({
+      username: ['', [Validators.required]],
       password: ['', Validators.required],
     });
 
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
+
+  get f() { return this.form.controls; }
 
   showOrHidePassword() {
     this.isPasswordHidden = !this.isPasswordHidden;
   }
 
   login(): void {
+    this.submitted = true;
     this.errorMessage = '';
-    // ReactiveFormHelper.markControlsTreeAsTouched(this.form);
+
     if (!this.form.valid) {
       return;
     }
+
+    this.loading = true;
+    this.accountService.login(this.f.username.value, this.f.password.value)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.router.navigate([this.returnUrl]);
+        },
+        error => {
+          this.loading = false;
+        });
     // this.authService
     //   .login(
     //     this.form.get('login').value,
@@ -71,10 +93,4 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  protected navigateAfterLoggedIn(): void {
-    const redirectUrl = localStorage.getItem('redirectUrl') || '/badges';
-    this.router
-      .navigate([redirectUrl])
-      .then(() => localStorage.removeItem('redirectUrl'));
-  }
 }

@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from "@angular/router";
-import {BookDefinition} from "./book-definition.model";
+import {BookDefinition} from "../core/models/book-definition.model";
 import {BooksService} from "../core/services/books.service";
 import {Observable} from "rxjs";
 

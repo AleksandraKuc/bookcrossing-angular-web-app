@@ -1,5 +1,5 @@
 import {AfterViewInit, ChangeDetectorRef, Component} from '@angular/core';
-import {BookDefinition} from "../book-definition.model";
+import {BookDefinition} from "../../core/models/book-definition.model";
 import {DetailsComponent} from "../../shared/details.component";
 import {BooksService} from "../../core/services/books.service";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -61,7 +61,7 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
   }
 
   protected modifyLink(id: number): string {
-    return `books/modify/${encodeURIComponent(id)}`;
+    return `books/edit/${encodeURIComponent(id)}`;
   }
 
   editBook(): void {
