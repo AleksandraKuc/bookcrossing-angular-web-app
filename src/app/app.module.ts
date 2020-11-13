@@ -8,11 +8,13 @@ import { AboutBookcrossingComponent } from './about-bookcrossing/about-bookcross
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ContactComponent } from './contact/contact.component';
-import { ErrorInterceptor } from "./shared/helpers/error.interceptor";
-import { JwtInterceptor } from "./shared/helpers/jwt.interceptor";
+// import { ErrorInterceptor } from "./shared/helpers/error.interceptor";
+// import { JwtInterceptor } from "./shared/helpers/jwt.interceptor";
 import { MainNavigationComponent } from './main-navigation/main-navigation.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { SharedModule } from "./shared/shared.module";
+import {httpInterceptorProviders} from "./shared/helpers/auth-interceptor";
+import { MessagesComponent } from './messages/messages.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,7 @@ import { SharedModule } from "./shared/shared.module";
     ContactComponent,
     MainNavigationComponent,
     MainPageComponent,
+    MessagesComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -30,9 +33,9 @@ import { SharedModule } from "./shared/shared.module";
     SharedModule.forRoot(),
     RouterModule
   ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+  providers: [ httpInterceptorProviders
+    // { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    // { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

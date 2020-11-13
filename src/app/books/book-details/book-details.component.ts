@@ -18,6 +18,7 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
   historyUser: UserHistoryDefinition[];
   firstUser: UserDefinition;
   currentUser: UserDefinition;
+  isFavourite: boolean = false;
 
   constructor(protected booksService: BooksService,
               protected historyUserService: HistoryUsersService,
@@ -31,8 +32,9 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
       this.setDetails(book);
       this.historyUserService.getUserHistory(this.getDetails().history.id_history).subscribe(historyUser => {
           this.historyUser = historyUser;
-          this.getBookFirstUser('firstUser');
-          this.getBookFirstUser('currentUser');
+          this.getBookUsers('firstUser');
+          this.getBookUsers('currentUser');
+          this.checkFavourites();
         }
       )
     });
@@ -42,7 +44,7 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
     this.cdr.detectChanges();
   }
 
-  getBookFirstUser(userType: string): void {
+  getBookUsers(userType: string): void {
     let userId: number;
     if (this.historyUser) {
       let index = this.historyUser.findIndex(item => item.userType === userType);
@@ -58,6 +60,12 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
         }
       });
     }
+  }
+
+  protected checkFavourites(): void {
+    this.booksService.checkIfFavourite(this.getDetails().id_book).subscribe( data => {
+      this.isFavourite = data;
+    })
   }
 
   protected modifyLink(id: number): string {
@@ -77,7 +85,15 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
   }
 
   addToFavourites(): void {
-    console.log('added');
+    this.booksService.addToFavourites(this.getDetails().id_book).subscribe(() => {
+      this.isFavourite = true;
+    })
+  }
+
+  removeFromFavourites(): void {
+    this.booksService.removeFromFavourites(this.getDetails().id_book).subscribe(() => {
+      this.isFavourite = false;
+    })
   }
 
   reserveBook(): void {

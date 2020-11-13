@@ -28,8 +28,12 @@
     <div>
       <label>Current user : </label> <span (click)="showUserProfile(currentUser?.id)"> {{currentUser?.username}} </span>
     </div>
+    <div>
+      <label>Is favourite : </label> <span> {{isFavourite}} </span>
+    </div>
     <button mat-raised-button color="accent" (click)="editBook()">Edit book</button>
-    <button mat-raised-button color="accent" (click)="addToFavourites()">Add to favourites</button>
+    <button mat-raised-button color="accent" *ngIf="!isFavourite" (click)="addToFavourites()">Add to favourites</button>
+    <button mat-raised-button color="accent" *ngIf="isFavourite" (click)="removeFromFavourites()">Remove from favourites</button>
     <button mat-raised-button color="accent" (click)="reserveBook()">Reserve book</button>
   </div>
 </div>

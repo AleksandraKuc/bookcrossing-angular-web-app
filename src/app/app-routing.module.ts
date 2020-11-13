@@ -4,6 +4,7 @@ import {MainPageComponent} from "./main-page/main-page.component";
 import {AboutBookcrossingComponent} from "./about-bookcrossing/about-bookcrossing.component";
 import {ContactComponent} from "./contact/contact.component";
 import {AuthGuard} from "./shared/helpers/auth.guard";
+import {MessagesComponent} from "./messages/messages.component";
 
 const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
 const booksModule = () => import('./books/books.module').then(x => x.BooksModule);
@@ -16,9 +17,8 @@ const ROUTES: Routes = [
   { path: 'books', loadChildren: booksModule },
   { path: 'reset-password', component: MainPageComponent, canActivate: [ AuthGuard ] },
   { path: 'setting', component: MainPageComponent },
-  // { path: 'users/profile/:id', component: UserDetailsComponent },
   { path: 'about', component: AboutBookcrossingComponent },
-  { path: 'messages', component: MainPageComponent, canActivate: [ AuthGuard ] },
+  { path: 'messages', component: MessagesComponent, canActivate: [ AuthGuard ] },
   { path: 'contact', component: ContactComponent },
 
   { path: '**', redirectTo: '' },

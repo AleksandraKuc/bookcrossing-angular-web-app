@@ -2,10 +2,12 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
+
 import { UsersListDataSource } from './users-list-datasource';
-import {UserDefinition} from "../../core/models/user-definition.model";
-import {Router} from "@angular/router";
-import {UsersService} from "../../core/services/users.service";
+import { UserDefinition } from "../../core/models/user-definition.model";
+import { UsersService } from "../../core/services/users.service";
+import {ActivatedRoute} from "@angular/router";
+import {TokenStorageService} from "../../shared/helpers/token-storage.service";
 
 @Component({
   selector: 'app-users-list',
@@ -18,15 +20,21 @@ export class UsersListComponent implements AfterViewInit, OnInit {
   @ViewChild(MatTable) table: MatTable<UserDefinition>;
   dataSource = new UsersListDataSource();
 
-  /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'name'];
+  board: string;
+  errorMessage: string;
 
-  constructor(private usersService: UsersService) {}
+  displayedColumns = ['name', 'username', 'city', 'province', 'addedBooks'];
+
+  constructor(private usersService: UsersService,
+              private tokenStorage: TokenStorageService,) {}
 
   ngOnInit() {
     this.usersService.getAllUsers().subscribe(response => {
       this.dataSource.data = response;
     });
+    if (this.tokenStorage.getUsername()){
+      this.displayedColumns = ['name', 'username', 'city', 'province', 'addedBooks', 'sendMessage'];
+    }
   }
 
   ngAfterViewInit() {
@@ -37,5 +45,9 @@ export class UsersListComponent implements AfterViewInit, OnInit {
 
   getDetailsLink(id: any) {
     return `details/${encodeURIComponent(id)}`;
+  }
+
+  sendMessage(username: string): void {
+
   }
 }

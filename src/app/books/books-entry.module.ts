@@ -5,7 +5,6 @@ import {BookDetailsComponent} from "./book-details/book-details.component";
 import {BooksListComponent} from "./books-list/books-list.component";
 import {BooksAddModifyComponent} from "./books-add-modify/books-add-modify.component";
 import {BooksLayoutComponent} from "./books-layout/books-layout.component";
-import {MainPageComponent} from "../main-page/main-page.component";
 import {AuthGuard} from "../shared/helpers/auth.guard";
 
 const BOOKS_ROUTES: Routes = [

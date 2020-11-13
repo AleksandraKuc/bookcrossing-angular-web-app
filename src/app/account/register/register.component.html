@@ -1,1 +1,178 @@
-<p>register works!</p>
+<form [formGroup]="form" class="register-form" (ngSubmit)="onSubmit()">
+
+  <mat-form-field appearance="fill">
+    <mat-label>Choose your username</mat-label>
+    <input matInput type="text" formControlName="username" required> <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="this.form.get('email').hasError('required')">
+      Username is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your password</mat-label>
+    <input matInput type="password" formControlName="password" required> <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="this.form.get('password').hasError('pattern') && !this.form.get('password').hasError('required')">
+      Please enter a valid password
+    </mat-error>
+    <mat-error *ngIf="this.form.get('password').hasError('required')">
+      Password is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Confirm your password</mat-label>
+    <input matInput type="password" [formControl]="confirmPassword" required> <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="!equalsPasswords() && !confirmPassword.hasError('required')">
+      Entered passwords are not equals
+    </mat-error>
+    <mat-error *ngIf="confirmPassword.hasError('required')">
+      Password is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your name</mat-label>
+    <input matInput type="text" formControlName="name" required> <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="this.form.get('name').hasError('required')">
+      Name is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your lastname</mat-label>
+    <input matInput type="text" formControlName="lastname" required> <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="this.form.get('lastname').hasError('required')">
+      Lastname is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your email</mat-label>
+    <input matInput type="email" formControlName="email" > <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="this.form.get('email').hasError('email') && !this.form.get('email').hasError('required')">
+      Please enter a valid email address
+    </mat-error>
+    <mat-error *ngIf="this.form.get('email').hasError('required')">
+      Email is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your city</mat-label>
+    <input matInput type="text" formControlName="city" required> <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="this.form.get('city').hasError('required')">
+      City is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your province</mat-label>
+    <input matInput type="text" formControlName="province" required> <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="this.form.get('province').hasError('required')">
+      Province is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your phoneNumber</mat-label>
+    <input matInput type="number" formControlName="phoneNumber" > <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="this.form.get('phoneNumber').hasError('pattern')">
+      Please enter a valid phone number
+    </mat-error>
+  </mat-form-field>
+
+  <div class="form-group">
+    <button mat-raised-button color="accent">Register</button>
+    <div *ngIf="isSignUpFailed" class="alert alert-warning">
+      Signup failed!<br/>{{errorMessage}}
+    </div>
+  </div>
+</form>
+
+
+<!--<p>register works!</p>-->
+<!--<div *ngIf="isSignedUp; else signupForm">-->
+<!--  Your registration is successful. Please login!-->
+<!--</div>-->
+
+<!--<ng-template #signupForm>-->
+<!--  <div class="row col-sm-6" style="max-width:350px;">-->
+<!--    <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>-->
+<!--      <div class="form-group">-->
+<!--        <label for="name">Your name</label>-->
+<!--        <input type="text" class="form-control" name="name" [(ngModel)]="form.name" #name="ngModel" required />-->
+<!--        <div *ngIf="f.submitted && name.invalid">-->
+<!--          <div *ngIf="name.errors.required">Name is required</div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="form-group">-->
+<!--        <label for="lastName">Your lastname</label>-->
+<!--        <input type="text" class="form-control" name="lastName" [(ngModel)]="form.lastName" #lastName="ngModel" required />-->
+<!--        <div *ngIf="f.submitted && lastName.invalid">-->
+<!--          <div *ngIf="lastName.errors.required">LastName is required</div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="form-group">-->
+<!--        <label for="username">Username</label>-->
+<!--        <input type="text" class="form-control" name="username" [(ngModel)]="form.username" #username="ngModel"-->
+<!--               required />-->
+<!--        <div *ngIf="f.submitted && username.invalid">-->
+<!--          <div *ngIf="username.errors.required">Username is required</div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="form-group">-->
+<!--        <label for="email">Email</label>-->
+<!--        <input type="text" class="form-control" name="email" [(ngModel)]="form.email" #email="ngModel" required email />-->
+<!--        <div *ngIf="f.submitted && email.invalid">-->
+<!--          <div *ngIf="email.errors.required">Email is required</div>-->
+<!--          <div *ngIf="email.errors.email">Email must be a valid email address</div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="form-group">-->
+<!--        <label for="cityy">City</label>-->
+<!--        <input type="text" class="form-control" name="cityy" [(ngModel)]="form.town" #city="ngModel" required />-->
+<!--        <div *ngIf="f.submitted">-->
+<!--          <div *ngIf="city.errors.required">City is required</div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="form-group">-->
+<!--        <label for="province">Province</label>-->
+<!--        <input type="text" class="form-control" name="province" [(ngModel)]="form.province" #province="ngModel" required />-->
+<!--        <div *ngIf="f.submitted && province.invalid">-->
+<!--          <div *ngIf="province.errors.required">Province is required</div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="form-group">-->
+<!--        <label for="phoneNumber">Phone number</label>-->
+<!--        <input type="text" class="form-control" name="phoneNumber" [(ngModel)]="form.phoneNumber" #phoneNumber="ngModel" required />-->
+<!--        <div *ngIf="f.submitted && phoneNumber.invalid">-->
+<!--          <div *ngIf="phoneNumber.errors.number">Phone number must be a numeric value</div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="form-group">-->
+<!--        <label for="password">Password</label>-->
+<!--        <input type="password" class="form-control" name="password" [(ngModel)]="form.password" #password="ngModel"-->
+<!--               required minlength="6" />-->
+<!--        <div *ngIf="f.submitted && password.invalid">-->
+<!--          <div *ngIf="password.errors.required">Password is required</div>-->
+<!--          <div *ngIf="password.errors.minlength">Password must be at least 6 characters</div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="form-group">-->
+<!--        <label for="password">Confirm password</label>-->
+<!--        <input type="password" class="form-control" name="password" [(ngModel)]="form.confirmPassword" #confirmPassword="ngModel"-->
+<!--               required minlength="6" />-->
+<!--        <div *ngIf="f.submitted && password.invalid">-->
+<!--          <div *ngIf="password.errors.required">Password is required</div>-->
+<!--          <div *ngIf="password.errors.minlength">Password must be at least 6 characters</div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="form-group">-->
+<!--        <button class="btn btn-primary">Register</button>-->
+<!--        <div *ngIf="f.submitted && isSignUpFailed" class="alert alert-warning">-->
+<!--          Signup failed!<br/>{{errorMessage}}-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </form>-->
+<!--  </div>-->
+<!--</ng-template>-->

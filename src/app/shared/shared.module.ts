@@ -9,12 +9,14 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatSortModule} from "@angular/material/sort";
 import {ModuleWithProviders, NgModule} from "@angular/core";
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from "@angular/material/input";
 
 const SHARED_COMPONENTS = [];
 const SHARED_MODULES = [
   LayoutModule,
   MatButtonModule,
   MatIconModule,
+  MatInputModule,
   MatListModule,
   MatTableModule,
   MatToolbarModule,

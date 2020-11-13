@@ -12,11 +12,11 @@ export class UsersService {
   constructor(private http: HttpClient) {}
 
   getUser(idUser : any): Observable<any> {
-    return this.http.get<UserDefinition>(`${environment.apiUrl}/user/getUser/${idUser}`);
+    return this.http.get<UserDefinition>(`${environment.apiUrl}/user/id/${idUser}`);
   }
 
   getAllUsers(): Observable<any> {
-    return this.http.get<UserDefinition[]>(`${environment.apiUrl}/user/allUsers`);
+    return this.http.get(`${environment.apiUrl}/user/all`);
   }
 
   getBooksByUser(idUser: number): Observable<any> {
