@@ -10,6 +10,4 @@ export class UserDefinition {
   startDate: string;
   phoneNumber: number;
   addedBooks: number;
-  usertype: number;
-  token: string;
 }

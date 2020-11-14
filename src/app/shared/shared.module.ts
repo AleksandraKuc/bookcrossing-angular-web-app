@@ -10,6 +10,7 @@ import {MatSortModule} from "@angular/material/sort";
 import {ModuleWithProviders, NgModule} from "@angular/core";
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from "@angular/material/input";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 const SHARED_COMPONENTS = [];
 const SHARED_MODULES = [
@@ -24,6 +25,7 @@ const SHARED_MODULES = [
   MatSidenavModule,
   MatSortModule,
   MatFormFieldModule,
+  MatAutocompleteModule,
 ];
 
 @NgModule({

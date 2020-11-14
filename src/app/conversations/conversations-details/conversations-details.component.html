@@ -1,0 +1,16 @@
+<button mat-raised-button color="accent" (click)="removeConversation()">Remove conversation</button>
+
+<div *ngFor="let message of messages">
+  <div>
+    <mat-label>{{message.sender}}</mat-label>
+    <input matInput value="{{message.content}}">
+  </div>
+</div>
+
+<div class="form-group col">
+  <mat-form-field appearance="fill">
+    <mat-label>Your message</mat-label>
+    <textarea matInput placeholder="Enter your message" [formControl]="content"></textarea>
+  </mat-form-field>
+  <button mat-raised-button color="accent" (click)="sendMessage()">Send message</button>
+</div>

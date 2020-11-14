@@ -7,6 +7,7 @@ import {UserHistoryDefinition} from "../../core/models/userHistory-definition.mo
 import {HistoryUsersService} from "../../core/services/history-users.service";
 import {UsersService} from "../../core/services/users.service";
 import {UserDefinition} from "../../core/models/user-definition.model";
+import {TokenStorageService} from "../../shared/helpers/token-storage.service";
 
 @Component({
   selector: 'app-book-details',
@@ -22,6 +23,7 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
 
   constructor(protected booksService: BooksService,
               protected historyUserService: HistoryUsersService,
+              protected tokenStorage: TokenStorageService,
               protected userService: UsersService,
               protected route: ActivatedRoute,
               protected router: Router,
@@ -34,7 +36,9 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
           this.historyUser = historyUser;
           this.getBookUsers('firstUser');
           this.getBookUsers('currentUser');
-          this.checkFavourites();
+          if (this.isLoggedUser) {
+            this.checkFavourites();
+          }
         }
       )
     });
@@ -100,4 +104,7 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
     console.log('reserved');
   }
 
+  get isLoggedUser(): boolean {
+    return !!this.tokenStorage.getUsername();
+  }
 }

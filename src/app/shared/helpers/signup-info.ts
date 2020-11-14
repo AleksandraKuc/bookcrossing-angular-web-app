@@ -10,7 +10,7 @@ export class SignUpInfo {
   password: string;
 
   constructor(name: string, lastName: string, username: string, email: string, city: string, province: string,
-              phoneNumber: number, password: string) {
+              phoneNumber: number, password?: string) {
     this.firstName = name;
     this.lastName = lastName;
     this.username = username;

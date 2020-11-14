@@ -15,10 +15,8 @@ export class RegisterComponent implements OnInit {
 
   form: FormGroup;
   confirmPassword = new FormControl('', [Validators.required, Validators.pattern(this.passRegex)]);
-  signupInfo: SignUpInfo;
-  isSignedUp = false;
-  isSignUpFailed = false;
 
+  isSignUpFailed = false;
   errorMessage = '';
 
   constructor(private authService: AuthService,
@@ -51,7 +49,7 @@ export class RegisterComponent implements OnInit {
     if (this.equalsPasswords() && this.form.valid) {
       console.log("weszło xd")
 
-      this.signupInfo = new SignUpInfo(
+      let signupInfo = new SignUpInfo(
         this.form.get('name').value,
         this.form.get('lastname').value,
         this.form.get('username').value,
@@ -61,10 +59,8 @@ export class RegisterComponent implements OnInit {
         this.form.get('phoneNumber').value,
         this.form.get('password').value);
 
-      console.log(this.signupInfo);
-      this.authService.signUp(this.signupInfo).subscribe(
+      this.authService.signUp(signupInfo).subscribe(
         data => {
-          this.isSignedUp = true;
           this.isSignUpFailed = false;
           this.router.navigate(['/account/login'], { queryParams: { message: "Register completed, please login"}});
         },

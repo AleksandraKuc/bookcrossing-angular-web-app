@@ -5,7 +5,5 @@ import { Component } from '@angular/core';
   templateUrl: './users-layout.component.html',
 })
 export class UsersLayoutComponent {
-  constructor() {
-    console.log('users layout');
-  }
+  constructor() {}
 }

@@ -1,13 +1,13 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from "@angular/router";
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import {MatTable, MatTableDataSource} from '@angular/material/table';
+import { MatTable } from '@angular/material/table';
 
 import { BooksListDataSource } from './books-list-datasource';
 import { BookDefinition } from "../../core/models/book-definition.model";
 import { BooksService } from "../../core/services/books.service";
-import {TokenStorageService} from "../../shared/helpers/token-storage.service";
+import { TokenStorageService } from "../../shared/helpers/token-storage.service";
 
 @Component({
   selector: 'app-books-list',
@@ -22,9 +22,11 @@ export class BooksListComponent implements AfterViewInit, OnInit {
 
   listIsFavourites: Array<{ bookId: number, status: boolean }> = new Array<{bookId: number; status: boolean}>();
 
-  viewType: string = '';
-
   displayedColumns = ['id', 'title', 'author', 'category', 'description'];
+
+  @Input() listMode: string = '';
+  @Input() isAccount: boolean = false;
+  @Input() username: string = '';
 
   constructor(private booksService: BooksService,
               private activatedRoute: ActivatedRoute,
@@ -32,11 +34,16 @@ export class BooksListComponent implements AfterViewInit, OnInit {
               protected router: Router) {}
 
   ngOnInit() {
-    this.activatedRoute.data.subscribe( data => {
-      this.viewType = data.type;
+    if (this.listMode === '') {
+      this.activatedRoute.data.subscribe( data => {
+        this.listMode = data.type;
+        this.setDisplayedColumns();
+        this.getBooks();
+      })
+    } else {
       this.setDisplayedColumns();
       this.getBooks();
-    })
+    }
   }
 
   ngAfterViewInit() {
@@ -50,9 +57,9 @@ export class BooksListComponent implements AfterViewInit, OnInit {
   }
 
   setDisplayedColumns(): void {
-    if (this.viewType !== 'handOver' && this.tokenStorage.getUsername()){
+    if (this.listMode !== 'handOver' && this.isLoggedIn() && (this.listMode !== 'own' && !this.username)){
       this.displayedColumns = ['id', 'title', 'author', 'category', 'description', 'favourites'];
-    } else if (this.viewType === 'handOver' && this.tokenStorage.getUsername()) {
+    } else if (this.listMode === 'handOver' && this.isLoggedIn()) {
       this.displayedColumns = ['id', 'title', 'author', 'category', 'description', 'handOver'];
     }
   }
@@ -65,7 +72,7 @@ export class BooksListComponent implements AfterViewInit, OnInit {
 
   removeFromFavourites(id: number): void {
     this.booksService.removeFromFavourites(id).subscribe(() => {
-      if (this.viewType === 'fav') {
+      if (this.listMode === 'fav') {
         let index = this.dataSource.data.findIndex( _book => _book.id_book === id);
         this.dataSource.data.splice(index, 1);
         this.refreshTable(this.dataSource.data);
@@ -74,8 +81,12 @@ export class BooksListComponent implements AfterViewInit, OnInit {
     })
   }
 
-  handOver(id: number): void {
-    this.router.navigate(['/user/all'], { queryParams: { type: "handOver", bookId: id}})
+  selectToHandOver(id: number): void {
+    this.router.navigate(['/users'], { state: { bookId: id } } );
+  }
+
+  addNewBook() {
+    this.router.navigate(['/books/add'] );
   }
 
   refreshTable(data: BookDefinition[]){
@@ -87,11 +98,12 @@ export class BooksListComponent implements AfterViewInit, OnInit {
   }
 
   getBooks() {
-    switch(this.viewType) {
+    switch(this.listMode) {
       case 'all': { this.getAll(); break; }
       case 'fav': { this.getFavBooks(); break; }
       case 'my': { this.getMyBooks(); break; }
       case 'handOver': { this.getMyBooks(); break; }
+      case 'own': { this.getOwnedByUser(); break; }
       default : { this.getAll(); break; }
     }
   }
@@ -106,7 +118,7 @@ export class BooksListComponent implements AfterViewInit, OnInit {
   }
 
   getMyBooks(): void {
-    this.booksService.getUserBooks().subscribe(response => {
+    this.booksService.getUserOwnedBooks().subscribe(response => {
       this.dataSource.data = response;
       this.getFavourites();
     });
@@ -119,13 +131,19 @@ export class BooksListComponent implements AfterViewInit, OnInit {
     });
   }
 
+  getOwnedByUser(): void {
+    this.booksService.getUserOwnedBooks(this.username).subscribe(response => {
+      this.dataSource.data = response;
+      this.getFavourites();
+    });
+  }
+
   getFavourites(): void {
     this.dataSource.data.forEach( book => {
       this.booksService.checkIfFavourite(book.id_book).subscribe( data => {
         this.listIsFavourites.push({bookId: book.id_book, status: data});
       })
     })
-    console.log(this.listIsFavourites);
   }
 
   setFavouritesList(id: number, status: boolean): void {
@@ -138,5 +156,13 @@ export class BooksListComponent implements AfterViewInit, OnInit {
 
   checkIsFavourite(id: number): boolean {
     return (this.listIsFavourites.find( element => element.bookId === id)).status;
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.tokenStorage.getUsername();
+  }
+
+  get showAddButton():boolean {
+    return !this.isAccount;
   }
 }

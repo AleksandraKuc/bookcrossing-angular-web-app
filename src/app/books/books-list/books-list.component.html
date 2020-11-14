@@ -1,4 +1,4 @@
-<button mat-raised-button color="accent">Add new book</button>
+<button mat-raised-button color="accent" *ngIf="isLoggedIn() && showAddButton" (click)="addNewBook()">Add new book</button>
 <div class="mat-elevation-z8 books-table">
   <table mat-table matSort class="full-width-table" aria-label="Elements">
     <!-- idBook Column -->
@@ -42,7 +42,7 @@
     <ng-container matColumnDef="handOver">
       <th mat-header-cell *matHeaderCellDef > Select book </th>
       <td mat-cell *matCellDef="let element" >
-        <button mat-button (click)="handOver(element.id_book); $event.stopPropagation()">Select</button>
+        <button mat-button (click)="selectToHandOver(element.id_book); $event.stopPropagation()">Select</button>
       </td>
     </ng-container>
 

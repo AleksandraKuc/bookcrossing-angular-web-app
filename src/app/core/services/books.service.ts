@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import {AuthService} from "../../shared/helpers/auth.service";
 import {TokenStorageService} from "../../shared/helpers/token-storage.service";
+import {BookDefinition} from "../models/book-definition.model";
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class BooksService {
 
   private baseUrl = 'http://localhost:8080/api/book';
   private favBooksUrl = 'http://localhost:8080/api/favouriteBooks';
+  private historyUserUrl = 'http://localhost:8080/api/historyUsers';
 
   constructor(private http: HttpClient,
               private tokenStorage: TokenStorageService) {}
@@ -24,8 +26,12 @@ export class BooksService {
     return this.http.get(`${this.baseUrl}/all`);
   }
 
-  getUserBooks(): Observable<any> {
-    let username = this.tokenStorage.getUsername();
+  // getUserAddedBooks(username: string): Observable<any> {
+  //   return this.http.get(`${this.baseUrl}/addedByUser/${username}`);
+  // }
+
+  getUserOwnedBooks(username?: string): Observable<any> {
+    username = username ? username : this.tokenStorage.getUsername();
     return this.http.get(`${this.baseUrl}/user/${username}`);
   }
 
@@ -38,16 +44,17 @@ export class BooksService {
   //   return this.http.get(`${this.baseUrl}/mail/${mail}`)
   // }
 
-  createBook(idUser: number, book: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/create/${idUser}`, book);
+  createBook(book: any): Observable<any> {
+    let username = this.tokenStorage.getUsername();
+    return this.http.post(`${this.baseUrl}/create/${username}`, book);
   }
 
-  updateBook(idBook: number, book: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/update/${idBook}`, book);
+  updateBook(book: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/update`, book);
   }
 
-  updateBookHired(idBook: number): Observable<any> {
-    return this.http.put(`${this.baseUrl}/update/hired/${idBook}`, null);
+  updateBookHired(idBook: number, username: string): Observable<any> {
+    return this.http.put(`${this.historyUserUrl}/update/${idBook}/${username}`, null);
   }
 
   deleteBook(idBook: number): Observable<any> {
