@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {Form, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
-import {first} from "rxjs/operators";
+
 import {UsersService} from "../../core/services/users.service";
 import {UserDefinition} from "../../core/models/user-definition.model";
-import {SignUpInfo} from "../../shared/helpers/signup-info";
+import {SignUpInfo} from "../../shared/models/signup-info";
 
 @Component({
   selector: 'app-users-add-modify',
@@ -14,14 +14,14 @@ import {SignUpInfo} from "../../shared/helpers/signup-info";
 export class UsersAddModifyComponent implements OnInit {
 
   form: FormGroup;
-  loading = false;
   submitted = false;
+  loading = false;
   hidePassword: boolean = true;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
-              private usersService: UsersService
+              private usersService: UsersService,
   ) { }
 
   ngOnInit(): void {
@@ -99,4 +99,5 @@ export class UsersAddModifyComponent implements OnInit {
 
     return this.form.get('email').hasError('email') ? 'Not a valid email' : '';
   }
+
 }

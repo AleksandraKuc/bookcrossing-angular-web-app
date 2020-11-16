@@ -6,7 +6,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 import { BooksService } from "../../core/services/books.service";
 import { BookDefinition } from "../../core/models/book-definition.model";
-import { TokenStorageService } from "../../shared/helpers/token-storage.service";
+import { TokenStorageService } from "../../shared/helpers/services/token-storage.service";
 
 @Component({
   selector: 'app-books-add-modify',
@@ -103,7 +103,6 @@ export class BooksAddModifyComponent implements OnInit {
     book.setId(this.form.get('id_book').value);
 
     this.bookService.updateBook(book).subscribe((data) => {
-      this.tokenStorage.saveToken(data.accessToken);
       this.router.navigate([`/books/details/${encodeURIComponent(book.id_book)}`]);
     },
     error => {
@@ -130,4 +129,5 @@ export class BooksAddModifyComponent implements OnInit {
   get submitButton(): string {
     return this.viewMode === 'add' ? "Add book" : "Save changes";
   }
+
 }

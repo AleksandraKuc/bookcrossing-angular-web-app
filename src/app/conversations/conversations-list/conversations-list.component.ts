@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {TokenStorageService} from "../../shared/helpers/token-storage.service";
+import {TokenStorageService} from "../../shared/helpers/services/token-storage.service";
 import {Router} from "@angular/router";
 import {ConversationsService} from "../../core/services/conversations.service";
 import {ConversationDefinition} from "../../core/models/conversation-definition.model";

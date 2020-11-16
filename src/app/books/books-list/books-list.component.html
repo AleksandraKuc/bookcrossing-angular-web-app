@@ -1,5 +1,19 @@
 <button mat-raised-button color="accent" *ngIf="isLoggedIn() && showAddButton" (click)="addNewBook()">Add new book</button>
+
+<!--<div class="spinner-container" *ngIf="dataSource.loading$ | async">-->
+
+<!--  <mat-spinner></mat-spinner>-->
+
+<!--</div>-->
+
 <div class="mat-elevation-z8 books-table">
+
+  <div>
+    <mat-form-field>
+      <input matInput type="text" (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+  </div>
+
   <table mat-table matSort class="full-width-table" aria-label="Elements">
     <!-- idBook Column -->
     <ng-container matColumnDef="id">

@@ -3,7 +3,8 @@ import {UserDefinition} from "../../core/models/user-definition.model";
 import {UsersService} from "../../core/services/users.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormControl, FormGroup} from "@angular/forms";
-import {TokenStorageService} from "../../shared/helpers/token-storage.service";
+import {TokenStorageService} from "../../shared/helpers/services/token-storage.service";
+import {ConversationsService} from "../../core/services/conversations.service";
 
 @Component({
   selector: 'app-user-details',
@@ -16,6 +17,7 @@ export class UserDetailsComponent implements OnInit {
   username: string;
 
   constructor(protected userService: UsersService,
+              protected conversationsService: ConversationsService,
               protected route: ActivatedRoute,
               protected activatedRoute: ActivatedRoute,
               protected router: Router,
@@ -55,8 +57,26 @@ export class UserDetailsComponent implements OnInit {
     this.router.navigate(['users/edit']);
   }
 
-  sendMessage() {
+  resetPassword(): void {
+    this.router.navigate(['users/change-password']);
+  }
 
+  sendMessage() {
+    this.conversationsService.checkIfExists(this.form.get('username').value)
+      .subscribe(
+        response => {
+          if (!response) {
+            console.log("creating conv")
+            this.conversationsService.createConversation(this.form.get('username').value)
+              .subscribe( conversation => {
+                this.router.navigate([`conversations/${this.form.get('username').value}`],
+                  { state: { conversationId: conversation.id_conversation } });
+            })
+          } else {
+            console.log("already exists")
+            this.router.navigate([`conversations/${this.form.get('username').value}`]);
+          }
+    })
   }
 
   isProfileView(): boolean {

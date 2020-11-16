@@ -7,7 +7,8 @@ import {UserHistoryDefinition} from "../../core/models/userHistory-definition.mo
 import {HistoryUsersService} from "../../core/services/history-users.service";
 import {UsersService} from "../../core/services/users.service";
 import {UserDefinition} from "../../core/models/user-definition.model";
-import {TokenStorageService} from "../../shared/helpers/token-storage.service";
+import {TokenStorageService} from "../../shared/helpers/services/token-storage.service";
+import {ConversationsService} from "../../core/services/conversations.service";
 
 @Component({
   selector: 'app-book-details',
@@ -23,6 +24,7 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
 
   constructor(protected booksService: BooksService,
               protected historyUserService: HistoryUsersService,
+              protected conversationsService: ConversationsService,
               protected tokenStorage: TokenStorageService,
               protected userService: UsersService,
               protected route: ActivatedRoute,
@@ -56,7 +58,7 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
         index = 0;
       }
       userId = this.historyUser[index].id_historyUsers.id_user;
-      this.userService.getUser(userId).subscribe(element => {
+      this.userService.getUserById(userId).subscribe(element => {
         if (userType === 'firstUser') {
           this.firstUser = element;
         } else {
@@ -80,12 +82,19 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
     this.router.navigate([this.modifyLink(this.getDetails().id_book)]);
   }
 
-  protected userLink(userId: number): string {
-    return `users/profile/${encodeURIComponent(userId)}`
+  deleteBook(): void {
+    this.booksService.deleteBook(this.getDetails().id_book).subscribe( () => {
+      this.router.navigate([`/books`]);
+    })
   }
 
-  showUserProfile(userId: number): void {
-    this.router.navigate([this.userLink(userId)]);
+  protected userLink(username: string): string {
+    return `users/profile/${encodeURIComponent(username)}`
+  }
+
+  showUserProfile(isCurrentUser: boolean): void {
+    let username = isCurrentUser ? this.currentUser.username : this.firstUser.username;
+    this.router.navigate([this.userLink(username)]);
   }
 
   addToFavourites(): void {
@@ -102,9 +111,35 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
 
   reserveBook(): void {
     console.log('reserved');
+    let message = "Hi, I want to reserve book \"" + this.getDetails().title + "\"";
+    if (this.getDetails().isbn !== null) {
+      message += " with isbn code " + this.getDetails();
+    }
+    let username = this.currentUser.username;
+    this.conversationsService.checkIfExists(this.currentUser.username)
+      .subscribe(
+        response => {
+          if (!response) {
+            console.log("creating conv")
+            this.conversationsService.createConversation(this.currentUser.username)
+              .subscribe(
+                conversation => {
+                  this.router.navigate([`conversations/${this.currentUser.username}`],
+                    { state: { conversationId: conversation.id_conversation, message: message } });
+            })
+          } else {
+            console.log("already exists")
+            this.router.navigate([`conversations/${this.currentUser.username}`],
+              { state: { message: message }});
+          }
+    })
   }
 
   get isLoggedUser(): boolean {
     return !!this.tokenStorage.getUsername();
+  }
+
+  get isMyBook(): boolean {
+    return this.currentUser.username === this.tokenStorage.getUsername();
   }
 }

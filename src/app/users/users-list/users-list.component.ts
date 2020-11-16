@@ -6,7 +6,7 @@ import { Router } from "@angular/router";
 
 import { BooksService } from "../../core/services/books.service";
 import { ConversationsService } from "../../core/services/conversations.service";
-import { TokenStorageService } from "../../shared/helpers/token-storage.service";
+import { TokenStorageService } from "../../shared/helpers/services/token-storage.service";
 import { UsersListDataSource } from './users-list-datasource';
 import { UserDefinition } from "../../core/models/user-definition.model";
 import { UsersService } from "../../core/services/users.service";

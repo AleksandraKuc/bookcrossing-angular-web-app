@@ -11,6 +11,8 @@ import {ModuleWithProviders, NgModule} from "@angular/core";
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from "@angular/material/input";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {CommonModule} from "@angular/common";
 
 const SHARED_COMPONENTS = [];
 const SHARED_MODULES = [
@@ -22,6 +24,7 @@ const SHARED_MODULES = [
   MatTableModule,
   MatToolbarModule,
   MatPaginatorModule,
+  MatProgressSpinnerModule,
   MatSidenavModule,
   MatSortModule,
   MatFormFieldModule,
@@ -29,7 +32,7 @@ const SHARED_MODULES = [
 ];
 
 @NgModule({
-  imports: [...SHARED_MODULES],
+  imports: [...SHARED_MODULES, CommonModule],
   declarations: [...SHARED_COMPONENTS],
   exports: [...SHARED_COMPONENTS, ...SHARED_MODULES],
 })

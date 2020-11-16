@@ -1,4 +1,7 @@
-<button mat-raised-button color="accent" (click)="removeConversation()">Remove conversation</button>
+<div>
+  <mat-label>Conversation with {{recipient}}</mat-label>
+  <button mat-raised-button color="accent" (click)="removeConversation()">Remove conversation</button>
+</div>
 
 <div *ngFor="let message of messages">
   <div>

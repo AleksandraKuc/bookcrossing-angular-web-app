@@ -7,7 +7,7 @@ import { MatTable } from '@angular/material/table';
 import { BooksListDataSource } from './books-list-datasource';
 import { BookDefinition } from "../../core/models/book-definition.model";
 import { BooksService } from "../../core/services/books.service";
-import { TokenStorageService } from "../../shared/helpers/token-storage.service";
+import { TokenStorageService } from "../../shared/helpers/services/token-storage.service";
 
 @Component({
   selector: 'app-books-list',
@@ -15,9 +15,9 @@ import { TokenStorageService } from "../../shared/helpers/token-storage.service"
   styleUrls: ['./books-list.component.css']
 })
 export class BooksListComponent implements AfterViewInit, OnInit {
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatTable) table: MatTable<BookDefinition>;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator; //co robi static?
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatTable, { static: true }) table: MatTable<BookDefinition>;
   dataSource = new BooksListDataSource();
 
   listIsFavourites: Array<{ bookId: number, status: boolean }> = new Array<{bookId: number; status: boolean}>();
@@ -165,4 +165,8 @@ export class BooksListComponent implements AfterViewInit, OnInit {
   get showAddButton():boolean {
     return !this.isAccount;
   }
+
+  // public doFilter = (value: string) => {
+  //   this.dataSource.filter = value.trim().toLocaleLowerCase();
+  // }
 }

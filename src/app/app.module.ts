@@ -2,6 +2,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from "@angular/common/http";
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 
 import { AboutBookcrossingComponent } from './about-bookcrossing/about-bookcrossing.component';
@@ -11,7 +12,8 @@ import { ContactComponent } from './contact/contact.component';
 import { MainNavigationComponent } from './main-navigation/main-navigation.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { SharedModule } from "./shared/shared.module";
-import { httpInterceptorProviders } from "./shared/helpers/auth-interceptor";
+import { httpInterceptorProviders } from "./shared/helpers/interceptors/auth-interceptor";
+import { SpinnerOverlayComponent } from './shared/components/spinner-overlay/spinner-overlay.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,7 @@ import { httpInterceptorProviders } from "./shared/helpers/auth-interceptor";
     ContactComponent,
     MainNavigationComponent,
     MainPageComponent,
+    SpinnerOverlayComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -27,9 +30,10 @@ import { httpInterceptorProviders } from "./shared/helpers/auth-interceptor";
     BrowserModule,
     HttpClientModule,
     SharedModule.forRoot(),
-    RouterModule
+    RouterModule,
+    ReactiveFormsModule
   ],
   providers: [ httpInterceptorProviders ],
-  bootstrap: [AppComponent]
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }

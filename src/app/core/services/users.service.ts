@@ -3,7 +3,8 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {UserDefinition} from "../models/user-definition.model";
 import {environment} from "../../../environments/environment";
-import {TokenStorageService} from "../../shared/helpers/token-storage.service";
+import {TokenStorageService} from "../../shared/helpers/services/token-storage.service";
+import {ResetPasswordInfo} from "../../shared/models/reset-password-info";
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,10 @@ export class UsersService {
     return this.http.get<UserDefinition>(`${environment.apiUrl}/user/username/${username}`);
   }
 
+  getUserById(id: number): Observable<any> {
+    return  this.http.get(`${environment.apiUrl}/user/id/${id}`);
+  }
+
   getAllUsers(): Observable<any> {
     return this.http.get(`${environment.apiUrl}/user/all`);
   }
@@ -30,8 +35,10 @@ export class UsersService {
     return this.http.put(`${environment.apiUrl}/user/update`, user);
   }
 
-  // getUserBymail(mail : string): Observable<any>{
-  //   return this.http.get(`${this.baseUrl}/mail/${mail}`)
-  // }
+  resetPassword(current: string, newPassword: string): Observable<any> {
+    let username = this.tokenStorage.getUsername();
+    let data = new ResetPasswordInfo(username, current, newPassword);
+    return this.http.post(`${environment.apiUrl}/user/resetPassword`, data);
+  }
 
 }

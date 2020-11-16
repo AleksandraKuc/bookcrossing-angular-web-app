@@ -29,7 +29,20 @@
   </mat-form-field> <br/>
 
 
-  <button mat-raised-button color="accent" *ngIf="isLoggedUser" (click)="editBook()">Edit book</button>
+  <mat-form-field appearance="fill">
+    <mat-label>Book's first user: </mat-label>
+    <input matInput type="text" value="{{firstUser?.username}}" (click)="showUserProfile(false)" readonly>
+  </mat-form-field> <br/>
+
+
+  <mat-form-field appearance="fill">
+    <mat-label>Book's current user: </mat-label>
+    <input matInput type="text" value="{{currentUser?.username}}" (click)="showUserProfile(true)" readonly>
+  </mat-form-field> <br/>
+
+
+  <button mat-raised-button color="accent" *ngIf="isLoggedUser && isMyBook" (click)="editBook()">Edit book</button>
+  <button mat-raised-button color="accent" *ngIf="isLoggedUser && isMyBook" (click)="deleteBook()">Delete book</button>
   <button mat-raised-button color="accent" *ngIf="!isFavourite && isLoggedUser" (click)="addToFavourites()">Add to favourites</button>
   <button mat-raised-button color="accent" *ngIf="isFavourite && isLoggedUser" (click)="removeFromFavourites()">Remove from favourites</button>
   <button mat-raised-button color="accent" *ngIf="isLoggedUser" (click)="reserveBook()">Reserve book</button>

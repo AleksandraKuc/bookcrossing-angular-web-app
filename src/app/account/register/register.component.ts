@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-
-import {AuthService} from "../../shared/helpers/auth.service";
-import {SignUpInfo} from "../../shared/helpers/signup-info";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
+
+import {AuthService} from "../../shared/helpers/services/auth.service";
+import {SignUpInfo} from "../../shared/models/signup-info";
 
 @Component({
   selector: 'app-register',
@@ -11,6 +11,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+
   private passRegex = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$";
 
   form: FormGroup;
@@ -25,6 +26,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     this.form = this.generateForm();
   }
+
   generateForm(): FormGroup {
     return new FormGroup(
       {
@@ -45,9 +47,7 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.form);
     if (this.equalsPasswords() && this.form.valid) {
-      console.log("weszło xd")
 
       let signupInfo = new SignUpInfo(
         this.form.get('name').value,
@@ -75,5 +75,4 @@ export class RegisterComponent implements OnInit {
       this.isSignUpFailed = true;
     }
   }
-
 }

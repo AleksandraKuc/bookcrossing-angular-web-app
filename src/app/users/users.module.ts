@@ -12,6 +12,7 @@ import { UsersEntryModule } from "./users-entry.module";
 import { UsersAddModifyComponent } from './users-add-modify/users-add-modify.component';
 import { UsersListComponent } from './users-list/users-list.component';
 import { BooksModule } from "../books/books.module";
+import { UserResetPasswordComponent } from './user-reset-password/user-reset-password.component';
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { BooksModule } from "../books/books.module";
     UsersLayoutComponent,
     UsersAddModifyComponent,
     UsersListComponent,
+    UserResetPasswordComponent,
   ],
 })
 export class UsersModule {}

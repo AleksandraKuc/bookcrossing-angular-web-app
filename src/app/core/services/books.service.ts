@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 
 import { Observable } from "rxjs";
-import {AuthService} from "../../shared/helpers/auth.service";
-import {TokenStorageService} from "../../shared/helpers/token-storage.service";
+import {AuthService} from "../../shared/helpers/services/auth.service";
+import {TokenStorageService} from "../../shared/helpers/services/token-storage.service";
 import {BookDefinition} from "../models/book-definition.model";
 
 @Injectable({
@@ -40,10 +40,6 @@ export class BooksService {
     return this.http.get(`${this.baseUrl}/fav/${username}`);
   }
 
-  // getUserBymail(mail : string): Observable<any>{
-  //   return this.http.get(`${this.baseUrl}/mail/${mail}`)
-  // }
-
   createBook(book: any): Observable<any> {
     let username = this.tokenStorage.getUsername();
     return this.http.post(`${this.baseUrl}/create/${username}`, book);
@@ -58,7 +54,7 @@ export class BooksService {
   }
 
   deleteBook(idBook: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/delete/${idBook}`);
+    return this.http.delete(`${this.baseUrl}/${idBook}`);
   }
 
   addToFavourites(idBook: number): Observable<any> {

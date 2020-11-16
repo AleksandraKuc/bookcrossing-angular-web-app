@@ -1,6 +1,7 @@
 <p>user-details works!</p>
 
 <button mat-raised-button color="accent" *ngIf="isLoggedIn() && isProfileView()" (click)="editProfile()">Edit profile</button>
+<button mat-raised-button color="accent" *ngIf="isLoggedIn() && isProfileView()" (click)="resetPassword()">Reset password</button>
 <button mat-raised-button color="accent" *ngIf="isLoggedIn() && !isProfileView()" (click)="sendMessage()">Send message</button>
 
 <form [formGroup]="form">

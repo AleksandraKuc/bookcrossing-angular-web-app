@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {UserDefinition} from "../models/user-definition.model";
 import {environment} from "../../../environments/environment";
-import {TokenStorageService} from "../../shared/helpers/token-storage.service";
+import {TokenStorageService} from "../../shared/helpers/services/token-storage.service";
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class ConversationsService {
 
   getConversationByUsers(recipient: string): Observable<any> {
     let username = this.tokenStorage.getUsername();
-    return this.http.get(`${environment.apiUrl}/conversation/ByUsers/${username}/${recipient}`);
+    return this.http.get(`${environment.apiUrl}/conversation/byUsers/${username}/${recipient}`);
   }
 
   getMessages(conversationId: number): Observable<any> {
