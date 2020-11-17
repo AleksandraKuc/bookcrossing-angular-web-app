@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ReactiveFormsModule } from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
@@ -15,16 +15,17 @@ import { BooksModule } from "../books/books.module";
 import { UserResetPasswordComponent } from './user-reset-password/user-reset-password.component';
 
 @NgModule({
-  imports: [
-      CommonModule,
-      ReactiveFormsModule,
-      UsersEntryModule,
-      SharedModule.forRoot(),
-      MatTableModule,
-      MatPaginatorModule,
-      MatSortModule,
-      BooksModule,
-  ],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        UsersEntryModule,
+        SharedModule.forRoot(),
+        MatTableModule,
+        MatPaginatorModule,
+        MatSortModule,
+        BooksModule,
+        FormsModule,
+    ],
   declarations: [
     UserDetailsComponent,
     UsersLayoutComponent,

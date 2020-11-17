@@ -1,24 +1,20 @@
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from "@angular/router";
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTable } from '@angular/material/table';
-
-import { BooksListDataSource } from './books-list-datasource';
-import { BookDefinition } from "../../core/models/book-definition.model";
-import { BooksService } from "../../core/services/books.service";
-import { TokenStorageService } from "../../shared/helpers/services/token-storage.service";
+import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
+import {MatTableFilter} from 'mat-table-filter';
+import {MatTableDataSource} from '@angular/material/table';
+import {BookDefinition} from "../../core/models/book-definition.model";
+import {BooksService} from "../../core/services/books.service";
+import {TokenStorageService} from "../../shared/helpers/services/token-storage.service";
 
 @Component({
   selector: 'app-books-list',
   templateUrl: './books-list.component.html',
   styleUrls: ['./books-list.component.css']
 })
-export class BooksListComponent implements AfterViewInit, OnInit {
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator; //co robi static?
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatTable, { static: true }) table: MatTable<BookDefinition>;
-  dataSource = new BooksListDataSource();
+export class BooksListComponent implements OnInit {
+  dataSource: MatTableDataSource<BookDefinition>;
+  filterType: MatTableFilter;
+  filterEntity: BookDefinition;
 
   listIsFavourites: Array<{ bookId: number, status: boolean }> = new Array<{bookId: number; status: boolean}>();
 
@@ -34,6 +30,9 @@ export class BooksListComponent implements AfterViewInit, OnInit {
               protected router: Router) {}
 
   ngOnInit() {
+    this.filterEntity = new BookDefinition();
+    this.filterType = MatTableFilter.ANYWHERE;
+
     if (this.listMode === '') {
       this.activatedRoute.data.subscribe( data => {
         this.listMode = data.type;
@@ -46,10 +45,8 @@ export class BooksListComponent implements AfterViewInit, OnInit {
     }
   }
 
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.table.dataSource = this.dataSource;
+  applyFilter(filterValue: string): void {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   getDetailsLink(id: any) {
@@ -75,7 +72,6 @@ export class BooksListComponent implements AfterViewInit, OnInit {
       if (this.listMode === 'fav') {
         let index = this.dataSource.data.findIndex( _book => _book.id_book === id);
         this.dataSource.data.splice(index, 1);
-        this.refreshTable(this.dataSource.data);
       }
       this.setFavouritesList(id, false);
     })
@@ -87,14 +83,6 @@ export class BooksListComponent implements AfterViewInit, OnInit {
 
   addNewBook() {
     this.router.navigate(['/books/add'] );
-  }
-
-  refreshTable(data: BookDefinition[]){
-    this.dataSource = new BooksListDataSource();
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.data = data;
-    this.table.dataSource = this.dataSource;
   }
 
   getBooks() {
@@ -110,7 +98,7 @@ export class BooksListComponent implements AfterViewInit, OnInit {
 
   getAll(): void {
     this.booksService.getAllBooks().subscribe(response => {
-      this.dataSource.data = response;
+      this.dataSource = new MatTableDataSource(response);
       if (this.tokenStorage.getUsername()){
         this.getFavourites();
       }
@@ -119,21 +107,21 @@ export class BooksListComponent implements AfterViewInit, OnInit {
 
   getMyBooks(): void {
     this.booksService.getUserOwnedBooks().subscribe(response => {
-      this.dataSource.data = response;
+      this.dataSource = new MatTableDataSource(response);
       this.getFavourites();
     });
   }
 
   getFavBooks(): void {
     this.booksService.getFavBooks().subscribe(response => {
-      this.dataSource.data = response;
+      this.dataSource = new MatTableDataSource(response);
       this.getFavourites();
     });
   }
 
   getOwnedByUser(): void {
     this.booksService.getUserOwnedBooks(this.username).subscribe(response => {
-      this.dataSource.data = response;
+      this.dataSource = new MatTableDataSource(response);
       this.getFavourites();
     });
   }
@@ -155,18 +143,14 @@ export class BooksListComponent implements AfterViewInit, OnInit {
   }
 
   checkIsFavourite(id: number): boolean {
-    return (this.listIsFavourites.find( element => element.bookId === id)).status;
+    return (this.listIsFavourites.find( element => element.bookId === id))?.status;
   }
 
   isLoggedIn(): boolean {
     return !!this.tokenStorage.getUsername();
   }
 
-  get showAddButton():boolean {
+  get showButtonAndFilters(): boolean {
     return !this.isAccount;
   }
-
-  // public doFilter = (value: string) => {
-  //   this.dataSource.filter = value.trim().toLocaleLowerCase();
-  // }
 }

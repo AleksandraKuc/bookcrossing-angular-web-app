@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
-import { ReactiveFormsModule } from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { CommonModule } from "@angular/common";
 
 import { BookDetailsComponent } from "./book-details/book-details.component";
@@ -11,13 +11,14 @@ import { BooksLayoutComponent } from './books-layout/books-layout.component';
 import { BooksEntryModule } from "./books-entry.module";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    BooksEntryModule,
-    SharedModule.forRoot(),
-    ReactiveFormsModule,
-  ],
+    imports: [
+        CommonModule,
+        RouterModule,
+        BooksEntryModule,
+        SharedModule.forRoot(),
+        ReactiveFormsModule,
+        FormsModule,
+    ],
   declarations: [
     BookDetailsComponent,
     BooksAddModifyComponent,

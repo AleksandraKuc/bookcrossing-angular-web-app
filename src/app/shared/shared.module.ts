@@ -13,6 +13,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {CommonModule} from "@angular/common";
+import {MatTableFilterModule} from "mat-table-filter";
 
 const SHARED_COMPONENTS = [];
 const SHARED_MODULES = [
@@ -29,6 +30,8 @@ const SHARED_MODULES = [
   MatSortModule,
   MatFormFieldModule,
   MatAutocompleteModule,
+
+  MatTableFilterModule
 ];
 
 @NgModule({

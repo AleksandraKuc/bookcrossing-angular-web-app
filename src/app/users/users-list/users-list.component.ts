@@ -1,26 +1,23 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTable } from '@angular/material/table';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource} from '@angular/material/table';
 import { Router } from "@angular/router";
 
 import { BooksService } from "../../core/services/books.service";
 import { ConversationsService } from "../../core/services/conversations.service";
 import { TokenStorageService } from "../../shared/helpers/services/token-storage.service";
-import { UsersListDataSource } from './users-list-datasource';
 import { UserDefinition } from "../../core/models/user-definition.model";
 import { UsersService } from "../../core/services/users.service";
+import {MatTableFilter} from "mat-table-filter";
 
 @Component({
   selector: 'app-users-list',
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.css']
 })
-export class UsersListComponent implements AfterViewInit, OnInit {
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatTable) table: MatTable<UserDefinition>;
-  dataSource = new UsersListDataSource();
+export class UsersListComponent implements OnInit {
+  dataSource: MatTableDataSource<UserDefinition>;
+  filterType: MatTableFilter;
+  filterEntity: UserDefinition;
 
   isHandOverMode: boolean = false;
   bookToHandOver: number;
@@ -37,16 +34,13 @@ export class UsersListComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
+    this.filterEntity = new UserDefinition();
+    this.filterType = MatTableFilter.ANYWHERE;
+
     this.usersService.getAllUsers().subscribe(response => {
-      this.dataSource.data = response;
+      this.dataSource = new MatTableDataSource(response);
     });
     this.setDisplayedColumns();
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.table.dataSource = this.dataSource;
   }
 
   setDisplayedColumns(): void {
@@ -64,12 +58,11 @@ export class UsersListComponent implements AfterViewInit, OnInit {
   sendMessage(username: string): void {
     this.conversationsService.checkIfExists(username).subscribe( response => {
       if (!response) {
-        console.log("creating conv")
         this.conversationsService.createConversation(username).subscribe( conversation => {
-          this.router.navigate([`conversations/${username}`], { state: { conversationId: conversation.id_conversation } });
+          this.router.navigate([`conversations/${username}`],
+            { state: { conversationId: conversation.id_conversation } });
         })
       } else {
-        console.log("already exists")
         this.router.navigate([`conversations/${username}`]);
       }
     })

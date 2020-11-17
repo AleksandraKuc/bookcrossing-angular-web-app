@@ -61,19 +61,37 @@ export class UserDetailsComponent implements OnInit {
     this.router.navigate(['users/change-password']);
   }
 
+  deleteAccount(): void {
+    if (!this.isProfileView()) {
+      this.userService.deleteAccount().subscribe();
+      // .subscribe( response => {
+      // this.logout();
+      // this.router.navigate([`/`]);
+      // })
+    } else {
+      this.userService.deleteAccount().subscribe();
+      // .subscribe( response => {
+      // this.logout();
+      // this.router.navigate([`/`]);
+      // })
+    }
+  }
+
+  logout(): void {
+    this.tokenStorage.signOut();
+  }
+
   sendMessage() {
     this.conversationsService.checkIfExists(this.form.get('username').value)
       .subscribe(
         response => {
           if (!response) {
-            console.log("creating conv")
             this.conversationsService.createConversation(this.form.get('username').value)
               .subscribe( conversation => {
                 this.router.navigate([`conversations/${this.form.get('username').value}`],
                   { state: { conversationId: conversation.id_conversation } });
             })
           } else {
-            console.log("already exists")
             this.router.navigate([`conversations/${this.form.get('username').value}`]);
           }
     })
@@ -85,5 +103,9 @@ export class UserDetailsComponent implements OnInit {
 
   isLoggedIn(): boolean {
     return !!this.tokenStorage.getUsername();
+  }
+
+  isAdmin(): boolean {
+    return this.tokenStorage.getAuthorities()[0] === "ROLE_ADMIN";
   }
 }

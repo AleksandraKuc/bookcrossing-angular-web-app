@@ -69,23 +69,23 @@ export class BooksAddModifyComponent implements OnInit {
   }
 
   onSubmit() {
-    let book: BookDefinition = new BookDefinition(
-      this.form.get('title').value,
-      this.form.get('description').value,
-      this.form.get('author').value,
-      this.form.get('isbn').value,
-      this.form.get('category').value
-    );
-    if (this.form.valid) {
-      if (this.viewMode === 'edit') {
-        this.saveBook(book);
-      } else {
-        this.addBook(book);
-      }
-    } else {
-      this.errorMessage = "Passwords are not equal!";
-      this.isSavingFailed = true;
-    }
+    // let book: BookDefinition = new BookDefinition(
+    //   this.form.get('title').value,
+    //   this.form.get('description').value,
+    //   this.form.get('author').value,
+    //   this.form.get('isbn').value,
+    //   this.form.get('category').value
+    // );
+    // if (this.form.valid) {
+    //   if (this.viewMode === 'edit') {
+    //     this.saveBook(book);
+    //   } else {
+    //     this.addBook(book);
+    //   }
+    // } else {
+    //   this.errorMessage = "Passwords are not equal!";
+    //   this.isSavingFailed = true;
+    // }
   }
 
   private addBook(book: BookDefinition) {

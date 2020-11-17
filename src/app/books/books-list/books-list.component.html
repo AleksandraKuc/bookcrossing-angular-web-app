@@ -1,68 +1,86 @@
-<button mat-raised-button color="accent" *ngIf="isLoggedIn() && showAddButton" (click)="addNewBook()">Add new book</button>
-
-<!--<div class="spinner-container" *ngIf="dataSource.loading$ | async">-->
-
-<!--  <mat-spinner></mat-spinner>-->
-
-<!--</div>-->
+<button mat-raised-button color="accent" *ngIf="isLoggedIn() && showButtonAndFilters" (click)="addNewBook()">Add new book</button>
 
 <div class="mat-elevation-z8 books-table">
 
-  <div>
-    <mat-form-field>
-      <input matInput type="text" (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-    </mat-form-field>
-  </div>
-
-  <table mat-table matSort class="full-width-table" aria-label="Elements">
+  <mat-table matTableFilter [exampleEntity]="filterEntity" [filterType]="filterType" matSort [dataSource]="dataSource" class="full-width-table" aria-label="Elements">
     <!-- idBook Column -->
     <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
-      <td mat-cell *matCellDef="let row">{{row.id_book}}</td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <mat-form-field *ngIf="showButtonAndFilters" appearance="outline">
+          <mat-label>Book id</mat-label>
+          <input matInput placeholder="bookId" [(ngModel)]="filterEntity.id_book">
+        </mat-form-field>
+        <span *ngIf="!showButtonAndFilters" >Id</span>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.id_book}} </mat-cell>
     </ng-container>
 
     <!-- Title Column -->
     <ng-container matColumnDef="title">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
-      <td mat-cell *matCellDef="let row">{{row.title}}</td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <mat-form-field *ngIf="showButtonAndFilters" appearance="outline">
+          <mat-label>Title</mat-label>
+          <input matInput placeholder="Title" [(ngModel)]="filterEntity.title">
+        </mat-form-field>
+        <span *ngIf="!showButtonAndFilters">Title</span>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.title}}</mat-cell>
     </ng-container>
 
     <!-- Author Column -->
     <ng-container matColumnDef="author">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Author</th>
-      <td mat-cell *matCellDef="let row">{{row.author}}</td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <mat-form-field *ngIf="showButtonAndFilters" appearance="outline">
+          <mat-label>Author</mat-label>
+          <input matInput placeholder="Author" [(ngModel)]="filterEntity.author">
+        </mat-form-field>
+        <span *ngIf="!showButtonAndFilters">Author</span>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.author}}</mat-cell>
     </ng-container>
 
     <!-- Category Column -->
     <ng-container matColumnDef="category">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
-      <td mat-cell *matCellDef="let row">{{row.category}}</td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <mat-form-field *ngIf="showButtonAndFilters" appearance="outline">
+          <mat-label>Category</mat-label>
+          <input matInput placeholder="Category" [(ngModel)]="filterEntity.category">
+        </mat-form-field>
+        <span *ngIf="!showButtonAndFilters">Category</span>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.category}}</mat-cell>
     </ng-container>
 
     <!-- Description Column -->
     <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
-      <td mat-cell *matCellDef="let row">{{row.description}}</td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        <mat-form-field *ngIf="showButtonAndFilters" appearance="outline">
+          <mat-label>Description</mat-label>
+          <input matInput placeholder="Description" [(ngModel)]="filterEntity.description">
+        </mat-form-field>
+        <span *ngIf="!showButtonAndFilters">Description</span>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.description}}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="favourites">
-      <th mat-header-cell  *matHeaderCellDef > Favourites </th>
-      <td mat-cell *matCellDef="let element" >
+      <mat-header-cell *matHeaderCellDef > Favourites </mat-header-cell>
+      <mat-cell mat-cell *matCellDef="let element" >
         <button mat-button *ngIf="!checkIsFavourite(element.id_book)" (click)="addToFavourites(element.id_book); $event.stopPropagation()">Add to favourites</button>
         <button mat-button *ngIf="checkIsFavourite(element.id_book)" (click)="removeFromFavourites(element.id_book); $event.stopPropagation()">Remove from favourites</button>
-      </td>
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="handOver">
-      <th mat-header-cell *matHeaderCellDef > Select book </th>
-      <td mat-cell *matCellDef="let element" >
+      <mat-header-cell *matHeaderCellDef > Select book </mat-header-cell>
+      <mat-cell *matCellDef="let element" >
         <button mat-button (click)="selectToHandOver(element.id_book); $event.stopPropagation()">Select</button>
-      </td>
+      </mat-cell>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="getDetailsLink(row.id_book)"></tr>
-  </table>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="getDetailsLink(row.id_book)"></mat-row>
+  </mat-table>
 
   <mat-paginator #paginator
                  [length]="dataSource?.data.length"

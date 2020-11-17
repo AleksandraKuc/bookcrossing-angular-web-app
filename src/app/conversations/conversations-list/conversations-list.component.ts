@@ -5,22 +5,20 @@ import {ConversationsService} from "../../core/services/conversations.service";
 import {ConversationDefinition} from "../../core/models/conversation-definition.model";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
-import {MatTable} from "@angular/material/table";
-import {UsersListDataSource} from "../../users/users-list/users-list-datasource";
+import {MatTable, MatTableDataSource} from "@angular/material/table";
 import {ConversationsListDataSource} from "./conversations-list-datasource";
-import {MessageDefinition} from "../../core/models/message-definition.model";
-import {formatDate} from "@angular/common";
+import {BookDefinition} from "../../core/models/book-definition.model";
+import {MatTableFilter} from "mat-table-filter";
 
 @Component({
   selector: 'app-conversations-list',
   templateUrl: './conversations-list.component.html',
   styleUrls: ['./conversations-list.component.css']
 })
-export class ConversationsListComponent implements OnInit, AfterViewInit {
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatTable) table: MatTable<ConversationDefinition>;
-  dataSource = new ConversationsListDataSource();
+export class ConversationsListComponent implements OnInit {
+  dataSource: MatTableDataSource<ConversationDefinition>;
+  filterType: MatTableFilter;
+  filterEntity: ConversationDefinition;
 
   displayedColumns = ['name', 'username', 'date', 'message'];
 
@@ -36,19 +34,14 @@ export class ConversationsListComponent implements OnInit, AfterViewInit {
           conv.messages = list;
         });
       });
-      this.dataSource.data = conversations;
-      console.log(conversations);
+      this.dataSource = new MatTableDataSource(conversations);
     });
-  }
 
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
-    this.table.dataSource = this.dataSource;
+    this.filterEntity = new ConversationDefinition();
+    this.filterType = MatTableFilter.ANYWHERE;
   }
 
   getDetailsLink(id: number, username: string) {
     this.router.navigate([`conversations/${username}`], { state: { conversationId: id } } );
   }
-
 }

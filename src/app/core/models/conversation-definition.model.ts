@@ -1,16 +1,17 @@
 import {MessageDefinition} from "./message-definition.model";
 
 export class ConversationDefinition {
-  id_conversation: number;
-  recipient: ConvUser;
+  idConversation: number;
+  firstUser: ConvUser;
   messages: MessageDefinition[];
 
-  constructor(recipient: any, id?: number) {
-    this.recipient = recipient;
-    this.id_conversation = id;
-  }
+  // constructor(recipient: any, id?: number) {
+  //   this.recipient = recipient;
+  //   this.id_conversation = id;
+  // }
+
   setId(id: number): void {
-    this.id_conversation = id;
+    this.idConversation = id;
   }
 
   setMessages(messages: MessageDefinition[]){

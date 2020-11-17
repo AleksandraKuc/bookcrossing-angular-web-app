@@ -41,4 +41,9 @@ export class UsersService {
     return this.http.post(`${environment.apiUrl}/user/resetPassword`, data);
   }
 
+  deleteAccount(username?: string): Observable<any> {
+    let user = username ? username : this.tokenStorage.getUsername();
+    return this.http.delete(`${environment.apiUrl}/user/${username}`);
+  }
+
 }
