@@ -13,15 +13,20 @@ import {MatInputModule} from "@angular/material/input";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {CommonModule} from "@angular/common";
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 const SHARED_COMPONENTS = [];
 const SHARED_MODULES = [
   LayoutModule,
   MatButtonModule,
+  MatButtonToggleModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
   MatTableModule,
+  MatDialogModule,
   MatToolbarModule,
   MatPaginatorModule,
   MatProgressSpinnerModule,
@@ -29,6 +34,7 @@ const SHARED_MODULES = [
   MatSortModule,
   MatFormFieldModule,
   MatAutocompleteModule,
+  MatSnackBarModule,
 ];
 
 @NgModule({

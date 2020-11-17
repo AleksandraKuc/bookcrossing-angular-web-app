@@ -13,17 +13,18 @@ import { UsersAddModifyComponent } from './users-add-modify/users-add-modify.com
 import { UsersListComponent } from './users-list/users-list.component';
 import { BooksModule } from "../books/books.module";
 import { UserResetPasswordComponent } from './user-reset-password/user-reset-password.component';
+import {ReportsModule} from "../reports/reports.module";
 
 @NgModule({
   imports: [
-      CommonModule,
-      ReactiveFormsModule,
-      UsersEntryModule,
-      SharedModule.forRoot(),
-      MatTableModule,
-      MatPaginatorModule,
-      MatSortModule,
-      BooksModule,
+    CommonModule,
+    ReactiveFormsModule,
+    UsersEntryModule,
+    SharedModule.forRoot(),
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    BooksModule,
   ],
   declarations: [
     UserDetailsComponent,

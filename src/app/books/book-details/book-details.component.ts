@@ -89,7 +89,7 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
   }
 
   protected userLink(username: string): string {
-    return `users/profile/${encodeURIComponent(username)}`
+    return `users/details/${encodeURIComponent(username)}`
   }
 
   showUserProfile(isCurrentUser: boolean): void {

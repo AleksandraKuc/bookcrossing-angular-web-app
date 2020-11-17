@@ -37,9 +37,7 @@ export class UsersListComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
-    this.usersService.getAllUsers().subscribe(response => {
-      this.dataSource.data = response;
-    });
+    this.getUsersList();
     this.setDisplayedColumns();
   }
 
@@ -55,7 +53,14 @@ export class UsersListComponent implements AfterViewInit, OnInit {
     } else if (this.tokenStorage.getUsername() && !this.isHandOverMode){
       this.displayedColumns = ['name', 'username', 'city', 'province', 'addedBooks', 'sendMessage'];
     }
-}
+  }
+
+  getUsersList(): void {
+    let filterResult = !this.isAdmin();
+    this.usersService.getAllUsers(filterResult).subscribe(response => {
+      this.dataSource.data = response;
+    });
+  }
 
   getDetailsLink(username: string) {
     return `details/${username}`;
@@ -64,16 +69,13 @@ export class UsersListComponent implements AfterViewInit, OnInit {
   sendMessage(username: string): void {
     this.conversationsService.checkIfExists(username).subscribe( response => {
       if (!response) {
-        console.log("creating conv")
         this.conversationsService.createConversation(username).subscribe( conversation => {
           this.router.navigate([`conversations/${username}`], { state: { conversationId: conversation.id_conversation } });
         })
       } else {
-        console.log("already exists")
         this.router.navigate([`conversations/${username}`]);
       }
     })
-
   }
 
   handOverBook(username: string): void {
@@ -82,5 +84,9 @@ export class UsersListComponent implements AfterViewInit, OnInit {
       this.isHandOverMode = false;
       window.location.reload();
     })
+  }
+
+  isAdmin(): boolean {
+    return this.tokenStorage.getAuthorities()[0] === "ROLE_ADMIN";
   }
 }

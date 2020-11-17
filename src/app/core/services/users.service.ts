@@ -23,8 +23,8 @@ export class UsersService {
     return  this.http.get(`${environment.apiUrl}/user/id/${id}`);
   }
 
-  getAllUsers(): Observable<any> {
-    return this.http.get(`${environment.apiUrl}/user/all`);
+  getAllUsers(filterResults: boolean): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/user/all/${filterResults}`);
   }
 
   getBooksByUser(idUser: number): Observable<any> {
@@ -35,10 +35,19 @@ export class UsersService {
     return this.http.put(`${environment.apiUrl}/user/update`, user);
   }
 
+  changeStatus(username: string): Observable<any> {
+    return this.http.put(`${environment.apiUrl}/user/changeStatus/${username}`, null);
+  }
+
   resetPassword(current: string, newPassword: string): Observable<any> {
     let username = this.tokenStorage.getUsername();
     let data = new ResetPasswordInfo(username, current, newPassword);
     return this.http.post(`${environment.apiUrl}/user/resetPassword`, data);
   }
 
+  deleteAccount(username?: string): Observable<any> {
+    let user = username ? username : this.tokenStorage.getUsername();
+    console.log(user)
+    return this.http.delete(`${environment.apiUrl}/user/${user}`);
+  }
 }

@@ -19,6 +19,6 @@ export class SignUpInfo {
     this.city = city;
     this.province = province;
     this.phoneNumber = phoneNumber;
-    this.roles = ['ROLE_CLIENT'];
+    this.roles = ['ROLE_ADMIN'];
   }
 }

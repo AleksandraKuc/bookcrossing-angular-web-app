@@ -53,7 +53,7 @@ export class BooksListComponent implements AfterViewInit, OnInit {
   }
 
   getDetailsLink(id: any) {
-    return `details/${encodeURIComponent(id)}`;
+    return `/books/details/${encodeURIComponent(id)}`;
   }
 
   setDisplayedColumns(): void {
@@ -165,8 +165,4 @@ export class BooksListComponent implements AfterViewInit, OnInit {
   get showAddButton():boolean {
     return !this.isAccount;
   }
-
-  // public doFilter = (value: string) => {
-  //   this.dataSource.filter = value.trim().toLocaleLowerCase();
-  // }
 }

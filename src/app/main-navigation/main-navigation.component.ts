@@ -20,15 +20,19 @@ export class MainNavigationComponent {
     );
 
   constructor(private breakpointObserver: BreakpointObserver,
-              private token: TokenStorageService) {
-    if(token.getToken()) {
+              private tokenStorage: TokenStorageService) {
+    if(tokenStorage.getToken()) {
       this.isLoggedUser = true;
     }
   }
 
   logout(): void {
-    this.token.signOut();
+    this.tokenStorage.signOut();
     window.location.reload();
+  }
+
+  isAdmin(): boolean {
+    return this.tokenStorage.getAuthorities()[0] === "ROLE_ADMIN";
   }
 
 }
