@@ -1,44 +1,49 @@
 <div>
-  <mat-form-field appearance="fill">
+<!--  <mat-form-field appearance="fill">-->
     <mat-label>Book's title: </mat-label>
     <input matInput type="text" value="{{getDetails()?.title}}" readonly>
-  </mat-form-field> <br/>
+<!--  </mat-form-field> <br/>-->
+    <br/>
 
-
-  <mat-form-field appearance="fill">
+<!--  <mat-form-field appearance="fill">-->
     <mat-label>Book's author: </mat-label>
     <input matInput type="text" value="{{getDetails()?.author}}" readonly> <!-- [errorStateMatcher]="matcher" -->
-  </mat-form-field> <br/>
+<!--  </mat-form-field> <br/>-->
+    <br/>
 
-
-  <mat-form-field appearance="fill">
+<!--  <mat-form-field appearance="fill">-->
     <mat-label>Book's description: </mat-label>
     <input matInput type="text" value="{{getDetails()?.description}}" readonly>  <!-- [errorStateMatcher]="matcher" -->
-  </mat-form-field> <br/>
+<!--  </mat-form-field> <br/>-->
+  <br/>
 
 
-  <mat-form-field appearance="fill">
+<!--  <mat-form-field appearance="fill">-->
     <mat-label>Book's isbn code: </mat-label>
     <input matInput type="text" *ngIf="getDetails()?.isbn" value="{{getDetails()?.isbn}}" readonly>
-  </mat-form-field> <br/>
+<!--  </mat-form-field> <br/>-->
+  <br/>
 
 
-  <mat-form-field appearance="fill">
+<!--  <mat-form-field appearance="fill">-->
     <mat-label>Book's category: </mat-label>
     <input matInput type="text" value="{{getDetails()?.category}}" readonly>
-  </mat-form-field> <br/>
+<!--  </mat-form-field> <br/>-->
+  <br/>
 
 
-  <mat-form-field appearance="fill">
+<!--  <mat-form-field appearance="fill">-->
     <mat-label>Book's first user: </mat-label>
     <input matInput type="text" value="{{firstUser?.username}}" (click)="showUserProfile(false)" readonly>
-  </mat-form-field> <br/>
+<!--  </mat-form-field> <br/>-->
+  <br/>
 
 
-  <mat-form-field appearance="fill">
+<!--  <mat-form-field appearance="fill">-->
     <mat-label>Book's current user: </mat-label>
     <input matInput type="text" value="{{currentUser?.username}}" (click)="showUserProfile(true)" readonly>
-  </mat-form-field> <br/>
+<!--  </mat-form-field> <br/>-->
+  <br/>
 
 
   <button mat-raised-button color="accent" *ngIf="isLoggedUser && isMyBook" (click)="editBook()">Edit book</button>
