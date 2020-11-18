@@ -43,10 +43,10 @@
 
 <div>
   <h3>Books added</h3>
-  <app-books-list [listMode]="'own'" [username]="form.get('username').value" [isAccount]="true"></app-books-list>
+  <app-books-list [listMode]="'own'" [username]="form.get('username').valueChanges" [isAccount]="true"></app-books-list>
 </div>
 
 <div>
   <h3>Favourite books</h3>
-  <app-books-list [listMode]="'fav'" [username]="form.get('username').value" [isAccount]="true"></app-books-list>
+  <app-books-list [listMode]="'fav'" [username]="form.get('username').valueChanges" [isAccount]="true"></app-books-list>
 </div>

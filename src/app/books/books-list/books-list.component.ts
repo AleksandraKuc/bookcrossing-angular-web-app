@@ -9,6 +9,8 @@ import { BookDefinition } from "../../core/models/book-definition.model";
 import { BooksService } from "../../core/services/books.service";
 import { TokenStorageService } from "../../shared/helpers/services/token-storage.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {Observable} from "rxjs";
+import {switchMap, take} from "rxjs/operators";
 
 @Component({
   selector: 'app-books-list',
@@ -29,7 +31,7 @@ export class BooksListComponent implements AfterViewInit, OnInit {
 
   @Input() listMode: string = '';
   @Input() isAccount: boolean = false;
-  @Input() username: string = '';
+  @Input() username: Observable<string> = null;
 
   public searchForm: FormGroup;
   public title = '';
@@ -53,17 +55,13 @@ export class BooksListComponent implements AfterViewInit, OnInit {
       this.getBooks();
     }
     this.searchFormInit();
-    this.dataSource.filterPredicate = this.getFilterPredicate();
+    // this.dataSource.filterPredicate = this.getFilterPredicate;
+
     // this.dataSource.filterPredicate =
     //   (data: BookDefinition, filtersJson: string) => {
-    //     const matchFilter = [];
-    //     const filters = JSON.parse(filtersJson);
-    //
-    //     filters.forEach(filter => {
-    //       const val = data[filter.id] === null ? '' : data[filter.id];
-    //       matchFilter.push(val.toLowerCase().includes(filter.value.toLowerCase()));
-    //     });
-    //     return matchFilter.every(Boolean);
+    //     console.log(data);
+    //     console.log(filtersJson);
+    //     return true;
     //   };
   }
 
@@ -72,19 +70,6 @@ export class BooksListComponent implements AfterViewInit, OnInit {
     this.dataSource.paginator = this.paginator;
     // this.table.dataSource = this.dataSource;
   }
-
-  // applyFilter(filterValue: string) {
-  //   const tableFilters = [];
-  //   tableFilters.push({
-  //     id: 'title',
-  //     value: filterValue
-  //   });
-  //
-  //   this.dataSource.filter = JSON.stringify(tableFilters);
-  //   if (this.dataSource.paginator) {
-  //     this.dataSource.paginator.firstPage();
-  //   }
-  // }
 
   getDetailsLink(id: any) {
     return `/books/details/${encodeURIComponent(id)}`;
@@ -158,6 +143,13 @@ export class BooksListComponent implements AfterViewInit, OnInit {
       if (this.tokenStorage.getUsername()){
         this.getFavourites();
       }
+      this.dataSource.filterPredicate = this.getFilterPredicate;
+      // this.dataSource.filterPredicate =
+      //   (data: BookDefinition, filtersJson: string) => {
+      //     console.log(data);
+      //     console.log(filtersJson);
+      //     return true;
+      //   };
     });
   }
 
@@ -180,8 +172,9 @@ export class BooksListComponent implements AfterViewInit, OnInit {
   }
 
   getOwnedByUser(): void {
-    this.booksService.getUserOwnedBooks(this.username).subscribe(response => {
-      // this.dataSource.data = response;
+    this.username.pipe(take(1), switchMap( user =>
+      this.booksService.getUserOwnedBooks(user)
+    )).subscribe( response => {
       this.dataSource = new MatTableDataSource(response);
       if (this.tokenStorage.getUsername()){
         this.getFavourites();
@@ -218,35 +211,35 @@ export class BooksListComponent implements AfterViewInit, OnInit {
   }
 
   /* this method well be called for each row in table  */
-  getFilterPredicate() {
-    return (row: BookDefinition, filters: string) => {
-      // split string per '$' to array
-      const filterArray = filters.split('$');
-      const title = filterArray[0];
-      const author = filterArray[1];
-      const category = filterArray[2];
+  getFilterPredicate = (row: BookDefinition, filters: string) => {
+    console.log('filtering')
+    // split string per '$' to array
+    const filterArray = filters.split('$');
+    const title = filterArray[0];
+    const author = filterArray[1];
+    const category = filterArray[2];
 
-      const matchFilter = [];
+    const matchFilter = [];
 
-      // Fetch data from row
-      const columnTitle = row.title;
-      const columnAuthor = row.author;
-      const columnCategory = row.category;
+    // Fetch data from row
+    const columnTitle = row.title;
+    const columnAuthor = row.author;
+    const columnCategory = row.category;
 
-      // verify fetching data by our searching values
-      const customFilterTitle = columnTitle.toLowerCase().includes(title);
-      const customFilterAuthor = columnAuthor.toLowerCase().includes(author);
-      const customFilterCategory = columnCategory.toLowerCase().includes(category);
+    // verify fetching data by our searching values
+    const customFilterTitle = columnTitle.toLowerCase().includes(title);
+    const customFilterAuthor = columnAuthor.toLowerCase().includes(author);
+    const customFilterCategory = columnCategory.toLowerCase().includes(category);
 
-      // push boolean values into array
-      matchFilter.push(customFilterTitle);
-      matchFilter.push(customFilterAuthor);
-      matchFilter.push(customFilterCategory);
+    // push boolean values into array
+    matchFilter.push(customFilterTitle);
+    matchFilter.push(customFilterAuthor);
+    matchFilter.push(customFilterCategory);
 
-      // return true if all values in array is true
-      // else return false
-      return matchFilter.some(Boolean);
-    };
+    console.log(matchFilter)
+    // return true if all values in array is true
+    // else return false
+    return matchFilter.every(Boolean);
   }
 
   applyFilter() {
@@ -260,7 +253,10 @@ export class BooksListComponent implements AfterViewInit, OnInit {
 
     // create string of our searching values and split if by '$'
     const filterValue = this.title + '$' + this.author + '$' + this.category;
-    console.log(filterValue);
     this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 }
