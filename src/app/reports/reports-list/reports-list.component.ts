@@ -7,6 +7,8 @@ import {ReportsListDataSource} from "./reports-list-datasource";
 import {TokenStorageService} from "../../shared/helpers/services/token-storage.service";
 import {Router} from "@angular/router";
 import {ReportService} from "../../core/services/report.service";
+import {BookDefinition} from "../../core/models/book-definition.model";
+import {BooksListDataSource} from "../../books/books-list/books-list-datasource";
 
 @Component({
   selector: 'app-reports-list',
@@ -19,7 +21,7 @@ export class ReportsListComponent implements AfterViewInit, OnInit {
   @ViewChild(MatTable) table: MatTable<ReportDefinition>;
   dataSource = new ReportsListDataSource();
 
-  displayedColumns = ['user', 'reporter', 'description', 'date'];
+  displayedColumns = ['user', 'reporter', 'description', 'date', 'delete'];
 
   constructor(private reportService: ReportService,
               private tokenStorage: TokenStorageService,
@@ -28,6 +30,8 @@ export class ReportsListComponent implements AfterViewInit, OnInit {
   ngOnInit(): void {
     this.reportService.getReports().subscribe(response => {
       this.dataSource.data = response;
+      console.log(response);
+      console.log(this.dataSource.data)
     });
   }
 
@@ -39,5 +43,21 @@ export class ReportsListComponent implements AfterViewInit, OnInit {
 
   getUserLink(username: string) {
     return `/users/details/${username}`;
+  }
+
+  deleteReport(idReport: number): void {
+    this.reportService.deleteReport(idReport).subscribe( response => {
+      let index = this.dataSource.data.findIndex( _report => _report.id_report === idReport);
+      this.dataSource.data.splice(index, 1);
+      this.refreshTable(this.dataSource.data);
+    })
+  }
+
+  refreshTable(data: ReportDefinition[]){
+    this.dataSource = new ReportsListDataSource();
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.data = data;
+    this.table.dataSource = this.dataSource;
   }
 }

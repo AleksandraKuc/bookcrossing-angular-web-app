@@ -71,11 +71,11 @@ export class UserDetailsComponent implements OnInit {
       this.userService.deleteAccount().subscribe(
         response => {
           this.logout();
+
           this.router.navigate([`/`]);
         }
       );
     } else {
-      console.log(this.username)
       this.userService.deleteAccount(this.username).subscribe(
         result => {
           this.router.navigate(['/users']);
@@ -86,6 +86,7 @@ export class UserDetailsComponent implements OnInit {
 
   logout(): void {
     this.tokenStorage.signOut();
+    window.location.reload();
   }
 
   sendMessage() {

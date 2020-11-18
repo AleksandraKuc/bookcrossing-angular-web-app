@@ -5,7 +5,5 @@ import { Component } from '@angular/core';
   templateUrl: './books-layout.component.html',
 })
 export class BooksLayoutComponent {
-  constructor() {
-    console.log('books layout');
-  }
+  constructor() {}
 }

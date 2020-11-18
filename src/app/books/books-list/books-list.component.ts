@@ -127,14 +127,18 @@ export class BooksListComponent implements AfterViewInit, OnInit {
   getFavBooks(): void {
     this.booksService.getFavBooks().subscribe(response => {
       this.dataSource.data = response;
-      this.getFavourites();
+      if (this.tokenStorage.getUsername()){
+        this.getFavourites();
+      }
     });
   }
 
   getOwnedByUser(): void {
     this.booksService.getUserOwnedBooks(this.username).subscribe(response => {
       this.dataSource.data = response;
-      this.getFavourites();
+      if (this.tokenStorage.getUsername()){
+        this.getFavourites();
+      }
     });
   }
 

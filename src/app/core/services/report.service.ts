@@ -24,4 +24,8 @@ export class ReportService {
     report.setReporter(username);
     return this.http.post(`${environment.apiUrl}/report/create`, report);
   }
+
+  deleteReport(reportId: number): Observable<any> {
+    return this.http.delete(`${environment.apiUrl}/report/delete/${reportId}`);
+  }
 }
