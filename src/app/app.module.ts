@@ -12,8 +12,9 @@ import { ContactComponent } from './contact/contact.component';
 import { MainNavigationComponent } from './main-navigation/main-navigation.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { SharedModule } from "./shared/shared.module";
-import { httpInterceptorProviders } from "./shared/helpers/interceptors/auth-interceptor";
+import { httpAuthInterceptorProvider } from "./shared/helpers/interceptors/auth-interceptor";
 import { SpinnerOverlayComponent } from './shared/components/spinner-overlay/spinner-overlay.component';
+import {httpOverlayInterceptorProvider} from "./shared/helpers/interceptors/spinner-overlay.interceptor";
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import { SpinnerOverlayComponent } from './shared/components/spinner-overlay/spi
     RouterModule,
     ReactiveFormsModule
   ],
-  providers: [ httpInterceptorProviders ],
+  providers: [ httpAuthInterceptorProvider, httpOverlayInterceptorProvider ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

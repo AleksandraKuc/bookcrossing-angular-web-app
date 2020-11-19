@@ -7,8 +7,6 @@ import {ReportsListDataSource} from "./reports-list-datasource";
 import {TokenStorageService} from "../../shared/helpers/services/token-storage.service";
 import {Router} from "@angular/router";
 import {ReportService} from "../../core/services/report.service";
-import {BookDefinition} from "../../core/models/book-definition.model";
-import {BooksListDataSource} from "../../books/books-list/books-list-datasource";
 
 @Component({
   selector: 'app-reports-list',

@@ -31,6 +31,11 @@ export class BooksService {
     return this.http.get(`${this.baseUrl}/user/${username}`);
   }
 
+  getUserAddedBooks(username?: string): Observable<any> {
+    username = username ? username : this.tokenStorage.getUsername();
+    return this.http.get(`${this.baseUrl}/addedByUser/${username}`);
+  }
+
   getFavBooks(): Observable<any> {
     let username = this.tokenStorage.getUsername();
     return this.http.get(`${this.baseUrl}/fav/${username}`);

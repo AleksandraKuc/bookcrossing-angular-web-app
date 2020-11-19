@@ -1,13 +1,15 @@
 import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatTable } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 
-import { BooksListDataSource } from './books-list-datasource';
 import { BookDefinition } from "../../core/models/book-definition.model";
 import { BooksService } from "../../core/services/books.service";
 import { TokenStorageService } from "../../shared/helpers/services/token-storage.service";
+import {Observable} from "rxjs";
+import {switchMap, take} from "rxjs/operators";
 
 @Component({
   selector: 'app-books-list',
@@ -17,8 +19,8 @@ import { TokenStorageService } from "../../shared/helpers/services/token-storage
 export class BooksListComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator; //co robi static?
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatTable, { static: true }) table: MatTable<BookDefinition>;
-  dataSource = new BooksListDataSource();
+
+  dataSource = new MatTableDataSource<BookDefinition>();
 
   listIsFavourites: Array<{ bookId: number, status: boolean }> = new Array<{bookId: number; status: boolean}>();
 
@@ -26,12 +28,17 @@ export class BooksListComponent implements AfterViewInit, OnInit {
 
   @Input() listMode: string = '';
   @Input() isAccount: boolean = false;
-  @Input() username: string = '';
+  @Input() username: Observable<string> = null;
+
+  public searchForm: FormGroup;
+  public title = '';
+  public author = '';
+  public category = '';
 
   constructor(private booksService: BooksService,
               private activatedRoute: ActivatedRoute,
               private tokenStorage: TokenStorageService,
-              protected router: Router) {}
+              private router: Router) {}
 
   ngOnInit() {
     if (this.listMode === '') {
@@ -44,16 +51,24 @@ export class BooksListComponent implements AfterViewInit, OnInit {
       this.setDisplayedColumns();
       this.getBooks();
     }
+    this.searchForm = this.searchFormInit();
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.table.dataSource = this.dataSource;
   }
 
   getDetailsLink(id: any) {
     return `/books/details/${encodeURIComponent(id)}`;
+  }
+
+  searchFormInit(): FormGroup {
+    return new FormGroup({
+      title: new FormControl('', Validators.pattern('^[a-zA-Z ]+$')),
+      author: new FormControl('', Validators.pattern('^[a-zA-Z ]+$')),
+      category: new FormControl('', Validators.pattern('^[a-zA-Z ]+$'))
+    });
   }
 
   setDisplayedColumns(): void {
@@ -90,11 +105,9 @@ export class BooksListComponent implements AfterViewInit, OnInit {
   }
 
   refreshTable(data: BookDefinition[]){
-    this.dataSource = new BooksListDataSource();
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.dataSource.data = data;
-    this.table.dataSource = this.dataSource;
+    this.dataSource = new MatTableDataSource(data);
   }
 
   getBooks() {
@@ -104,42 +117,59 @@ export class BooksListComponent implements AfterViewInit, OnInit {
       case 'my': { this.getMyBooks(); break; }
       case 'handOver': { this.getMyBooks(); break; }
       case 'own': { this.getOwnedByUser(); break; }
+      case 'added': { this.getAddedByUser(); break; }
       default : { this.getAll(); break; }
     }
   }
 
+  setTable(response: BookDefinition[]): void {
+    this.dataSource.data = response;
+    this.dataSource.filterPredicate = this.getFilterPredicate;
+  }
+
   getAll(): void {
     this.booksService.getAllBooks().subscribe(response => {
-      this.dataSource.data = response;
-      if (this.tokenStorage.getUsername()){
-        this.getFavourites();
-      }
+      this.setTable(response);
+      this.setFavBooks();
     });
   }
 
   getMyBooks(): void {
     this.booksService.getUserOwnedBooks().subscribe(response => {
-      this.dataSource.data = response;
-      this.getFavourites();
+      this.setTable(response);
+      this.setFavBooks();
     });
   }
 
   getFavBooks(): void {
     this.booksService.getFavBooks().subscribe(response => {
-      this.dataSource.data = response;
-      if (this.tokenStorage.getUsername()){
-        this.getFavourites();
-      }
+      this.setTable(response);
+      this.setFavBooks();
     });
   }
 
   getOwnedByUser(): void {
-    this.booksService.getUserOwnedBooks(this.username).subscribe(response => {
+    this.username.pipe(take(1), switchMap( user =>
+      this.booksService.getUserOwnedBooks(user)
+    )).subscribe(response => {
       this.dataSource.data = response;
-      if (this.tokenStorage.getUsername()){
-        this.getFavourites();
-      }
+      this.setFavBooks();
     });
+  }
+
+  getAddedByUser(): void {
+    this.username.pipe(take(1), switchMap( user =>
+      this.booksService.getUserAddedBooks(user)
+    )).subscribe( response => {
+      this.dataSource.data = response;
+      this.setFavBooks();
+    });
+  }
+
+  setFavBooks(): void {
+    if (this.tokenStorage.getUsername()){
+      this.getFavourites();
+    }
   }
 
   getFavourites(): void {
@@ -168,5 +198,53 @@ export class BooksListComponent implements AfterViewInit, OnInit {
 
   get showAddButton():boolean {
     return !this.isAccount;
+  }
+
+  /* this method well be called for each row in table  */
+  getFilterPredicate = (row: BookDefinition, filters: string) => {
+    // split string per '$' to array
+    const filterArray = filters.split('$');
+    const title = filterArray[0];
+    const author = filterArray[1];
+    const category = filterArray[2];
+
+    const matchFilter = [];
+
+    // Fetch data from row
+    const columnTitle = row.title;
+    const columnAuthor = row.author;
+    const columnCategory = row.category;
+
+    // verify fetching data by our searching values
+    const customFilterTitle = columnTitle.toLowerCase().includes(title);
+    const customFilterAuthor = columnAuthor.toLowerCase().includes(author);
+    const customFilterCategory = columnCategory.toLowerCase().includes(category);
+
+    // push boolean values into array
+    matchFilter.push(customFilterTitle);
+    matchFilter.push(customFilterAuthor);
+    matchFilter.push(customFilterCategory);
+
+    // return true if all values in array is true
+    // else return false
+    return matchFilter.every(Boolean);
+  }
+
+  applyFilter() {
+    const title = this.searchForm.get('title').value;
+    const author = this.searchForm.get('author').value;
+    const category = this.searchForm.get('category').value;
+
+    this.title = title === null ? '' : title;
+    this.author = author === null ? '' : author;
+    this.category = category === null ? '' : category;
+
+    // create string of our searching values and split if by '$'
+    const filterValue = this.title + '$' + this.author + '$' + this.category;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 }
