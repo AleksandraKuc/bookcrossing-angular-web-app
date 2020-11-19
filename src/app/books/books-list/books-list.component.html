@@ -1,43 +1,99 @@
-<div class="mat-elevation-z8 books-table">
-  <table mat-table matSort class="full-width-table" aria-label="Elements">
-    <!-- idBook Column -->
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
-      <td mat-cell *matCellDef="let row">{{row.id_book}}</td>
-    </ng-container>
+<button mat-raised-button color="accent" *ngIf="isLoggedIn() && showAddButton" (click)="addNewBook()">Add new book</button>
 
-    <!-- Title Column -->
-    <ng-container matColumnDef="title">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
-      <td mat-cell *matCellDef="let row">{{row.title}}</td>
-    </ng-container>
+<div>
+  <form *ngIf="!isAccount" [formGroup]="searchForm" class="search__form">
 
-    <!-- Author Column -->
-    <ng-container matColumnDef="author">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Author</th>
-      <td mat-cell *matCellDef="let row">{{row.author}}</td>
-    </ng-container>
+    <mat-form-field class="search__form_field" appearance="outline">
+      <mat-label>Book title</mat-label>
+      <input type="text"
+             aria-label="Book title"
+             matInput
+             formControlName="title"
+             (keyup)="applyFilter()"
+      >
+    </mat-form-field>
 
-    <!-- Category Column -->
-    <ng-container matColumnDef="category">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
-      <td mat-cell *matCellDef="let row">{{row.category}}</td>
-    </ng-container>
+    <mat-form-field class="search__form_field" appearance="outline">
+      <mat-label>Book author</mat-label>
+      <input type="text"
+             aria-label="Book author"
+             matInput
+             formControlName="author"
+             (keyup)="applyFilter()"
+      >
+    </mat-form-field>
 
-    <!-- Description Column -->
-    <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
-      <td mat-cell *matCellDef="let row">{{row.description}}</td>
-    </ng-container>
+    <mat-form-field class="search__form_field" appearance="outline">
+      <mat-label>Book category</mat-label>
+      <input type="text"
+             aria-label="Book category"
+             matInput
+             formControlName="category"
+             (keyup)="applyFilter()"
+      >
+    </mat-form-field>
+  </form>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="getDetailsLink(row.id_book)"></tr>
-  </table>
+  <div *ngIf="dataSource.data.length !== 0" class="mat-elevation-z8 books-table">
 
-  <mat-paginator #paginator
-                 [length]="dataSource?.data.length"
-                 [pageIndex]="0"
-                 [pageSize]="10"
-                 [pageSizeOptions]="[10, 25, 50]">
-  </mat-paginator>
+    <table mat-table [dataSource]="dataSource" matSort class="full-width-table" aria-label="Elements">
+      <!-- idBook Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+        <td mat-cell *matCellDef="let element">{{element.id_book}}</td>
+      </ng-container>
+
+      <!-- Title Column -->
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+        <td mat-cell *matCellDef="let element">{{element.title}}</td>
+      </ng-container>
+
+      <!-- Author Column -->
+      <ng-container matColumnDef="author">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Author</th>
+        <td mat-cell *matCellDef="let element">{{element.author}}</td>
+      </ng-container>
+
+      <!-- Category Column -->
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
+        <td mat-cell *matCellDef="let element">{{element.category}}</td>
+      </ng-container>
+
+      <!-- Description Column -->
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+        <td mat-cell *matCellDef="let element">{{element.description}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="favourites">
+        <th mat-header-cell *matHeaderCellDef > Favourites </th>
+        <td mat-cell *matCellDef="let element" >
+          <button mat-button *ngIf="!checkIsFavourite(element.id_book)" (click)="addToFavourites(element.id_book); $event.stopPropagation()">Add to favourites</button>
+          <button mat-button *ngIf="checkIsFavourite(element.id_book)" (click)="removeFromFavourites(element.id_book); $event.stopPropagation()">Remove from favourites</button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="handOver">
+        <th mat-header-cell *matHeaderCellDef > Select book </th>
+        <td mat-cell *matCellDef="let element" >
+          <button mat-button (click)="selectToHandOver(element.id_book); $event.stopPropagation()">Select</button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="getDetailsLink(row.id_book)"></tr>
+    </table>
+
+    <mat-paginator #paginator
+                   [length]="dataSource?.data.length"
+                   [pageIndex]="0"
+                   [pageSize]="10"
+                   [pageSizeOptions]="[10, 25, 50]">
+    </mat-paginator>
+  </div>
+
+  <span *ngIf="dataSource.data.length === 0"> No items :( </span>
+
 </div>

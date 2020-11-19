@@ -1,28 +1,33 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
-import { AccountService } from "../../core/services/account.service";
+import {TokenStorageService} from "./services/token-storage.service";
+import {MatSnackBar, MatSnackBarConfig} from "@angular/material/snack-bar";
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
 
-  constructor(
-    private router: Router,
-    private accountService: AccountService
-  ) {}
+  constructor(private router: Router,
+              private tokenStorage: TokenStorageService,
+              private snackBar: MatSnackBar) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    console.log('check');
 
-    const user = this.accountService.userValue;
-    console.log(user);
-    if (user) {
+    const username = this.tokenStorage.getUsername();
+    if (username) {
       // authorised so return true
       return true;
     }
 
-    // not logged in so redirect to login page with the return url
+    this.openSnackBar();
     this.router.navigate(['/account/login'], { queryParams: { returnUrl: state.url }});
     return false;
+  }
+
+  openSnackBar(): void {
+    let config = new MatSnackBarConfig();
+    config.duration = 5000;
+    let message = "You have to log in to see this page";
+    this.snackBar.open(message, "x", config);
   }
 }

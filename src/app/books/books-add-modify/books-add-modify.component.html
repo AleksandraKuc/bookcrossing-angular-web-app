@@ -1,1 +1,57 @@
 <p>books-add-modify works!</p>
+
+<!--(ngSubmit)="onSubmit()" (cancel)="cancel()"-->
+<form [formGroup]="form" class="register-form" >
+
+  <mat-form-field appearance="fill">
+    <mat-label>Choose title</mat-label>
+    <input matInput type="text" formControlName="title" required > <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="this.form.get('title').hasError('required')">
+      Title is <strong>required</strong>
+    </mat-error>
+  </mat-form-field> <br/>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Enter book's author</mat-label>
+    <input matInput type="text" formControlName="author" required> <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="this.form.get('author').hasError('required')">
+      Author is <strong>required</strong>
+    </mat-error>
+  </mat-form-field> <br/>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Enter book's description</mat-label>
+    <input matInput type="text" formControlName="description" required> <!-- [errorStateMatcher]="matcher" -->
+  </mat-form-field> <br/>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Enter book isbn</mat-label>
+    <input matInput type="text" formControlName="isbn"> <!-- [errorStateMatcher]="matcher" -->
+    <mat-hint>Make it easier for other users to find the book</mat-hint>
+  </mat-form-field> <br/>
+
+  <mat-form-field appearance="fill">
+    <input type="text"
+           placeholder="Category"
+           aria-label="Number"
+           matInput
+           formControlName="category"
+           [matAutocomplete]="auto">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredCategories | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-error *ngIf="this.form.get('category').hasError('required')">
+      Category is <strong>required</strong>
+    </mat-error>
+  </mat-form-field> <br/>
+
+  <div class="form-group">
+    <button mat-raised-button color="accent" (click)="onSubmit()">{{submitButton}}</button>
+    <button mat-raised-button color="accent" (click)="cancel(); $event.stopPropagation()">Cancel</button>
+    <div *ngIf="isSavingFailed" class="alert alert-warning">
+      Saving failed!<br/>{{errorMessage}}
+    </div>
+  </div>
+</form>

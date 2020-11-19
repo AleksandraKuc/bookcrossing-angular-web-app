@@ -1,1 +1,90 @@
-<p>register works!</p>
+<form [formGroup]="form" class="register-form" (ngSubmit)="onSubmit()">
+
+  <mat-form-field appearance="fill">
+    <mat-label>Choose your username</mat-label>
+    <input matInput type="text" formControlName="username" required> <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="this.form.get('username').hasError('required')">
+      Username is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your password</mat-label>
+    <input matInput type="password" formControlName="password" required> <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="this.form.get('password').hasError('pattern') && !this.form.get('password').hasError('required')">
+      Please enter a valid password
+    </mat-error>
+    <mat-error *ngIf="this.form.get('password').hasError('required')">
+      Password is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Confirm your password</mat-label>
+    <input matInput type="password" [formControl]="confirmPassword" required> <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="!equalsPasswords() && !confirmPassword.hasError('required')">
+      Entered passwords are not equals
+    </mat-error>
+    <mat-error *ngIf="confirmPassword.hasError('required')">
+      Password is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your name</mat-label>
+    <input matInput type="text" formControlName="name" required> <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="this.form.get('name').hasError('required')">
+      Name is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your lastname</mat-label>
+    <input matInput type="text" formControlName="lastname" required> <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="this.form.get('lastname').hasError('required')">
+      Lastname is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your email</mat-label>
+    <input matInput type="email" formControlName="email" > <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="this.form.get('email').hasError('email') && !this.form.get('email').hasError('required')">
+      Please enter a valid email address
+    </mat-error>
+    <mat-error *ngIf="this.form.get('email').hasError('required')">
+      Email is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your city</mat-label>
+    <input matInput type="text" formControlName="city" required> <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="this.form.get('city').hasError('required')">
+      City is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your province</mat-label>
+    <input matInput type="text" formControlName="province" required> <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="this.form.get('province').hasError('required')">
+      Province is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your phoneNumber</mat-label>
+    <input matInput type="number" formControlName="phoneNumber" > <!-- [errorStateMatcher]="matcher" -->
+    <mat-error *ngIf="this.form.get('phoneNumber').hasError('pattern')">
+      Please enter a valid phone number
+    </mat-error>
+  </mat-form-field>
+
+  <div class="form-group">
+    <button mat-raised-button color="accent">Register</button>
+    <div *ngIf="isSignUpFailed" class="alert alert-warning">
+      Signup failed!<br/>{{errorMessage}}
+    </div>
+  </div>
+</form>

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
-import {first} from "rxjs/operators";
+
 import {UsersService} from "../../core/services/users.service";
+import {UserDefinition} from "../../core/models/user-definition.model";
+import {SignUpInfo} from "../../shared/models/signup-info";
 
 @Component({
   selector: 'app-users-add-modify',
@@ -12,91 +14,82 @@ import {UsersService} from "../../core/services/users.service";
 export class UsersAddModifyComponent implements OnInit {
 
   form: FormGroup;
-  id: string;
-  isAddMode: boolean;
-  loading = false;
   submitted = false;
+  loading = false;
   hidePassword: boolean = true;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
               private router: Router,
-              private usersService: UsersService
+              private usersService: UsersService,
   ) { }
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.params['id'];
-    this.isAddMode = !this.id;
+    this.form = this.generateForm();
 
-    // password not required in edit mode
-    const passwordValidators = [Validators.minLength(6)];
-    if (this.isAddMode) {
-      passwordValidators.push(Validators.required);
-    }
-
-    this.form = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      username: ['', Validators.required],
-      password: ['', passwordValidators]
-    });
-
-    if (!this.isAddMode) {
-      this.usersService.getUser(this.id)
-        .pipe(first())
-        .subscribe(x => {
-          this.f.firstName.setValue(x.firstName);
-          this.f.lastName.setValue(x.lastName);
-          this.f.username.setValue(x.username);
-        });
-    }
+    this.usersService.getUser()
+      .subscribe(details => {
+        this.setFormValue(details);
+      });
   }
 
-  // convenience getter for easy access to form fields
+  generateForm(): FormGroup {
+    return new FormGroup(
+      {
+        firstName: new FormControl('', [Validators.required]),
+        lastName: new FormControl('', [Validators.required]),
+        username: new FormControl({ value: '', disabled: true }),
+        email: new FormControl('', [Validators.required, Validators.email]),
+        city: new FormControl('', [Validators.required]),
+        province: new FormControl('', [Validators.required]),
+        phoneNumber: new FormControl(0, [Validators.pattern("^[0-9]+$")]),
+      },
+    );
+  }
+
+  setFormValue(user: UserDefinition): void {
+    this.form.get('firstName').setValue(user.firstName);
+    this.form.get('lastName').setValue(user.lastName);
+    this.form.get('username').setValue(user.username);
+    this.form.get('email').setValue(user.email);
+    this.form.get('city').setValue(user.city);
+    this.form.get('province').setValue(user.province);
+    this.form.get('phoneNumber').setValue(user.phoneNumber);
+  }
+
   get f() { return this.form.controls; }
 
-  onSubmit() {
+  onSubmit(): void {
     this.submitted = true;
 
-    // stop here if form is invalid
-    if (this.form.invalid) {
-      return;
-    }
-
-    this.loading = true;
-    if (this.isAddMode) {
-      this.createUser();
-    } else {
+    if (this.form.valid) {
+      this.loading = true;
       this.updateUser();
     }
   }
 
-  private createUser() {
-    console.log(this.form.value);
-    // this.usersService.createUser(this.form.value)
-    //   .pipe(first())
-    //   .subscribe(
-    //     data => {
-    //       this.router.navigate(['.', { relativeTo: this.route }]);
-    //     },
-    //     error => {
-    //       this.loading = false;
-    //     });
+  private updateUser() {
+    let signupInfo = new SignUpInfo(
+      this.form.get('firstName').value,
+      this.form.get('lastName').value,
+      this.form.get('username').value,
+      this.form.get('email').value,
+      this.form.get('city').value,
+      this.form.get('province').value,
+      this.form.get('phoneNumber').value);
+
+    this.usersService.updateUser(signupInfo)
+      .subscribe(() => {
+          this.router.navigate([`/users/profile`]);
+        },
+        error => {
+          console.log(error);
+          this.loading = false;
+      });
   }
 
-  private updateUser() {
-    console.log('update');
-    console.log(this.form.value);
-    // this.usersService.updateUser(Number(this.id), this.form.value)
-    //   .pipe(first())
-    //   .subscribe(
-    //     data => {
-    //       this.router.navigate(['..', { relativeTo: this.route }]);
-    //     },
-    //     error => {
-    //       this.loading = false;
-    //     });
+  cancel() {
+    this.router.navigate([`/users/profile`]);
   }
 
   getErrorMessage() {
@@ -106,4 +99,5 @@ export class UsersAddModifyComponent implements OnInit {
 
     return this.form.get('email').hasError('email') ? 'Not a valid email' : '';
   }
+
 }

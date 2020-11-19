@@ -3,16 +3,16 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
+import {ConversationDefinition} from "../../core/models/conversation-definition.model";
 
-import {BookDefinition} from "../../core/models/book-definition.model";
 
 /**
- * Data source for the BooksList view. This class should
+ * Data source for the UsersList view. This class should
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
-export class BooksListDataSource extends DataSource<BookDefinition> {
-  data: BookDefinition[] = [];
+export class ConversationsListDataSource extends DataSource<ConversationDefinition> {
+  data: ConversationDefinition[] = [];
   paginator: MatPaginator;
   sort: MatSort;
 
@@ -25,7 +25,7 @@ export class BooksListDataSource extends DataSource<BookDefinition> {
    * the returned stream emits new items.
    * @returns A stream of the items to be rendered.
    */
-  connect(): Observable<BookDefinition[]> {
+  connect(): Observable<ConversationDefinition[]> {
     // Combine everything that affects the rendered data into one update
     // stream for the data-table to consume.
     const dataMutations = [
@@ -49,7 +49,7 @@ export class BooksListDataSource extends DataSource<BookDefinition> {
    * Paginate the data (client-side). If you're using server-side pagination,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getPagedData(data: BookDefinition[]) {
+  private getPagedData(data: ConversationDefinition[]) {
     const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
     return data.splice(startIndex, this.paginator.pageSize);
   }
@@ -58,7 +58,7 @@ export class BooksListDataSource extends DataSource<BookDefinition> {
    * Sort the data (client-side). If you're using server-side sorting,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getSortedData(data: BookDefinition[]) {
+  private getSortedData(data: ConversationDefinition[]) {
     if (!this.sort.active || this.sort.direction === '') {
       return data;
     }
@@ -66,10 +66,8 @@ export class BooksListDataSource extends DataSource<BookDefinition> {
     return data.sort((a, b) => {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
-        case 'title': return compare(a.title, b.title, isAsc);
-        case 'description': return compare(+a.description.length, +b.description.length, isAsc);
-        case 'category': return compare(+a.category.length, +b.category.length, isAsc);
-        case 'author': return compare(+a.author.length, +b.author.length, isAsc);
+        // case 'name': return compare(a.firstName, b.firstName, isAsc);
+        // case 'id': return compare(+a.id, +b.id, isAsc);
         default: return 0;
       }
     });

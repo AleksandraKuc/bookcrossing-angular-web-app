@@ -9,23 +9,40 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {MatSortModule} from "@angular/material/sort";
 import {ModuleWithProviders, NgModule} from "@angular/core";
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from "@angular/material/input";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {CommonModule} from "@angular/common";
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
 
 const SHARED_COMPONENTS = [];
 const SHARED_MODULES = [
   LayoutModule,
   MatButtonModule,
+  MatButtonToggleModule,
+  MatDatepickerModule,
   MatIconModule,
+  MatInputModule,
   MatListModule,
   MatTableModule,
+  MatDialogModule,
   MatToolbarModule,
   MatPaginatorModule,
+  MatProgressSpinnerModule,
   MatSidenavModule,
   MatSortModule,
   MatFormFieldModule,
+  MatAutocompleteModule,
+  MatSnackBarModule,
+  MatNativeDateModule,
 ];
 
 @NgModule({
-  imports: [...SHARED_MODULES],
+  imports: [...SHARED_MODULES, CommonModule],
   declarations: [...SHARED_COMPONENTS],
   exports: [...SHARED_COMPONENTS, ...SHARED_MODULES],
 })

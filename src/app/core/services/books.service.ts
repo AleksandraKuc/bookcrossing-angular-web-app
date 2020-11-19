@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 
 import { Observable } from "rxjs";
+import {AuthService} from "../../shared/helpers/services/auth.service";
+import {TokenStorageService} from "../../shared/helpers/services/token-storage.service";
+import {BookDefinition} from "../models/book-definition.model";
 
 @Injectable({
   providedIn: 'root'
@@ -9,41 +12,64 @@ import { Observable } from "rxjs";
 export class BooksService {
 
   private baseUrl = 'http://localhost:8080/api/book';
+  private favBooksUrl = 'http://localhost:8080/api/favouriteBooks';
+  private historyUserUrl = 'http://localhost:8080/api/historyUsers';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+              private tokenStorage: TokenStorageService) {}
 
   getBook(idBook : any): Observable<any> {
-    return this.http.get(`${this.baseUrl}/getBook/${idBook}`);
+    return this.http.get(`${this.baseUrl}/id/${idBook}`);
   }
 
   getAllBooks(): Observable<any> {
-    // return this.http.get<Book[]>(`${this.baseUrl}/allBooks`).pipe(map((response) => {
-    //   return response.json();
-    // }));
-    return this.http.get(`${this.baseUrl}/allBooks`);
+    return this.http.get(`${this.baseUrl}/all`);
   }
 
-  getBooksByUser(idUser: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}/getBooksByUser/${idUser}`);
+  getUserOwnedBooks(username?: string): Observable<any> {
+    username = username ? username : this.tokenStorage.getUsername();
+    return this.http.get(`${this.baseUrl}/user/${username}`);
   }
 
-  // getUserBymail(mail : string): Observable<any>{
-  //   return this.http.get(`${this.baseUrl}/mail/${mail}`)
-  // }
-
-  createBook(idUser: number, book: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/create/${idUser}`, book);
+  getUserAddedBooks(username?: string): Observable<any> {
+    username = username ? username : this.tokenStorage.getUsername();
+    return this.http.get(`${this.baseUrl}/addedByUser/${username}`);
   }
 
-  updateBook(idBook: number, book: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/update/${idBook}`, book);
+  getFavBooks(): Observable<any> {
+    let username = this.tokenStorage.getUsername();
+    return this.http.get(`${this.baseUrl}/fav/${username}`);
   }
 
-  updateBookHired(idBook: number): Observable<any> {
-    return this.http.put(`${this.baseUrl}/update/hired/${idBook}`, null);
+  createBook(book: any): Observable<any> {
+    let username = this.tokenStorage.getUsername();
+    return this.http.post(`${this.baseUrl}/create/${username}`, book);
+  }
+
+  updateBook(book: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/update`, book);
+  }
+
+  updateBookHired(idBook: number, username: string): Observable<any> {
+    return this.http.put(`${this.historyUserUrl}/update/${idBook}/${username}`, null);
   }
 
   deleteBook(idBook: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/delete/${idBook}`);
+    return this.http.delete(`${this.baseUrl}/${idBook}`);
+  }
+
+  addToFavourites(idBook: number): Observable<any> {
+    let username = this.tokenStorage.getUsername();
+    return this.http.post(`${this.favBooksUrl}/create/${username}/${idBook}`, null);
+  }
+
+  removeFromFavourites(idBook: number): Observable<any> {
+    let username = this.tokenStorage.getUsername();
+    return this.http.delete(`${this.favBooksUrl}/delete/${username}/${idBook}`);
+  }
+
+  checkIfFavourite(idBook: number): Observable<any> {
+    let username = this.tokenStorage.getUsername();
+    return this.http.get(`${this.favBooksUrl}/check/${username}/${idBook}`);
   }
 }

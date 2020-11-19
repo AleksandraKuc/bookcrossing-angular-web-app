@@ -12,7 +12,7 @@ export class HistoryUsersService {
   constructor(private http: HttpClient) { }
 
   getUserHistory(idHistory : any): Observable<any> {
-    return this.http.get(`${this.baseUrl}/getByHistory/${idHistory}`);
+    return this.http.get(`${this.baseUrl}/history/${idHistory}`);
   }
 }
 

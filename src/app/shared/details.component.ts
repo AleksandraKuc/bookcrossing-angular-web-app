@@ -4,9 +4,7 @@ export abstract class DetailsComponent<T> {
   protected details: T;
   protected id: number;
 
-  protected constructor(protected route: ActivatedRoute,
-                        // private location: Location
-  ) {
+  protected constructor(protected route: ActivatedRoute) {
     this.id = +this.route.snapshot.paramMap.get('id');
   }
 
