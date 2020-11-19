@@ -19,6 +19,6 @@ export class ConversationDefinition {
 }
 
 class ConvUser {
-  firstName: string;
+  firstname: string;
   username: string;
 }

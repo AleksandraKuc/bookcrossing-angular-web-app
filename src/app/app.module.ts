@@ -14,7 +14,7 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { SharedModule } from "./shared/shared.module";
 import { httpAuthInterceptorProvider } from "./shared/helpers/interceptors/auth-interceptor";
 import { SpinnerOverlayComponent } from './shared/components/spinner-overlay/spinner-overlay.component';
-import {httpOverlayInterceptorProvider} from "./shared/helpers/interceptors/spinner-overlay.interceptor";
+import { httpOverlayInterceptorProvider } from "./shared/helpers/interceptors/spinner-overlay.interceptor";
 
 @NgModule({
   declarations: [
@@ -34,7 +34,10 @@ import {httpOverlayInterceptorProvider} from "./shared/helpers/interceptors/spin
     RouterModule,
     ReactiveFormsModule
   ],
-  providers: [ httpAuthInterceptorProvider, httpOverlayInterceptorProvider ],
+  providers: [
+    httpAuthInterceptorProvider,
+    httpOverlayInterceptorProvider
+  ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

@@ -5,6 +5,7 @@ import {AboutBookcrossingComponent} from "./about-bookcrossing/about-bookcrossin
 import {ContactComponent} from "./contact/contact.component";
 import {AuthGuard} from "./shared/helpers/auth.guard";
 import {ReportsListComponent} from "./reports/reports-list/reports-list.component";
+import {AuthAdminGuard} from "./shared/helpers/auth-admin.guard";
 
 const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
 const booksModule = () => import('./books/books.module').then(x => x.BooksModule);
@@ -18,7 +19,7 @@ const ROUTES: Routes = [
   { path: 'books', loadChildren: booksModule },
   { path: 'conversations', loadChildren: conversationsModule },
   { path: 'reset-password', component: MainPageComponent, canActivate: [ AuthGuard ] },
-  { path: 'reports', component: ReportsListComponent, canActivate: [ AuthGuard ] },
+  { path: 'reports', component: ReportsListComponent, canActivate: [ AuthAdminGuard ] },
   { path: 'about', component: AboutBookcrossingComponent },
   { path: 'contact', component: ContactComponent },
 

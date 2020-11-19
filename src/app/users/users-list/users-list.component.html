@@ -1,59 +1,95 @@
-<div class="mat-elevation-z8">
-  <table mat-table class="full-width-table" matSort aria-label="Elements">
 
-    <!-- firstName Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-      <td mat-cell *matCellDef="let row">{{row.firstName}}</td>
-    </ng-container>
+<div>
+  <form [formGroup]="searchForm" class="search__form">
 
-    <!-- username Column -->
-    <ng-container matColumnDef="username">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
-      <td mat-cell *matCellDef="let row">{{row.username}}</td>
-    </ng-container>
+    <mat-form-field class="search__form_field" appearance="outline">
+      <mat-label>First name</mat-label>
+      <input type="text"
+             aria-label="First name"
+             matInput
+             formControlName="firstName"
+             (keyup)="applyFilter()"
+      >
+    </mat-form-field>
 
-    <!-- city Column -->
-    <ng-container matColumnDef="city">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>City</th>
-      <td mat-cell *matCellDef="let row">{{row.city}}</td>
-    </ng-container>
+    <mat-form-field class="search__form_field" appearance="outline">
+      <mat-label>Username</mat-label>
+      <input type="text"
+             aria-label="Username"
+             matInput
+             formControlName="username"
+             (keyup)="applyFilter()"
+      >
+    </mat-form-field>
 
-    <!-- province Column -->
-    <ng-container matColumnDef="province">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Province</th>
-      <td mat-cell *matCellDef="let row">{{row.province}}</td>
-    </ng-container>
+    <mat-form-field class="search__form_field" appearance="outline">
+      <mat-label>City</mat-label>
+      <input type="text"
+             aria-label="City"
+             matInput
+             formControlName="city"
+             (keyup)="applyFilter()"
+      >
+    </mat-form-field>
+  </form>
 
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="full-width-table" matSort aria-label="Elements">
 
-    <!-- added Books Column -->
-    <ng-container matColumnDef="addedBooks">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Added books amount</th>
-      <td mat-cell *matCellDef="let row">{{row.addedBooks}}</td>
-    </ng-container>
+      <!-- firstName Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let row">{{row.firstName}}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="sendMessage">
-      <th mat-header-cell *matHeaderCellDef > Send message </th>
-      <td mat-cell *matCellDef="let element" >
-        <button mat-button (click)="sendMessage(element.username); $event.stopPropagation()">New message</button>
-      </td>
-    </ng-container>
+      <!-- username Column -->
+      <ng-container matColumnDef="username">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
+        <td mat-cell *matCellDef="let row">{{row.username}}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="handOver">
-      <th mat-header-cell *matHeaderCellDef > Select user </th>
-      <td mat-cell *matCellDef="let element" >
-        <button mat-button (click)="handOverBook(element.username); $event.stopPropagation()">Select</button>
-      </td>
-    </ng-container>
+      <!-- city Column -->
+      <ng-container matColumnDef="city">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>City</th>
+        <td mat-cell *matCellDef="let row">{{row.city}}</td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="getDetailsLink(row.username)"></tr>
-  </table>
+      <!-- province Column -->
+      <ng-container matColumnDef="province">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Province</th>
+        <td mat-cell *matCellDef="let row">{{row.province}}</td>
+      </ng-container>
 
-  <mat-paginator #paginator
-      [length]="dataSource?.data.length"
-      [pageIndex]="0"
-      [pageSize]="50"
-      [pageSizeOptions]="[25, 50, 100, 250]">
-  </mat-paginator>
+      <!-- added Books Column -->
+      <ng-container matColumnDef="addedBooks">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Added books amount</th>
+        <td mat-cell *matCellDef="let row">{{row.addedBooks}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="sendMessage">
+        <th mat-header-cell *matHeaderCellDef > Send message </th>
+        <td mat-cell *matCellDef="let element" >
+          <button mat-button (click)="sendMessage(element.username); $event.stopPropagation()">New message</button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="handOver">
+        <th mat-header-cell *matHeaderCellDef > Select user </th>
+        <td mat-cell *matCellDef="let element" >
+          <button mat-button (click)="handOverBook(element.username); $event.stopPropagation()">Select</button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [routerLink]="getDetailsLink(row.username)"></tr>
+    </table>
+
+    <mat-paginator #paginator
+        [length]="dataSource?.data.length"
+        [pageIndex]="0"
+        [pageSize]="50"
+        [pageSizeOptions]="[25, 50, 100, 250]">
+    </mat-paginator>
+  </div>
+
 </div>

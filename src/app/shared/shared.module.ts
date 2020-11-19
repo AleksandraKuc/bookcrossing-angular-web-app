@@ -16,12 +16,15 @@ import {CommonModule} from "@angular/common";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
 
 const SHARED_COMPONENTS = [];
 const SHARED_MODULES = [
   LayoutModule,
   MatButtonModule,
   MatButtonToggleModule,
+  MatDatepickerModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
@@ -35,6 +38,7 @@ const SHARED_MODULES = [
   MatFormFieldModule,
   MatAutocompleteModule,
   MatSnackBarModule,
+  MatNativeDateModule,
 ];
 
 @NgModule({

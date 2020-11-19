@@ -10,9 +10,9 @@ import {RouterModule} from "@angular/router";
 @NgModule({
   imports: [
     CommonModule,
-    SharedModule.forRoot(),
     ReactiveFormsModule,
     RouterModule,
+    SharedModule.forRoot(),
   ],
   exports: [
     ReportItemComponent
