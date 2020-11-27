@@ -40,6 +40,11 @@
     <input matInput type="text" value="{{currentUser?.username}}" (click)="showUserProfile(true)" readonly>
   </mat-form-field> <br/>
 
+  <div class="container row">
+    <div class="col-md-12">
+      <img [src]="bookImage">
+    </div>
+  </div>
 
   <button mat-raised-button color="accent" *ngIf="isLoggedUser && isMyBook" (click)="editBook()">Edit book</button>
   <button mat-raised-button color="accent" *ngIf="isLoggedUser && isMyBook" (click)="deleteBook()">Delete book</button>

@@ -41,6 +41,10 @@ export class BooksService {
     return this.http.get(`${this.baseUrl}/fav/${username}`);
   }
 
+  uploadImage(image: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/upload`, image);
+  }
+
   createBook(book: any): Observable<any> {
     let username = this.tokenStorage.getUsername();
     return this.http.post(`${this.baseUrl}/create/${username}`, book);

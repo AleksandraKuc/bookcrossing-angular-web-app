@@ -189,7 +189,7 @@ export class BooksListComponent implements AfterViewInit, OnInit {
   }
 
   checkIsFavourite(id: number): boolean {
-    return (this.listIsFavourites.find( element => element.bookId === id)).status;
+    return (this.listIsFavourites.find( element => element.bookId === id))?.status;
   }
 
   isLoggedIn(): boolean {

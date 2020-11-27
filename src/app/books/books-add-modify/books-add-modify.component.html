@@ -21,12 +21,12 @@
 
   <mat-form-field appearance="fill">
     <mat-label>Enter book's description</mat-label>
-    <input matInput type="text" formControlName="description" required> <!-- [errorStateMatcher]="matcher" -->
+    <input matInput type="text" formControlName="description" required>
   </mat-form-field> <br/>
 
   <mat-form-field appearance="fill">
     <mat-label>Enter book isbn</mat-label>
-    <input matInput type="text" formControlName="isbn"> <!-- [errorStateMatcher]="matcher" -->
+    <input matInput type="text" formControlName="isbn">
     <mat-hint>Make it easier for other users to find the book</mat-hint>
   </mat-form-field> <br/>
 
@@ -46,6 +46,20 @@
       Category is <strong>required</strong>
     </mat-error>
   </mat-form-field> <br/>
+
+<!--  <mat-form-field appearance="fill">-->
+    <div class="container row">
+      <div class="col-md-12">
+        <h1>Upload Image</h1>
+      </div>
+    </div>
+
+    <div class="container row">
+      <div class="col-md-6">
+        <input type="file" (change)="onFileChanged($event)">
+      </div>
+    </div>
+<!--  </mat-form-field> <br/>-->
 
   <div class="form-group">
     <button mat-raised-button color="accent" (click)="onSubmit()">{{submitButton}}</button>

@@ -9,6 +9,7 @@ import {UsersService} from "../../core/services/users.service";
 import {UserDefinition} from "../../core/models/user-definition.model";
 import {TokenStorageService} from "../../shared/helpers/services/token-storage.service";
 import {ConversationsService} from "../../core/services/conversations.service";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-book-details',
@@ -21,6 +22,10 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
   firstUser: UserDefinition;
   currentUser: UserDefinition;
   isFavourite: boolean = false;
+  bookImage: any;
+  base64Data: any;
+  message: string;
+  imageName: any;
 
   constructor(protected booksService: BooksService,
               protected historyUserService: HistoryUsersService,
@@ -29,11 +34,16 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
               protected userService: UsersService,
               protected route: ActivatedRoute,
               protected router: Router,
-              protected cdr: ChangeDetectorRef) {
+              protected cdr: ChangeDetectorRef,
+              protected sanitizer: DomSanitizer) {
     super(route);
 
     this.booksService.getBook(this.id).subscribe(book => {
       this.setDetails(book);
+      this.base64Data = book.image.picByte;
+      let objectURL = 'data:image/jpeg;base64,' + this.base64Data;
+      this.bookImage = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+      console.log(this.bookImage);
       this.historyUserService.getUserHistory(this.getDetails().history.id_history).subscribe(historyUser => {
           this.historyUser = historyUser;
           this.getBookUsers('firstUser');
@@ -110,17 +120,15 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
   }
 
   reserveBook(): void {
-    console.log('reserved');
     let message = "Hi, I want to reserve book \"" + this.getDetails().title + "\"";
     if (this.getDetails().isbn !== null) {
       message += " with isbn code " + this.getDetails();
     }
-    let username = this.currentUser.username;
+    let username = this.currentUser?.username;
     this.conversationsService.checkIfExists(this.currentUser.username)
       .subscribe(
         response => {
           if (!response) {
-            console.log("creating conv")
             this.conversationsService.createConversation(this.currentUser.username)
               .subscribe(
                 conversation => {
@@ -128,7 +136,6 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
                     { state: { conversationId: conversation.id_conversation, message: message } });
             })
           } else {
-            console.log("already exists")
             this.router.navigate([`conversations/${this.currentUser.username}`],
               { state: { message: message }});
           }
@@ -140,6 +147,6 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
   }
 
   get isMyBook(): boolean {
-    return this.currentUser.username === this.tokenStorage.getUsername();
+    return this.currentUser?.username === this.tokenStorage.getUsername();
   }
 }

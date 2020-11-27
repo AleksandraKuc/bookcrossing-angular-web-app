@@ -55,8 +55,6 @@ export class ConversationsDetailsComponent implements OnInit {
   }
 
   sendMessage(){
-    console.log(this.tokenStorage.getUsername());
-    console.log(this.conversationId);
     let message = new MessageDefinition(
       this.content.value,
       this.tokenStorage.getUsername(),

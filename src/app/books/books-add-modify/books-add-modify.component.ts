@@ -18,6 +18,7 @@ export class BooksAddModifyComponent implements OnInit {
   viewMode: string;
   bookId: number;
   form: FormGroup;
+  selectedFile: File = null;
 
   isSavingFailed = false;
   errorMessage = '';
@@ -55,8 +56,12 @@ export class BooksAddModifyComponent implements OnInit {
       description: new FormControl(''),
       author: new FormControl('', Validators.required),
       isbn: new FormControl(''),
-      category: new FormControl('', Validators.required)
+      category: new FormControl('', Validators.required),
     });
+  }
+
+  public onFileChanged(event) {
+    this.selectedFile = event.target.files[0];
   }
 
   private setValues(book: BookDefinition) {
@@ -74,13 +79,19 @@ export class BooksAddModifyComponent implements OnInit {
       this.form.get('description').value,
       this.form.get('author').value,
       this.form.get('isbn').value,
-      this.form.get('category').value
+      this.form.get('category').value,
     );
+    const uploadImageData = new FormData();
+    uploadImageData.append('image', this.selectedFile, this.selectedFile.name);
+
     if (this.form.valid) {
       if (this.viewMode === 'edit') {
         this.saveBook(book);
       } else {
-        this.addBook(book);
+        this.bookService.uploadImage(uploadImageData).subscribe( image => {
+          book.image = image;
+          this.addBook(book);
+        })
       }
     } else {
       this.errorMessage = "Passwords are not equal!";
