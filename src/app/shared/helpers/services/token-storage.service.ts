@@ -48,4 +48,12 @@ export class TokenStorageService {
     }
     return this.roles;
   }
+
+  isLoggedIn(): boolean {
+    return !!this.getUsername();
+  }
+
+  areUsernameEquals(login: string): boolean {
+    return login === this.getUsername();
+  }
 }

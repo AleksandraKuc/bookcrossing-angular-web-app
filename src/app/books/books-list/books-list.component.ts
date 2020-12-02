@@ -10,6 +10,7 @@ import { BooksService } from "../../core/services/books.service";
 import { TokenStorageService } from "../../shared/helpers/services/token-storage.service";
 import {Observable} from "rxjs";
 import {switchMap, take} from "rxjs/operators";
+import {SearchParamsInfo} from "../../shared/models/searchParams-info";
 
 @Component({
   selector: 'app-books-list',
@@ -129,7 +130,7 @@ export class BooksListComponent implements AfterViewInit, OnInit {
 
   getAll(): void {
     this.booksService.getAllBooks().subscribe(response => {
-      this.setTable(response);
+      this.setTable(response.books);
       this.setFavBooks();
     });
   }
@@ -143,7 +144,7 @@ export class BooksListComponent implements AfterViewInit, OnInit {
 
   getFavBooks(): void {
     this.booksService.getFavBooks().subscribe(response => {
-      this.setTable(response);
+      this.setTable(response.books);
       this.setFavBooks();
     });
   }
