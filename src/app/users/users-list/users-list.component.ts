@@ -71,7 +71,8 @@ export class UsersListComponent implements AfterViewInit, OnInit {
   getUsersList(): void {
     let filterResult = !this.isAdmin();
     this.usersService.getAllUsers(filterResult).subscribe(response => {
-      this.dataSource.data = response;
+
+      this.dataSource.data = response.users;
       this.dataSource.filterPredicate = this.getFilterPredicate;
     });
   }

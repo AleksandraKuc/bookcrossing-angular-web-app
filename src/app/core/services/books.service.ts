@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 
 import { Observable } from "rxjs";
 import {AuthService} from "../../shared/helpers/services/auth.service";
@@ -23,7 +23,13 @@ export class BooksService {
   }
 
   getAllBooks(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/all`);
+    const params = new HttpParams()
+      .set('title', '')
+      .set('category', '')
+      .set('maxResults', '')
+      .set('page', '')
+      .set('username', null);
+    return this.http.get(`${this.baseUrl}/all`, {params});
   }
 
   getUserOwnedBooks(username?: string): Observable<any> {
@@ -38,7 +44,12 @@ export class BooksService {
 
   getFavBooks(): Observable<any> {
     let username = this.tokenStorage.getUsername();
-    return this.http.get(`${this.baseUrl}/fav/${username}`);
+    const params = new HttpParams()
+      .set('title', '')
+      .set('category', '')
+      .set('maxResults', '')
+      .set('page', '');
+    return this.http.get(`${this.baseUrl}/fav/${username}`, {params});
   }
 
   createBook(book: any): Observable<any> {

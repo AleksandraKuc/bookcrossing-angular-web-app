@@ -110,7 +110,6 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
   }
 
   reserveBook(): void {
-    console.log('reserved');
     let message = "Hi, I want to reserve book \"" + this.getDetails().title + "\"";
     if (this.getDetails().isbn !== null) {
       message += " with isbn code " + this.getDetails();
@@ -120,7 +119,6 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
       .subscribe(
         response => {
           if (!response) {
-            console.log("creating conv")
             this.conversationsService.createConversation(this.currentUser.username)
               .subscribe(
                 conversation => {
@@ -128,7 +126,6 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
                     { state: { conversationId: conversation.id_conversation, message: message } });
             })
           } else {
-            console.log("already exists")
             this.router.navigate([`conversations/${this.currentUser.username}`],
               { state: { message: message }});
           }
@@ -136,10 +133,10 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
   }
 
   get isLoggedUser(): boolean {
-    return !!this.tokenStorage.getUsername();
+    return this.tokenStorage.isLoggedIn();
   }
 
   get isMyBook(): boolean {
-    return this.currentUser.username === this.tokenStorage.getUsername();
+    return this.tokenStorage.areUsernameEquals(this.currentUser?.username);
   }
 }
