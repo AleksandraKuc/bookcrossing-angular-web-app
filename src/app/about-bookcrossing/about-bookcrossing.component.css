@@ -1,0 +1,27 @@
+#cms {
+  padding: 95px 0 50px;
+}
+
+.container.section-heading {
+  margin-top: 0;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+hr.primary {
+  border-color: #ffd740;
+  border-width: 3px;
+  max-width: 150px;
+}
+
+.row.content {
+  margin-top: 24px;
+  margin-left: -150px;
+  margin-right: -150px;
+  font-size: 18px;
+}
+
+.content-paragraph {
+  line-height:150%;
+  margin-bottom: 16px;
+}
