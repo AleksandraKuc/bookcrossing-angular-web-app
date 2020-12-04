@@ -1,42 +1,78 @@
-<span *ngIf="returnRegisterMessage">{{registerMessage}}</span>
-
-<div *ngIf="isLoggedIn; else loggedOut">
-  Logged in as {{roles}}.
+<div id="cms">
+  <div class="container container-fluid">
+    <mat-card>
+      <mat-card-header>
+        <div class="col-md-11 text-center align-content-center align-self-center">
+          <h1 class="section-heading text-center">Logging to BOOKCROSSING</h1>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="row login-content">
+          <div class="col-md-6 my-auto text-center">
+            <form [formGroup]="form" (ngSubmit)="form.valid && onSubmit()">
+              <mat-form-field appearance="fill" style="width: 80%">
+                <mat-label>Username</mat-label>
+                <input matInput type="text" name="username" formControlName="username" required/>
+                <mat-error *ngIf="this.form.get('username').hasError('required')">
+                  Username is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="fill" style="width: 80%; padding-top: 10px">
+                <mat-label>Password</mat-label>
+                <input matInput type="password" name="password" formControlName="password" required/>
+                <mat-error *ngIf="this.form.get('password').hasError('required')">
+                  Password is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+              <div class="form-group submit-button">
+                <button mat-raised-button color="accent" class="button-styles">LOGIN</button>
+                <div *ngIf="isLoginFailed" class="alert alert-danger">
+                  Login failed: {{errorMessage}}
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-6 register-section">
+            <h1 class="section-heading text-center">Register new Account</h1>
+            <hr class="primary">
+            <div class="register-content">
+              <div style="display: inline-flex; position: relative">
+                <span class="material-icons">done</span>
+                <p>&nbsp;&nbsp;make books free</p>
+              </div>
+              <div style="display: inline-flex; position: relative">
+                <span class="material-icons">done</span>
+                <p>&nbsp;&nbsp;share with others</p>
+              </div>
+              <div style="display: inline-flex; position: relative">
+                <span class="material-icons">done</span>
+                <p>&nbsp;&nbsp;rate books</p>
+              </div>
+              <div style="display: inline-flex; position: relative">
+                <span class="material-icons">done</span>
+                <p>&nbsp;&nbsp;develop Bookcrossing</p>
+              </div>
+              <div style="display: inline-flex; position: relative">
+                <span class="material-icons">done</span>
+                <p>&nbsp;&nbsp;and much, much more...</p>
+              </div>
+            </div>
+            <div class="submit-button">
+              <button mat-raised-button color="accent" routerLink="/account/register" class="button-styles"> REGISTER
+                NOW
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
 
-<ng-template #loggedOut>
-  <div class="row col-sm-6" style="max-width:350px;">
-    <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" class="form-control" name="username" [(ngModel)]="form.username" #username="ngModel"
-               required />
-        <div *ngIf="f.submitted && username.invalid">
-          <div *ngIf="username.errors.required">Username is required</div>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" class="form-control" name="password" [(ngModel)]="form.password" #password="ngModel"
-               required minlength="6" />
-        <div *ngIf="f.submitted && password.invalid">
-          <div *ngIf="password.errors.required">Password is required</div>
-          <div *ngIf="password.errors.minlength">Password must be at least 6 characters</div>
-        </div>
-      </div>
-      <div class="form-group">
-        <button class="btn btn-primary">Login</button>
-        <div *ngIf="f.submitted && isLoginFailed" class="alert alert-danger">
-          Login failed: {{errorMessage}}
-        </div>
-      </div>
-    </form>
-    <hr />
-    <p>Don't have an account?</p>
-    <a routerLink="/account/register" class="btn btn-success">Sign Up</a>
-  </div>
-</ng-template>
 
+<!--<div *ngIf="isLoggedIn; else loggedOut">-->
+<!--  Logged in as {{roles}}.-->
+<!--</div>-->
 
 <!--<div class="card">-->
 <!--  <h4 class="card-header">Login</h4>-->

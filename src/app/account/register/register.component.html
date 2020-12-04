@@ -32,7 +32,7 @@
 
   <mat-form-field appearance="fill">
     <mat-label>Enter your name</mat-label>
-    <input matInput type="text" formControlName="name" required> <!-- [errorStateMatcher]="matcher" -->
+    <input matInput type="text" formControlName="name" required>
     <mat-error *ngIf="this.form.get('name').hasError('required')">
       Name is <strong>required</strong>
     </mat-error>
@@ -40,7 +40,7 @@
 
   <mat-form-field appearance="fill">
     <mat-label>Enter your lastname</mat-label>
-    <input matInput type="text" formControlName="lastname" required> <!-- [errorStateMatcher]="matcher" -->
+    <input matInput type="text" formControlName="lastname" required>
     <mat-error *ngIf="this.form.get('lastname').hasError('required')">
       Lastname is <strong>required</strong>
     </mat-error>
@@ -48,7 +48,7 @@
 
   <mat-form-field appearance="fill">
     <mat-label>Enter your email</mat-label>
-    <input matInput type="email" formControlName="email" > <!-- [errorStateMatcher]="matcher" -->
+    <input matInput type="email" formControlName="email" >
     <mat-error *ngIf="this.form.get('email').hasError('email') && !this.form.get('email').hasError('required')">
       Please enter a valid email address
     </mat-error>
@@ -59,7 +59,7 @@
 
   <mat-form-field appearance="fill">
     <mat-label>Enter your city</mat-label>
-    <input matInput type="text" formControlName="city" required> <!-- [errorStateMatcher]="matcher" -->
+    <input matInput type="text" formControlName="city" required>
     <mat-error *ngIf="this.form.get('city').hasError('required')">
       City is <strong>required</strong>
     </mat-error>
@@ -67,7 +67,7 @@
 
   <mat-form-field appearance="fill">
     <mat-label>Enter your province</mat-label>
-    <input matInput type="text" formControlName="province" required> <!-- [errorStateMatcher]="matcher" -->
+    <input matInput type="text" formControlName="province" required>
     <mat-error *ngIf="this.form.get('province').hasError('required')">
       Province is <strong>required</strong>
     </mat-error>
@@ -75,7 +75,7 @@
 
   <mat-form-field appearance="fill">
     <mat-label>Enter your phoneNumber</mat-label>
-    <input matInput type="number" formControlName="phoneNumber" > <!-- [errorStateMatcher]="matcher" -->
+    <input matInput type="number" formControlName="phoneNumber" >
     <mat-error *ngIf="this.form.get('phoneNumber').hasError('pattern')">
       Please enter a valid phone number
     </mat-error>

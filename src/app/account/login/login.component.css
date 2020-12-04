@@ -1,0 +1,52 @@
+#cms {
+  padding: 95px 0 50px;
+}
+
+.login-content {
+  padding: 30px 20px 30px 30px;
+  margin-left: 20px;
+}
+
+.section-heading {
+  margin: 0;
+  font-weight: 500;
+}
+
+hr.primary {
+  border-color: #ffd740;
+  border-width: 3px;
+  max-width: 150px;
+}
+
+.button-styles {
+  width: 90%;
+  border-radius: 300px;
+  font-weight: 600;
+}
+
+.submit-button {
+  padding-top: 20px;
+}
+
+.register-content {
+  padding-top: 20px;
+  padding-left: 30px;
+  line-height: 2;
+  font-size: 16px;
+  display: grid;
+}
+
+.mat-card-header {
+  background: #f2c500;
+  min-height: 50px;
+  border-radius: 300px;
+}
+
+.register-section {
+  padding: 0 20px 30px 50px;
+}
+
+.mat-card {
+  border-radius: 40px;
+  box-shadow: 8px 8px 8px 0 rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+}
