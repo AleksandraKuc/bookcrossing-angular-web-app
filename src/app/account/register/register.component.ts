@@ -16,6 +16,7 @@ export class RegisterComponent implements OnInit {
 
   form: FormGroup;
   confirmPassword = new FormControl('', [Validators.required, Validators.pattern(this.passRegex)]);
+  placeholder = new FormControl('');
 
   isSignUpFailed = false;
   errorMessage = '';

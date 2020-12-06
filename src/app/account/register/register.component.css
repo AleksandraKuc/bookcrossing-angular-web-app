@@ -1,0 +1,37 @@
+#cms {
+  padding: 95px 0 50px;
+}
+
+.register-content {
+  padding: 40px 30px 20px 30px;
+}
+
+.section-heading {
+  margin: 0;
+  font-weight: 500;
+}
+
+hr.primary {
+  border-color: #ffd740;
+  border-width: 3px;
+  max-width: 150px;
+}
+
+.submit-button {
+  width: 20%;
+  border-radius: 300px;
+  font-weight: 600;
+  font-size: 16px;
+  /*padding-top: 20px;*/
+}
+
+.mat-card-header {
+  background: #f2c500;
+  min-height: 50px;
+  border-radius: 300px;
+}
+
+.mat-card {
+  border-radius: 40px;
+  box-shadow: 8px 8px 8px 0 rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+}

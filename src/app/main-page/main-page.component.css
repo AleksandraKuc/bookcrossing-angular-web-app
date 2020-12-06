@@ -1,0 +1,50 @@
+#cms {
+  padding: 95px 0 50px;
+}
+
+.container.section-heading {
+  margin-top: 0;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+hr.primary {
+  border-color: #ffd740;
+  border-width: 3px;
+  max-width: 150px;
+}
+
+.more-button {
+  border-radius: 300px;
+  font-weight: 600;
+  width: 20%;
+}
+
+.join-button {
+  border-radius: 300px;
+  font-weight: 600;
+  width: 20%;
+  margin-top: 15px;
+}
+
+.row.content {
+  margin-top: 24px;
+  font-size: 18px;
+}
+
+.info-content {
+  display: inline-block;
+  padding-top: 15px;
+}
+
+.image-add {
+  background-image: url(../../assets/book-image2.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 300px;
+
+  background-color: #cccccc;
+  background-size: cover;
+  position: relative;
+  color: white;
+}
