@@ -41,4 +41,18 @@ mat-label {
 .action-button {
   border-radius: 300px;
   width: fit-content;
+  outline: none;
+}
+
+tr {
+  outline: none;
+  cursor: pointer;
+}
+
+th{
+  position: sticky;
+  top:0;
+  z-index: 1;
+  background-color: #673ab7;
+  color: #fff;
 }

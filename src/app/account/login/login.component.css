@@ -22,6 +22,7 @@ hr.primary {
   width: 90%;
   border-radius: 300px;
   font-weight: 600;
+  outline: none;
 }
 
 .submit-button {
@@ -40,10 +41,6 @@ hr.primary {
   background: #f2c500;
   min-height: 50px;
   border-radius: 300px;
-}
-
-.register-section {
-  padding: 0 20px 30px 50px;
 }
 
 .mat-card {

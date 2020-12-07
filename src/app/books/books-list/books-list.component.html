@@ -90,11 +90,11 @@
       <ng-container matColumnDef="favourites">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element">
-          <button mat-button *ngIf="!checkIsFavourite(element.id_book)"
+          <button mat-button *ngIf="!checkIsFavourite(element.id_book)" class="fav-button"
                   (click)="addToFavourites(element.id_book); $event.stopPropagation()">
             <span class="material-icons">favorite_border</span>
           </button>
-          <button mat-button *ngIf="checkIsFavourite(element.id_book)"
+          <button mat-button *ngIf="checkIsFavourite(element.id_book)" class="fav-button"
                   (click)="removeFromFavourites(element.id_book); $event.stopPropagation()">
             <span class="material-icons">favorite</span>
           </button>

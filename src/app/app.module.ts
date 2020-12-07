@@ -15,6 +15,8 @@ import { MainNavigationComponent } from './main-navigation/main-navigation.compo
 import { MainPageComponent } from './main-page/main-page.component';
 import { SharedModule } from "./shared/shared.module";
 import { SpinnerOverlayComponent } from "./shared/components/spinner-overlay/spinner-overlay.component";
+import {BooksModule} from "./books/books.module";
+import {MatCardModule} from "@angular/material/card";
 
 @NgModule({
   declarations: [
@@ -32,7 +34,8 @@ import { SpinnerOverlayComponent } from "./shared/components/spinner-overlay/spi
     HttpClientModule,
     SharedModule.forRoot(),
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BooksModule
   ],
   providers: [
     httpAuthInterceptorProvider,

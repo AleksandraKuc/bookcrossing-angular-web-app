@@ -22,7 +22,7 @@ hr.primary {
   border-radius: 300px;
   font-weight: 600;
   font-size: 16px;
-  /*padding-top: 20px;*/
+  outline: none;
 }
 
 .mat-card-header {

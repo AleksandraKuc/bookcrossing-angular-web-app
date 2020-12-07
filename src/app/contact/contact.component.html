@@ -1,69 +1,68 @@
-<p>contact works!</p>
-
-<h1>Enter the following details</h1>
-
-<form [formGroup]="form">
-  <table>
-    <tr>
-      <td><span>Name</span></td>
-      <td>
-        <mat-form-field appearance="fill">
-          <mat-label>Enter your names</mat-label>
-          <input matInput type="text" formControlName="name" required>
-          <mat-error *ngIf="this.form.get('email').hasError('required')">
-            Your names are <strong>required</strong>
-          </mat-error>
-        </mat-form-field>
-      </td>
-    </tr>
-    <tr>
-      <td><span>Enter your email address</span></td>
-      <td>
-        <mat-form-field appearance="fill">
-          <mat-label>Enter your email</mat-label>
-          <input matInput type="email" formControlName="email" > <!-- [errorStateMatcher]="matcher" -->
-          <mat-error *ngIf="this.form.get('email').hasError('email') && !this.form.get('email').hasError('required')">
-            Please enter a valid email address
-          </mat-error>
-          <mat-error *ngIf="this.form.get('email').hasError('required')">
-            Your email is <strong>required</strong>
-          </mat-error>
-        </mat-form-field>
-      </td>
-    </tr>
-    <tr>
-      <td><span>Message title</span></td>
-      <td>
-        <mat-form-field appearance="fill">
-          <mat-label>Enter message title</mat-label>
-          <input matInput type="text" formControlName="title" required> <!-- [errorStateMatcher]="matcher" -->
-          <mat-error *ngIf="this.form.get('title').hasError('required')">
-            Message title is <strong>required</strong>
-          </mat-error>
-        </mat-form-field>
-      </td>
-    </tr>
-    <tr>
-      <td><span>Message content</span></td>
-      <td>
-        <mat-form-field appearance="fill">
-          <mat-label>Enter book's description</mat-label>
-          <textarea matInput type="text" formControlName="content" required></textarea>
-          <mat-error *ngIf="this.form.get('content').hasError('required') && !this.form.get('content').hasError('minLength')">
-            Message content is <strong>required</strong>
-          </mat-error>
-          <mat-error *ngIf="this.form.get('content').hasError('minLength')">
-            Message content should be at least 20 characters
-          </mat-error>
-        </mat-form-field>
-      </td>
-    </tr>
-    <tr>
-      <td></td>
-      <td>
-        <button mat-raised-button color="accent" (click)="onSubmit()"> Submit </button>
-      </td>
-    </tr>
-  </table>
-</form>
+<div id="cms">
+  <div class="container container-fluid">
+    <mat-card>
+      <mat-card-header>
+        <div class="col-md-11 text-center align-content-center align-self-center">
+          <h1 class="section-heading text-center">Contact with us</h1>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="form">
+          <div class="row contact-content">
+            <div class="col-md-6 my-auto text-center">
+              <!-- name -->
+              <mat-form-field appearance="fill" style="width: 80%">
+                  <mat-label>Enter your names</mat-label>
+                  <input matInput type="text" formControlName="name" required>
+                  <mat-error *ngIf="this.form.get('name').hasError('required')">
+                    Your names are <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              <!-- email -->
+              <mat-form-field appearance="fill" style="width: 80%; padding-top: 10px">
+                  <mat-label>Enter your email</mat-label>
+                  <input matInput type="email" formControlName="email" > <!-- [errorStateMatcher]="matcher" -->
+                  <mat-error *ngIf="this.form.get('email').hasError('email') && !this.form.get('email').hasError('required')">
+                    Please enter a valid email address
+                  </mat-error>
+                  <mat-error *ngIf="this.form.get('email').hasError('required')">
+                    Your email is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              <!-- name -->
+              <mat-form-field appearance="fill" style="width: 80%; padding-top: 10px">
+                <mat-label>Enter message title</mat-label>
+                <input matInput type="text" formControlName="title" required> <!-- [errorStateMatcher]="matcher" -->
+                <mat-error *ngIf="this.form.get('title').hasError('required')">
+                  Message title is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-6 text-center">
+              <!-- confirm password -->
+              <mat-form-field appearance="fill" style="width: 80%">
+                <mat-label>Enter message content</mat-label>
+                <textarea matInput type="text" formControlName="content" required
+                          cdkTextareaAutosize
+                          cdkAutosizeMinRows="12"
+                          cdkAutosizeMaxRows="12">
+                </textarea>
+                <mat-error *ngIf="this.form.get('content').hasError('required') && !this.form.get('content').hasError('minLength')">
+                  Message content is <strong>required</strong>
+                </mat-error>
+                <mat-error *ngIf="this.form.get('content').hasError('minLength')">
+                  Message content should be at least 20 characters
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <!-- Submit -->
+          <div class="text-center" style="padding-bottom: 20px">
+            <button mat-raised-button color="accent" class="submit-button" (click)="onSubmit()"> SEND </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
 
