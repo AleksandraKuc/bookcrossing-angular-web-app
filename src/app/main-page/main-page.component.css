@@ -23,6 +23,7 @@ hr.primary {
   font-weight: 600;
   width: 20%;
   min-width: fit-content;
+  outline: none;
 }
 
 .join-button {
@@ -31,6 +32,7 @@ hr.primary {
   width: 20%;
   min-width: fit-content;
   margin-top: 15px;
+  outline: none;
 }
 
 .row.content {
