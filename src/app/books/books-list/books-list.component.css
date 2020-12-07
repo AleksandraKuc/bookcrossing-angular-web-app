@@ -1,5 +1,18 @@
 #cms {
-  padding: 40px 0 50px;
+  padding: 30px 0 50px;
+}
+
+.section-heading {
+  margin-top: 0;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: 500;
+}
+
+hr.primary {
+  border-color: #ffd740;
+  border-width: 3px;
+  max-width: 150px;
 }
 
 .full-width-table {
@@ -31,4 +44,13 @@ th, td {
   margin-top: 15px;
   width: fit-content;
   margin-bottom: 20px;
+}
+
+.action-button {
+  border-radius: 300px;
+  width: fit-content;
+}
+
+mat-label {
+  padding-left: 5px;
 }

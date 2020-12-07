@@ -1,3 +1,44 @@
+#cms {
+  padding: 30px 0 50px;
+}
+
+.section-heading {
+  margin-top: 0;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: 500;
+}
+
+hr.primary {
+  border-color: #ffd740;
+  border-width: 3px;
+  max-width: 150px;
+}
+
 .full-width-table {
   width: 100%;
+}
+
+table {
+  table-layout: fixed;
+}
+
+th, td {
+  text-align: justify;
+}
+
+.table-content {
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   padding: 0 5px 0 5px;
+}
+
+mat-label {
+  padding-left: 5px;
+}
+
+.action-button {
+  border-radius: 300px;
+  width: fit-content;
 }

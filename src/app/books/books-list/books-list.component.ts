@@ -79,6 +79,16 @@ export class BooksListComponent implements AfterViewInit, OnInit {
     }
   }
 
+  get pageTitle(): string {
+    switch(this.listMode) {
+      case 'all': { return "All books" }
+      case 'fav': { return "Your favourites books" }
+      case 'my': { return "Your owned books" }
+      case 'handOver': { return "Hand over book" }
+      default : { return "All books" }
+    }
+  }
+
   addToFavourites(id: number): void {
     this.booksService.addToFavourites(id).subscribe( () => {
       this.setFavouritesList(id, true);
@@ -197,7 +207,7 @@ export class BooksListComponent implements AfterViewInit, OnInit {
   }
 
   get showAddButton():boolean {
-    return !this.isAccount;
+    return !this.isAccount && this.listMode === 'all';
   }
 
   bookIsbn(isbn: string): string {
