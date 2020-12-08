@@ -85,6 +85,8 @@ export class BooksListComponent implements AfterViewInit, OnInit {
       case 'fav': { return "Your favourites books" }
       case 'my': { return "Your owned books" }
       case 'handOver': { return "Hand over book" }
+      case 'own': { return "User owned books" }
+      case 'added': { return "User added book" }
       default : { return "All books" }
     }
   }

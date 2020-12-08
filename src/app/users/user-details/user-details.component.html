@@ -1,52 +1,106 @@
-<script src="../../core/services/users.service.ts"></script><p>user-details works!</p>
+<div id="cms">
+  <div class="container container-fluid">
+    <div class="row header">
+      <div class="col-md-12 text-center align-content-center">
+        <h1 class="section-heading text-center"><strong>{{form.get('username')?.value}}</strong> profile</h1>
+        <hr class="primary">
+      </div>
+    </div>
+    <mat-card>
+      <mat-card-content>
+        <div class="row">
+          <div class="col-md-12 text-right">
+            <button mat-raised-button class="action-button" color="accent" *ngIf="isLoggedIn() && isProfileView()"
+                    (click)="editProfile()">Edit profile
+            </button>
+            <button mat-raised-button class="action-button" color="accent" *ngIf="isLoggedIn() && isProfileView()"
+                    (click)="resetPassword()">Reset password
+            </button>
+            <button mat-raised-button class="action-button" color="accent" *ngIf="isLoggedIn() && !isProfileView()"
+                    (click)="sendMessage()">Send message
+            </button>
 
-<button mat-raised-button color="accent" *ngIf="isLoggedIn() && isProfileView()" (click)="editProfile()">Edit profile</button>
-<button mat-raised-button color="accent" *ngIf="isLoggedIn() && isProfileView()" (click)="resetPassword()">Reset password</button>
-<button mat-raised-button color="accent" *ngIf="isLoggedIn() && (isProfileView() || isAdmin())" (click)="deleteAccount()">Delete account</button>
-<button mat-raised-button color="accent" *ngIf="isLoggedIn() && isAdmin() && isBlocked()" (click)="changeStatus()">Unblock account</button>
-<button mat-raised-button color="accent" *ngIf="isLoggedIn() && isAdmin() && !isBlocked()" (click)="changeStatus()">Block account</button>
-<button mat-raised-button color="accent" *ngIf="isLoggedIn() && !isProfileView()" (click)="sendMessage()">Send message</button>
+            <button mat-raised-button class="action-button" color="accent" *ngIf="isLoggedIn() && !isProfileView()"
+                    (click)="reportUser()">Report User
+            </button>
+            <button mat-raised-button class="action-button" color="accent"
+                    *ngIf="isLoggedIn() && isAdmin() && !isProfileView() && isBlocked()" (click)="changeStatus()">Unblock account
+            </button>
+            <button mat-raised-button class="action-button" color="accent"
+                    *ngIf="isLoggedIn() && isAdmin() && !isProfileView() && !isBlocked()" (click)="changeStatus()">Block account
+            </button>
+            <button mat-raised-button class="action-button" color="accent"
+                    *ngIf="isLoggedIn() && (isProfileView() || isAdmin())" (click)="deleteAccount()">Delete account
+            </button>
+          </div>
+        </div>
 
-<button mat-raised-button color="accent" *ngIf="isLoggedIn() && !isProfileView()" (click)="reportUser()">Report User</button>
+        <div class="row details-content">
+          <form [formGroup]="form" class="col-md-8 my-auto text-center">
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">First name: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="text" formControlName="firstName" readonly>
+              </mat-form-field>
+            </div>
 
-<form [formGroup]="form">
-  <mat-form-field appearance="fill">
-    <mat-label>First name: </mat-label>
-    <input matInput type="text" formControlName="firstName" readonly>
-  </mat-form-field> <br/>
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">Username: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="text" formControlName="username" readonly>
+              </mat-form-field>
+            </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Username: </mat-label>
-    <input matInput type="text" formControlName="username" readonly>
-  </mat-form-field> <br/>
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">City: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="text" formControlName="city" readonly>
+              </mat-form-field>
+            </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>City: </mat-label>
-    <input matInput type="text" formControlName="city" readonly>
-  </mat-form-field> <br/>
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">Province: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="text" formControlName="province" readonly>
+              </mat-form-field>
+            </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Province: </mat-label>
-    <input matInput type="text" formControlName="province" readonly>
-  </mat-form-field> <br/>
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">Join date: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="text" formControlName="startDate" readonly>
+              </mat-form-field>
+            </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Start date: </mat-label>
-    <input matInput type="text" formControlName="startDate" readonly>
-  </mat-form-field> <br/>
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">Added books amount: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="text" formControlName="addedBooks" readonly>
+              </mat-form-field>
+            </div>
+          </form>
+          <div class="col-xl-4 my-auto text-center">
+            <img src="assets/user-picture.png" alt="User picture">
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Added books amount: </mat-label>
-    <input matInput type="text" formControlName="addedBooks" readonly>
-  </mat-form-field> <br/>
-</form>
 
-<div>
-  <h3>Books owned by user</h3>
-  <app-books-list [listMode]="'own'" [username]="form.get('username').valueChanges" [isAccount]="true"></app-books-list>
+  </div>
+  <div class="row">
+    <div class="col-md-10 mx-auto text-center" style="min-height: 200px">
+      <mat-tab-group mat-align-tabs="left">
+        <mat-tab label="Own books">
+          <app-books-list [listMode]="'own'" [username]="form.get('username').valueChanges"
+                          [isAccount]="true"></app-books-list>
+        </mat-tab>
+        <mat-tab label="Added books">
+          <app-books-list [listMode]="'added'" [username]="form.get('username').valueChanges"
+                          [isAccount]="true"></app-books-list>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
 </div>
 
-<div>
-  <h3>Added books by user</h3>
-  <app-books-list [listMode]="'added'" [username]="form.get('username').valueChanges" [isAccount]="true"></app-books-list>
-</div>

@@ -73,3 +73,11 @@ th {
   background-color: #673ab7;
   color: #fff;
 }
+
+img {
+  border-radius: 40px;
+}
+
+.no-content {
+  margin-top: 20px;
+}
