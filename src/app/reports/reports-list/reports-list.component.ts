@@ -65,9 +65,29 @@ export class ReportsListComponent implements AfterViewInit, OnInit {
   }
 
   refreshTable(data: ReportDefinition[]){
+    this.dataSource = new MatTableDataSource(data);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.dataSource = new MatTableDataSource(data);
+  }
+
+  sortData(sort: any){
+    console.log(sort);
+    const data = this.dataSource.data;
+    if (!sort.active || sort.direction == '') {
+      this.dataSource.data = data;
+      return;
+    }
+
+    this.dataSource.data = data.sort((a, b) => {
+      let isAsc = sort.direction == 'asc';
+      switch (sort.active) {
+        case 'user': return compare(a.user, b.user, isAsc);
+        case 'reporter': return compare(a.reporter, b.reporter, isAsc);
+        case 'description': return compare(a.description, b.description, isAsc);
+        case 'date': return compare(a.date, b.date, isAsc);
+        default: return 0;
+      }
+    });
   }
 
   /* this method well be called for each row in table  */
@@ -117,4 +137,8 @@ export class ReportsListComponent implements AfterViewInit, OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+}
+
+function compare(a, b, isAsc) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

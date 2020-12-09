@@ -12,9 +12,8 @@
       <a mat-list-item routerLink="conversations" *ngIf="isLoggedUser" class="item">Messages</a>
       <a mat-list-item routerLink="users" class="item">Users</a>
       <a mat-list-item routerLink="users/profile" *ngIf="isLoggedUser" class="item">My profile</a>
-      <a mat-list-item routerLink="contact" class="item">Contact</a>
+      <a mat-list-item routerLink="contact" *ngIf="!isAdmin()" class="item">Contact</a>
       <a mat-list-item routerLink="reports" *ngIf="isAdmin()" class="item">Reports</a>
-<!--      <a mat-list-item routerLink="account/login" *ngIf="!isLoggedUser" class="item">Log In</a>-->
       <div style="text-align: right">
         <button mat-raised-button color="accent" routerLink="account/login" *ngIf="!isLoggedUser" class="login-button">Log In</button>
       </div>

@@ -16,7 +16,6 @@ export class UsersAddModifyComponent implements OnInit {
   form: FormGroup;
   submitted = false;
   loading = false;
-  hidePassword: boolean = true;
 
   constructor(private formBuilder: FormBuilder,
               private route: ActivatedRoute,
@@ -43,6 +42,8 @@ export class UsersAddModifyComponent implements OnInit {
         city: new FormControl('', [Validators.required]),
         province: new FormControl('', [Validators.required]),
         phoneNumber: new FormControl(0, [Validators.pattern("^[0-9]+$")]),
+        startDate: new FormControl('', [Validators.required]),
+        addedBooks: new FormControl('', [Validators.required]),
       },
     );
   }
@@ -55,6 +56,8 @@ export class UsersAddModifyComponent implements OnInit {
     this.form.get('city').setValue(user.city);
     this.form.get('province').setValue(user.province);
     this.form.get('phoneNumber').setValue(user.phoneNumber);
+    this.form.get('startDate').setValue(user.startDate);
+    this.form.get('addedBooks').setValue(user.addedBooks);
   }
 
   get f() { return this.form.controls; }
@@ -91,13 +94,4 @@ export class UsersAddModifyComponent implements OnInit {
   cancel() {
     this.router.navigate([`/users/profile`]);
   }
-
-  getErrorMessage() {
-    if (this.form.get('email').hasError('required')) {
-      return 'You must enter a value';
-    }
-
-    return this.form.get('email').hasError('email') ? 'Not a valid email' : '';
-  }
-
 }

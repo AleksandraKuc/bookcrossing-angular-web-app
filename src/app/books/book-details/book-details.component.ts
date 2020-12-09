@@ -92,9 +92,19 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
     return `users/details/${encodeURIComponent(username)}`
   }
 
+  protected myProfileLink(): string {
+    return `users/profile`;
+  }
+
+  protected isProfile(username: string): boolean {
+    return this.tokenStorage.areUsernameEquals(username);
+  }
+
   showUserProfile(isCurrentUser: boolean): void {
     let username = isCurrentUser ? this.currentUser.username : this.firstUser.username;
-    this.router.navigate([this.userLink(username)]);
+    this.isProfile(username) ?
+      this.router.navigate([this.myProfileLink()]) :
+      this.router.navigate([this.userLink(username)]);
   }
 
   addToFavourites(): void {

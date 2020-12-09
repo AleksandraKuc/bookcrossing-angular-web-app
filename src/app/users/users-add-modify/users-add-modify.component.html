@@ -1,58 +1,112 @@
-<h1>Edit User</h1>
-<form [formGroup]="form">
-  <div class="form-row">
-    <div class="form-group col">
-      <mat-form-field appearance="fill">
-        <mat-label>Your username</mat-label>
-        <input matInput formControlName="username">
-      </mat-form-field>
+<div id="cms">
+  <div class="container container-fluid">
+    <div class="row header">
+      <div class="col-md-12 text-center align-content-center">
+        <h1 class="section-heading text-center">modify  <strong>{{form.get('username')?.value}}</strong>  profile</h1>
+        <hr class="primary">
+      </div>
     </div>
-    <div class="form-group col">
-      <mat-form-field appearance="fill">
-        <mat-label>Enter your email</mat-label>
-        <input matInput formControlName="email" required>
-        <mat-error *ngIf="f.email.invalid">{{getErrorMessage()}}</mat-error>
-      </mat-form-field>
-    </div>
+    <mat-card>
+      <mat-card-content>
+        <div class="row edit-content">
+          <form [formGroup]="form" class="col-md-8 my-auto text-center">
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">Username: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="text" formControlName="username" readonly>
+              </mat-form-field>
+            </div>
+
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">First name: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="text" formControlName="firstName" required>
+                <mat-error *ngIf="this.form.get('firstName').hasError('required')">
+                  Name is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">Last name: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="text" formControlName="lastName" required>
+                <mat-error *ngIf="this.form.get('lastName').hasError('required')">
+                  Lastname is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">Email: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="email" formControlName="email">
+                <mat-error *ngIf="this.form.get('email').hasError('email') && !this.form.get('email').hasError('required')">
+                  Please enter a valid email address
+                </mat-error>
+                <mat-error *ngIf="this.form.get('email').hasError('required')">
+                  Email is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">Phone: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="number" formControlName="phoneNumber">
+                <mat-error *ngIf="this.form.get('phoneNumber').hasError('pattern')">
+                  Please enter a valid phone number
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">City: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="text" formControlName="city" required>
+                <mat-error *ngIf="this.form.get('city').hasError('required')">
+                  City is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">Province: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="text" formControlName="province" required>
+                <mat-error *ngIf="this.form.get('province').hasError('required')">
+                  Province is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">Join date: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="text" formControlName="startDate" readonly>
+              </mat-form-field>
+            </div>
+
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">Added books amount: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="text" formControlName="addedBooks" readonly>
+              </mat-form-field>
+            </div>
+            <div class="row submit-section">
+              <div class="col-md-12 my-auto text-right">
+                <button mat-raised-button class="action-button" color="accent" [disabled]="loading && !form.valid" (click)="onSubmit()">
+                  Save changes
+                </button>
+                <button mat-raised-button class="action-button cancel-button" (click)="cancel()">Cancel</button>
+              </div>
+            </div>
+          </form>
+          <div class="col-xl-4 my-auto text-center">
+            <img src="assets/user-picture.png" alt="User picture">
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
-  <div class="form-row">
-    <div class="form-group col">
-      <mat-form-field appearance="fill">
-        <mat-label>Enter your name</mat-label>
-        <input matInput formControlName="firstName" required>
-      </mat-form-field>
-    </div>
-    <div class="form-group col">
-      <mat-form-field appearance="fill">
-        <mat-label>Enter your last name</mat-label>
-        <input matInput formControlName="lastName" required>
-      </mat-form-field>
-    </div>
-  </div>
-  <div class="form-row">
-    <div class="form-group col">
-      <mat-form-field appearance="fill">
-        <mat-label>Enter your city</mat-label>
-        <input matInput formControlName="city" required>
-      </mat-form-field>
-    </div>
-    <div class="form-group col">
-      <mat-form-field appearance="fill">
-        <mat-label>Enter your province</mat-label>
-        <input matInput formControlName="province" required>
-      </mat-form-field>
-    </div>
-    <div class="form-group col">
-      <mat-form-field appearance="fill">
-        <mat-label>Enter your phone number</mat-label>
-        <input matInput formControlName="phoneNumber">
-      </mat-form-field>
-    </div>
-  </div>
-  <div class="form-group">
-    <button mat-raised-button color="accent" [disabled]="loading" (click)="onSubmit()">
-      Save changes
-    </button>
-    <button mat-raised-button color="accent" (click)="cancel()">Cancel</button>
-  </div>
-</form>
+</div>

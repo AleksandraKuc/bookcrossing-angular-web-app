@@ -7,6 +7,7 @@ import {TokenStorageService} from "../../shared/helpers/services/token-storage.s
 import {ConversationsService} from "../../core/services/conversations.service";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {ReportItemComponent} from "../../reports/report-item/report-item.component";
+import {UserResetPasswordComponent} from "../user-reset-password/user-reset-password.component";
 
 @Component({
   selector: 'app-user-details',
@@ -40,7 +41,10 @@ export class UserDetailsComponent implements OnInit {
     return new FormGroup({
       id: new FormControl(''),
       firstName: new FormControl(''),
+      lastName: new FormControl(''),
       username: new FormControl(''),
+      email: new FormControl(''),
+      phoneNumber: new FormControl(''),
       city: new FormControl(''),
       province: new FormControl(''),
       startDate: new FormControl(''),
@@ -51,7 +55,10 @@ export class UserDetailsComponent implements OnInit {
   setFormValues(user: UserDefinition): void {
     this.form.get('id').setValue(user.id);
     this.form.get('firstName').setValue(user.firstName);
+    this.form.get('lastName').setValue(user.lastName);
     this.form.get('username').setValue(user.username);
+    this.form.get('email').setValue(user.email);
+    this.form.get('phoneNumber').setValue(user.phoneNumber);
     this.form.get('city').setValue(user.city);
     this.form.get('province').setValue(user.province);
     this.form.get('startDate').setValue(user.startDate);
@@ -60,10 +67,6 @@ export class UserDetailsComponent implements OnInit {
 
   editProfile(): void {
     this.router.navigate(['users/edit']);
-  }
-
-  resetPassword(): void {
-    this.router.navigate(['users/change-password']);
   }
 
   deleteAccount(): void {
@@ -128,11 +131,15 @@ export class UserDetailsComponent implements OnInit {
     return this.user?.accountStatus === 1;
   }
 
+  get phoneNumber() {
+    return this.form.get('phoneNumber').value === 0 ? '---' : this.form.get('phoneNumber').value;
+  }
+
   reportUser(): void {
     this.openReportDialog();
   }
 
-  openReportDialog() {
+  protected openReportDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
@@ -141,5 +148,17 @@ export class UserDetailsComponent implements OnInit {
     };
 
     this.dialog.open(ReportItemComponent, dialogConfig);
+  }
+
+  resetPassword(): void {
+    this.openResetPasswordDialog();
+  }
+
+  protected openResetPasswordDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    this.dialog.open(UserResetPasswordComponent, dialogConfig);
   }
 }

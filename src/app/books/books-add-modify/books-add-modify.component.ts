@@ -21,6 +21,7 @@ export class BooksAddModifyComponent implements OnInit {
 
   isSavingFailed = false;
   errorMessage = '';
+  loading = false;
 
   categories: string[] = ['Biography', 'ChildrenBook', 'Guide', 'PopularScience', 'Thriller', 'Novel', 'Poetry', 'History', 'Romance', 'Education', 'Scientific', 'Adventure', 'Criminal', 'Humour', 'Science_fiction', 'Other']
   filteredCategories: Observable<string[]>;
@@ -77,6 +78,7 @@ export class BooksAddModifyComponent implements OnInit {
       this.form.get('category').value
     );
     if (this.form.valid) {
+      this.loading = true;
       if (this.viewMode === 'edit') {
         this.saveBook(book);
       } else {
@@ -96,6 +98,7 @@ export class BooksAddModifyComponent implements OnInit {
         console.log(error);
         this.errorMessage = error.error.message;
         this.isSavingFailed = true;
+        this.loading = false;
       });
   }
 
@@ -109,6 +112,7 @@ export class BooksAddModifyComponent implements OnInit {
       console.log(error);
       this.errorMessage = error.error.message;
       this.isSavingFailed = true;
+      this.loading = false;
     });
   }
 

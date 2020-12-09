@@ -23,7 +23,7 @@
         </div>
 
         <div class="row details-content">
-          <div class="col-md-8 my-auto text-center">
+          <div class="col-md-8 my-auto">
             <div class="row">
               <span class="col-md-4 my-auto text-right">Book's title: </span>
               <mat-form-field class="col-md-8 element">
@@ -63,16 +63,20 @@
 
             <div class="row">
               <span class="col-md-4 my-auto text-right">Book's first user: </span>
-              <mat-form-field class="col-md-8 element">
-                <input matInput type="text" value="{{firstUser?.username}}" (click)="showUserProfile(false)" readonly>
-              </mat-form-field>
+              <div class="col-md-8 element">
+                <button mat-raised-button class="action-button" color="accent" (click)="showUserProfile(false)">
+                  <span>{{firstUser?.username}}</span>
+                </button>
+              </div>
             </div>
 
             <div class="row">
               <span class="col-md-4 my-auto text-right">Book's current user: </span>
-              <mat-form-field class="col-md-8 element">
-                <input matInput type="text" value="{{currentUser?.username}}" (click)="showUserProfile(true)" readonly>
-              </mat-form-field>
+              <div class="col-md-8 element">
+                <button mat-raised-button class="action-button last-button" color="accent" (click)="showUserProfile(true)">
+                  <span>{{currentUser?.username}}</span>
+                </button>
+              </div>
             </div>
           </div>
           <div class="col-xl-4 my-auto text-center">

@@ -20,17 +20,21 @@
                     (click)="sendMessage()">Send message
             </button>
 
-            <button mat-raised-button class="action-button" color="accent" *ngIf="isLoggedIn() && !isProfileView()"
-                    (click)="reportUser()">Report User
+            <button mat-raised-button class="action-button" color="accent"
+                    *ngIf="isLoggedIn() && !isProfileView() && !isAdmin()" (click)="reportUser()">
+              Report User
             </button>
             <button mat-raised-button class="action-button" color="accent"
-                    *ngIf="isLoggedIn() && isAdmin() && !isProfileView() && isBlocked()" (click)="changeStatus()">Unblock account
+                    *ngIf="isLoggedIn() && isAdmin() && !isProfileView() && isBlocked()" (click)="changeStatus()">
+              Unblock account
             </button>
             <button mat-raised-button class="action-button" color="accent"
-                    *ngIf="isLoggedIn() && isAdmin() && !isProfileView() && !isBlocked()" (click)="changeStatus()">Block account
+                    *ngIf="isLoggedIn() && isAdmin() && !isProfileView() && !isBlocked()" (click)="changeStatus()">
+              Block account
             </button>
             <button mat-raised-button class="action-button" color="accent"
-                    *ngIf="isLoggedIn() && (isProfileView() || isAdmin())" (click)="deleteAccount()">Delete account
+                    *ngIf="isLoggedIn() && (isProfileView() || isAdmin())" (click)="deleteAccount()">
+              Delete account
             </button>
           </div>
         </div>
@@ -44,10 +48,31 @@
               </mat-form-field>
             </div>
 
+            <div class="row" *ngIf="isLoggedIn() && isProfileView()">
+              <span class="col-md-4 my-auto text-right">Last name: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="text" formControlName="lastName" readonly>
+              </mat-form-field>
+            </div>
+
             <div class="row">
               <span class="col-md-4 my-auto text-right">Username: </span>
               <mat-form-field class="col-md-8 element">
                 <input matInput type="text" formControlName="username" readonly>
+              </mat-form-field>
+            </div>
+
+            <div class="row" *ngIf="isLoggedIn() && isProfileView()">
+              <span class="col-md-4 my-auto text-right">Email: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="email" formControlName="email" readonly>
+              </mat-form-field>
+            </div>
+
+            <div class="row" *ngIf="isLoggedIn() && isProfileView()">
+              <span class="col-md-4 my-auto text-right">Phone number: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="text" [value]="phoneNumber" readonly>
               </mat-form-field>
             </div>
 
@@ -85,8 +110,6 @@
         </div>
       </mat-card-content>
     </mat-card>
-
-
   </div>
   <div class="row">
     <div class="col-md-10 mx-auto text-center" style="min-height: 200px">
