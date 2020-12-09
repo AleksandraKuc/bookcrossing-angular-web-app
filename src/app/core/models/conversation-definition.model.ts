@@ -16,6 +16,19 @@ export class ConversationDefinition {
   setMessages(messages: MessageDefinition[]){
     this.messages = messages;
   }
+
+  getLastMessageDate(): Date {
+    if (this.messages) {
+      return this.messages[this.messages.length-1].date;
+    }
+  }
+
+  getLastMessageContent(): string {
+    if (this.messages) {
+      return this.messages[this.messages.length-1].content;
+    }
+  }
+
 }
 
 class ConvUser {

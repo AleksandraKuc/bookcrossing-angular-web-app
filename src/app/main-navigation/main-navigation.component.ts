@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import {TokenStorageService} from "../shared/helpers/services/token-storage.service";
+
+import { TokenStorageService } from "../shared/helpers/services/token-storage.service";
 
 @Component({
   selector: 'app-navigation',
@@ -34,5 +36,4 @@ export class MainNavigationComponent {
   isAdmin(): boolean {
     return this.tokenStorage.getAuthorities()[0] === "ROLE_ADMIN";
   }
-
 }
