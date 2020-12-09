@@ -143,6 +143,8 @@ export class UserDetailsComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
+    dialogConfig.width = '500px';
+    dialogConfig.minWidth = 'fit-content';
     dialogConfig.data = {
       username: this.username
     };
@@ -158,6 +160,8 @@ export class UserDetailsComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
+    dialogConfig.width = '600px';
+    dialogConfig.minWidth = 'fit-content';
 
     this.dialog.open(UserResetPasswordComponent, dialogConfig);
   }
