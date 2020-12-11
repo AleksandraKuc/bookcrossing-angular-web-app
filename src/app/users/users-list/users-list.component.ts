@@ -85,10 +85,10 @@ export class UsersListComponent implements AfterViewInit, OnInit {
     this.conversationsService.checkIfExists(username).subscribe( response => {
       if (!response) {
         this.conversationsService.createConversation(username).subscribe( conversation => {
-          this.router.navigate([`conversations/${username}`], { state: { conversationId: conversation.id_conversation } });
+          this.router.navigate([`conversations`], { state: { conversationId: conversation.id_conversation, username: username } });
         })
       } else {
-        this.router.navigate([`conversations/${username}`]);
+        this.router.navigate([`conversations`], { state: { username: username } });
       }
     })
   }

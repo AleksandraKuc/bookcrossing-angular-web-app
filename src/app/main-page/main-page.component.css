@@ -46,7 +46,7 @@ hr.primary {
 }
 
 .image-add {
-  background-image: url(../../assets/book-image2.jpg);
+  background-image: url(src/assets/book-image.jpg);
   background-position: center;
   background-repeat: no-repeat;
   min-height: 300px;

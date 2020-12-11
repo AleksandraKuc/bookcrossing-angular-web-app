@@ -1,19 +1,150 @@
-<div>
-  <mat-label>Conversation with {{recipient}}</mat-label>
-  <button mat-raised-button color="accent" (click)="removeConversation()">Remove conversation</button>
-</div>
+<link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
 
-<div *ngFor="let message of messages">
-  <div>
-    <mat-label>{{message.sender}}</mat-label>
-    <input matInput value="{{message.content}}">
+<div id="cms">
+  <div class="container container-fluid">
+    <div class="row header">
+      <div class="col-md-12 text-center align-content-center">
+        <h1 class="section-heading text-center">conversations</h1>
+        <hr class="primary">
+      </div>
+    </div>
+    <mat-card>
+      <mat-card-content>
+        <div class="row">
+          <div class="col-md-4 conversations">
+            <div class="list-title">
+                <h2>Conversations</h2>
+            </div>
+            <div class="conversation-list">
+              <div class="elements" *ngFor="let conversation of conversations" (click)="chooseUser(conversation)"
+                   [ngClass]="{active_chat: isSelected(conversation.id_conversation)}">
+                <div class="element">
+                  <div class="element-user">
+                    <span>
+                      {{ conversation?.recipient.username }}
+                    </span>
+                  </div>
+                  <div class="element-content">
+                    <span>
+                      {{ getLastMessageContent(conversation?.messages) }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8 messages">
+              <div class="messages-title">
+                <h1>Conversation with {{ recipient?.username }}</h1>
+                <button mat-raised-button color="accent" class="remove-button" (click)="removeConversation()">Remove conversation</button>
+              </div>
+              <div class="messages-list" (scroll)="scrolled($event)" #scrollframe>
+                <div *ngFor="let message of messages" #item>
+                  <div [ngClass]="{'received-message': amIRecipient(message.sender),
+                                    'sent-message': !amIRecipient(message.sender)}">
+                    <div>
+                      <span>{{ message.date | date: 'yyyy/MM/dd hh:mm:ss'}}</span>
+                    </div>
+                    <div class="message-content">
+                      <p>{{ message.content }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="sending-section">
+                <form (ngSubmit)="sendMessage()">
+                  <textarea matInput
+                    type="text"
+                    placeholder="Type a message"
+                    cdkTextareaAutosize
+                    [formControl]="content"
+                  ></textarea>
+                  <button mat-raised-button color="accent" class="submit-button">
+                    <i class="material-icons-outlined">near_me</i>
+                  </button>
+                </form>
+              </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>
 
-<div class="form-group col">
-  <mat-form-field appearance="fill">
-    <mat-label>Your message</mat-label>
-    <textarea matInput placeholder="Enter your message" [formControl]="content"></textarea>
-  </mat-form-field>
-  <button mat-raised-button color="accent" (click)="sendMessage()">Send message</button>
-</div>
+<!--<div class="container">-->
+<!--  <div class="messaging">-->
+<!--    <div class="inbox_msg">-->
+<!--      <div class="inbox_people">-->
+<!--        <div class="headind_srch">-->
+<!--          <div class="channel_heading">-->
+<!--            <h4>Conversations</h4>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="inbox_chat">-->
+<!--          <div class="channels" *ngFor="let conversation of conversations">-->
+<!--            <div class="chat_list" (click)="chooseUser(conversation)"-->
+<!--                 [ngClass]="{selected: isSelected(conversation.id_conversation)}">-->
+<!--              <div class="chat_people">-->
+<!--                <div class="chat_ib">-->
+<!--                  <h5>-->
+<!--                    {{ conversation?.recipient.username }}-->
+<!--                  </h5>-->
+<!--                  <p>-->
+<!--                    {{ getLastMessageContent(conversation?.messages) }}-->
+<!--                  </p>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="mesgs">-->
+<!--        <div>-->
+<!--          <h1>Conversation with {{ recipient?.username }}</h1>-->
+<!--          <button mat-raised-button color="accent" (click)="removeConversation()">Remove conversation</button>-->
+<!--        </div>-->
+<!--        <div class="msg_history">-->
+<!--          <li class="message" *ngFor="let message of messages">-->
+<!--            <div-->
+<!--              *ngIf="-->
+<!--                  message.sender === recipient.username;-->
+<!--                  then incoming_msg;-->
+<!--                  else outgoing_msg-->
+<!--                "-->
+<!--            ></div>-->
+<!--            <ng-template #incoming_msg>-->
+<!--              <div class="incoming_msg">-->
+<!--                <div class="received_msg">-->
+<!--                  <div class="received_withd_msg">-->
+<!--                    <p>{{ message.content }}</p>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </ng-template>-->
+<!--            <ng-template #outgoing_msg>-->
+<!--              <div class="outgoing_msg">-->
+<!--                <div class="sent_msg">-->
+<!--                  <p>{{ message.content }}</p>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </ng-template>-->
+<!--          </li>-->
+<!--        </div>-->
+<!--        <div class="type_msg">-->
+<!--          <form class="input_msg_write" (ngSubmit)="sendMessage()">-->
+<!--            <input-->
+<!--              type="text"-->
+<!--              class="write_msg"-->
+<!--              placeholder="Type a message"-->
+<!--              name="newMessage"-->
+<!--              [formControl]="content"-->
+<!--            />-->
+<!--            <button class="msg_send_btn" type="button">-->
+<!--              <i class="fa fa-paper-plane-o" aria-hidden="true"></i>-->
+<!--            </button>-->
+<!--          </form>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->

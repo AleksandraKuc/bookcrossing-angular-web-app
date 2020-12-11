@@ -31,7 +31,7 @@ export class ConversationDefinition {
 
 }
 
-class ConvUser {
+export class ConvUser {
   firstname: string;
   username: string;
 }

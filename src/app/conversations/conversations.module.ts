@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { ReactiveFormsModule } from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 import { SharedModule } from "../shared/shared.module";
 import { ConversationsLayoutComponent } from './conversations-layout/conversations-layout.component';
@@ -9,12 +9,13 @@ import { ConversationsDetailsComponent } from './conversations-details/conversat
 import { ConversationsEntryModule } from "./conversations-entry.module";
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    SharedModule.forRoot(),
-    ConversationsEntryModule,
-  ],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        SharedModule.forRoot(),
+        ConversationsEntryModule,
+        FormsModule,
+    ],
   declarations: [
   ConversationsLayoutComponent,
   ConversationsListComponent,
