@@ -1,14 +1,23 @@
-<p>main-page works!</p>
-<div *ngIf="info.token; else loggedOut">
-  <h5 class="text-primary">Your Information</h5>
-  <p>
-    <strong>Username:</strong> {{info.username}}<br/>
-    <strong>Roles:</strong> {{info.authorities}}<br />
-    <strong>Token:</strong> {{info.token}}.
-  </p>
-  <button class="btn btn-secondary" (click)="logout()">Logout</button>
+<div id="cms">
+  <div class="main-page">
+    <div class="row image-add">
+      <div class="col-md-12 text-center align-self-center">
+        <h1 class="section-heading text-center"><b>BOOKCROSSING</b></h1>
+        <hr class="primary">
+        <div class="col-md-10 my-auto info-content">
+          <p style="padding-bottom: 15px">We release books and share the joy of reading with others. Bookcrossing is about adding the books you've read to our online list so that another interested person can pick them up, read them, and circulate them again.</p>
+        </div>
+        <button mat-raised-button color="accent" routerLink="/about" class="more-button"> FIND OUT MORE </button>
+      </div>
+    </div>
+    <div class="row content join-section">
+      <div class="col-md-12">
+        <h1 class="section-heading text-center"> Don't have account yet? <strong routerLink="/account/register">Join us now! </strong></h1>
+        <hr class="primary">
+        <div class="col-md-12  text-center align-self-center">
+          <button mat-raised-button color="accent" routerLink="/account/register" class="join-button"> JOIN NOW </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-<ng-template #loggedOut>
-  Please login.
-</ng-template>

@@ -18,6 +18,8 @@ import {MatDialogModule} from "@angular/material/dialog";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatCardModule} from "@angular/material/card";
 
 const SHARED_COMPONENTS = [];
 const SHARED_MODULES = [
@@ -39,6 +41,8 @@ const SHARED_MODULES = [
   MatAutocompleteModule,
   MatSnackBarModule,
   MatNativeDateModule,
+  MatCardModule,
+  MatTabsModule
 ];
 
 @NgModule({

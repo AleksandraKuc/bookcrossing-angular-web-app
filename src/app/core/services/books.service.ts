@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams} from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 
 import { Observable } from "rxjs";
-import {AuthService} from "../../shared/helpers/services/auth.service";
-import {TokenStorageService} from "../../shared/helpers/services/token-storage.service";
-import {BookDefinition} from "../models/book-definition.model";
+import { TokenStorageService } from "../../shared/helpers/services/token-storage.service";
 
 @Injectable({
   providedIn: 'root'

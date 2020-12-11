@@ -85,10 +85,10 @@ export class UsersListComponent implements AfterViewInit, OnInit {
     this.conversationsService.checkIfExists(username).subscribe( response => {
       if (!response) {
         this.conversationsService.createConversation(username).subscribe( conversation => {
-          this.router.navigate([`conversations/${username}`], { state: { conversationId: conversation.id_conversation } });
+          this.router.navigate([`conversations`], { state: { conversationId: conversation.id_conversation, username: username } });
         })
       } else {
-        this.router.navigate([`conversations/${username}`]);
+        this.router.navigate([`conversations`], { state: { username: username } });
       }
     })
   }
@@ -103,6 +103,26 @@ export class UsersListComponent implements AfterViewInit, OnInit {
 
   isAdmin(): boolean {
     return this.tokenStorage.getAuthorities()[0] === "ROLE_ADMIN";
+  }
+
+  sortData(sort: any){
+    const data = this.dataSource.data;
+    if (!sort.active || sort.direction == '') {
+      this.dataSource.data = data;
+      return;
+    }
+
+    this.dataSource.data = data.sort((a, b) => {
+      let isAsc = sort.direction == 'asc';
+      switch (sort.active) {
+        case 'name': return compare(a.firstName, b.firstName, isAsc);
+        case 'username': return compare(a.username, b.username, isAsc);
+        case 'city': return compare(a.city, b.city, isAsc);
+        case 'province': return compare(a.province, b.province, isAsc);
+        case 'addedBooks': return compare(+a.addedBooks, +b.addedBooks, isAsc);
+        default: return 0;
+      }
+    });
   }
 
   /* this method well be called for each row in table  */
@@ -152,4 +172,8 @@ export class UsersListComponent implements AfterViewInit, OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+}
+
+function compare(a, b, isAsc) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

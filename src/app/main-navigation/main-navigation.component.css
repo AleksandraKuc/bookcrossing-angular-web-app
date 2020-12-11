@@ -3,11 +3,9 @@
 }
 
 .sidenav {
-  width: 200px;
-  box-shadow: 3px 0 6px rgba(0,0,0,.24);
-}
-
-.sidenav {
+  width: 250px;
+  border-right: none;
+  box-shadow: 3px 0 6px rgba(0, 0, 0, .24);
   background: inherit;
 }
 
@@ -17,6 +15,27 @@
   z-index: 1;
 }
 
-.spacer {
-  flex: auto 1;
+.item {
+  font-size: 18px;
+}
+
+mat-nav-list {
+  padding-left: 10px;
+}
+
+.button {
+  font-size: 18px;
+  outline: none;
+  border-radius: 300px;
+  width: fit-content;
+  margin-right: 20px;
+  margin-top: 20px;
+}
+
+.login-button {
+  font-size: 18px;
+  outline: none;
+  border-radius: 300px;
+  width: fit-content;
+  margin-right: 20px;
 }

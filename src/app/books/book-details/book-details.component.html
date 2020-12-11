@@ -1,50 +1,93 @@
-<div>
-  <mat-form-field appearance="fill">
-    <mat-label>Book's title: </mat-label>
-    <input matInput type="text" value="{{getDetails()?.title}}" readonly>
-  </mat-form-field> <br/>
+<div id="cms">
+  <div class="container container-fluid">
+    <div class="row header">
+      <div class="col-md-12 text-center align-content-center">
+        <h1 class="section-heading text-center"><strong>"{{getDetails()?.title}}"</strong> details</h1>
+        <hr class="primary">
+      </div>
+    </div>
+    <mat-card>
+      <mat-card-content>
+        <div class="row">
+          <div class="col-md-12 text-right">
+            <button mat-icon-button class="fav-button" *ngIf="!isFavourite && isLoggedUser" (click)="addToFavourites()">
+              <span class="material-icons">favorite_border</span>
+            </button>
+            <button mat-icon-button class="fav-button" *ngIf="isFavourite && isLoggedUser" (click)="removeFromFavourites()">
+              <span class="material-icons">favorite</span>
+            </button>
+            <button mat-raised-button class="action-button" color="accent" *ngIf="isLoggedUser && isMyBook" (click)="editBook()">Edit book</button>
+            <button mat-raised-button class="action-button" color="accent" *ngIf="isLoggedUser && isMyBook" (click)="deleteBook()">Delete book</button>
+            <button mat-raised-button class="action-button" color="accent" *ngIf="isLoggedUser && !isMyBook" (click)="reserveBook()">Reserve book</button>
+          </div>
+        </div>
 
+        <div class="row details-content">
+          <div class="col-md-8 my-auto">
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">Book's title: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="text" value="{{getDetails()?.title}}" readonly>
+              </mat-form-field>
+            </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Book's author: </mat-label>
-    <input matInput type="text" value="{{getDetails()?.author}}" readonly> <!-- [errorStateMatcher]="matcher" -->
-  </mat-form-field> <br/>
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">Book's author: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="text" value="{{getDetails()?.author}}" readonly>
+              </mat-form-field>
+            </div>
 
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">Book's description: </span>
+              <mat-form-field class="col-md-8 element">
+                <textarea matInput type="text"
+                          cdkTextareaAutosize
+                          value="{{getDetails()?.description}}" readonly></textarea>
+              </mat-form-field>
+            </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Book's description: </mat-label>
-    <input matInput type="text" value="{{getDetails()?.description}}" readonly>  <!-- [errorStateMatcher]="matcher" -->
-  </mat-form-field> <br/>
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">Book's isbn code: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="text" value="{{getDetails()?.isbn}}" readonly>
+              </mat-form-field>
+            </div>
 
-<!--//tu jest error-->
-  <mat-form-field appearance="fill">
-    <mat-label>Book's isbn code: </mat-label>
-    <input matInput type="text" *ngIf="getDetails()?.isbn" value="{{getDetails()?.isbn}}" readonly>
-  </mat-form-field> <br/>
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">Book's category: </span>
+              <mat-form-field class="col-md-8 element">
+                <input matInput type="text" value="{{getDetails()?.category}}" readonly>
+              </mat-form-field>
+            </div>
 
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">Book's first user: </span>
+              <div class="col-md-8 element">
+                <button mat-raised-button class="action-button" color="accent" (click)="showUserProfile(false)">
+                  <span>{{firstUser?.username}}</span>
+                </button>
+              </div>
+            </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Book's category: </mat-label>
-    <input matInput type="text" value="{{getDetails()?.category}}" readonly>
-  </mat-form-field> <br/>
-
-
-  <mat-form-field appearance="fill">
-    <mat-label>Book's first user: </mat-label>
-    <input matInput type="text" value="{{firstUser?.username}}" (click)="showUserProfile(false)" readonly>
-  </mat-form-field> <br/>
-
-
-  <mat-form-field appearance="fill">
-    <mat-label>Book's current user: </mat-label>
-    <input matInput type="text" value="{{currentUser?.username}}" (click)="showUserProfile(true)" readonly>
-  </mat-form-field> <br/>
-
-
-  <button mat-raised-button color="accent" *ngIf="isLoggedUser && isMyBook" (click)="editBook()">Edit book</button>
-  <button mat-raised-button color="accent" *ngIf="isLoggedUser && isMyBook" (click)="deleteBook()">Delete book</button>
-  <button mat-raised-button color="accent" *ngIf="!isFavourite && isLoggedUser" (click)="addToFavourites()">Add to favourites</button>
-  <button mat-raised-button color="accent" *ngIf="isFavourite && isLoggedUser" (click)="removeFromFavourites()">Remove from favourites</button>
-  <button mat-raised-button color="accent" *ngIf="isLoggedUser" (click)="reserveBook()">Reserve book</button>
-
+            <div class="row">
+              <span class="col-md-4 my-auto text-right">Book's current user: </span>
+              <div class="col-md-8 element">
+                <button mat-raised-button class="action-button last-button" color="accent" (click)="showUserProfile(true)">
+                  <span>{{currentUser?.username}}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-4 my-auto text-center">
+            <img src="assets/book-picture.png" alt="Book picture">
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
+
+
+
+

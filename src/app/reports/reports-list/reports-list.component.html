@@ -1,81 +1,100 @@
-<div>
-  <form [formGroup]="searchForm" class="search__form">
+<div class="p-4">
+  <div id="cms">
+    <div class="row">
+      <div class="col-md-12 text-center align-content-center">
+        <h1 class="section-heading text-center">received reports</h1>
+        <hr class="primary">
+      </div>
+    </div>
+    <form *ngIf="dataSource.data.length !== 0" [formGroup]="searchForm" class="row">
+      <div class="col-md-9">
+        <mat-form-field class="col-md-3 mx-auto">
+          <mat-label>Reported user</mat-label>
+          <input matInput
+                 type="text"
+                 formControlName="user"
+                 aria-label="Reported user"
+                 (keyup)="applyFilter()"/>
+        </mat-form-field>
 
-    <mat-form-field class="search__form_field" appearance="outline">
-      <mat-label>Reported user</mat-label>
-      <input type="text"
-             aria-label="Reported user"
-             matInput
-             formControlName="user"
-             (keyup)="applyFilter()"
-      >
-    </mat-form-field>
+        <mat-form-field class="col-md-3 mx-auto">
+          <mat-label>Reporter</mat-label>
+          <input matInput
+                 type="text"
+                 formControlName="reporter"
+                 aria-label="Reporter"
+                 (keyup)="applyFilter()"/>
+        </mat-form-field>
 
-    <mat-form-field class="search__form_field" appearance="outline">
-      <mat-label>Reporter</mat-label>
-      <input type="text"
-             aria-label="Reporter"
-             matInput
-             formControlName="reporter"
-             (keyup)="applyFilter()"
-      >
-    </mat-form-field>
+        <mat-form-field class="col-md-3 mx-auto">
+          <mat-label>Report date</mat-label>
+          <input matInput
+                 formControlName="date"
+                 [matDatepicker]="picker"
+                 (dateInput)="applyFilter()">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </form>
 
-    <mat-form-field class="search__form_field" appearance="outline">
-      <mat-label>Report date</mat-label>
-      <input matInput
-             formControlName="date"
-             [matDatepicker]="picker"
-             (dateInput)="applyFilter()">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
-  </form>
+    <div *ngIf="dataSource.data.length !== 0" class="mat-elevation-z8 books-table">
 
+      <table mat-table [dataSource]="dataSource" matSort class="full-width-table table-hover" aria-label="Elements"
+             (matSortChange)="sortData($event)">
 
-  <div class="mat-elevation-z8">
-    <table mat-table [dataSource]="dataSource" class="full-width-table" matSort aria-label="Elements">
+        <!-- user Column -->
+        <ng-container matColumnDef="user">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Reported user</th>
+          <td mat-cell *matCellDef="let element" class="table-content">{{element.user}}</td>
+        </ng-container>
 
-      <!-- firstName Column -->
-      <ng-container matColumnDef="user">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Reported user</th>
-        <td mat-cell *matCellDef="let element">{{element.user}}</td>
-      </ng-container>
+        <!-- reporter Column -->
+        <ng-container matColumnDef="reporter">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Reporting user</th>
+          <td mat-cell *matCellDef="let element" class="table-content">{{element.reporter}}</td>
+        </ng-container>
 
-      <!-- username Column -->
-      <ng-container matColumnDef="reporter">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Reporting user</th>
-        <td mat-cell *matCellDef="let element">{{element.reporter}}</td>
-      </ng-container>
+        <!-- description Column -->
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+          <td mat-cell *matCellDef="let element" class="table-content">{{element.description}}</td>
+        </ng-container>
 
-      <!-- city Column -->
-      <ng-container matColumnDef="description">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
-        <td mat-cell *matCellDef="let element">{{element.description}}</td>
-      </ng-container>
+        <!-- date Column -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+          <td mat-cell *matCellDef="let element" class="table-content">{{element.date | date: 'yyyy/mm/dd'}}</td>
+        </ng-container>
 
-      <!-- province Column -->
-      <ng-container matColumnDef="date">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
-        <td mat-cell *matCellDef="let element">{{element.date | date: 'yyyy/mm/dd'}}</td>
-      </ng-container>
+        <!-- date Column -->
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef> Delete report </th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-raised-button class="action-button" color="accent"
+                    (click)="deleteReport(element.idReport); $event.stopPropagation()">
+              Delete
+            </button>
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="delete">
-        <th mat-header-cell *matHeaderCellDef > Delete report </th>
-        <td mat-cell *matCellDef="let element" >
-          <button mat-button (click)="deleteReport(element.idReport); $event.stopPropagation()"> Delete </button>
-        </td>
-      </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let element; columns: displayedColumns;" [routerLink]="getUserLink(element.user)"></tr>
+      </table>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let element; columns: displayedColumns;" [routerLink]="getUserLink(element.user)"></tr>
-    </table>
-
-    <mat-paginator #paginator
-                   [length]="dataSource?.data.length"
-                   [pageIndex]="0"
-                   [pageSize]="50"
-                   [pageSizeOptions]="[25, 50, 100, 250]">
-    </mat-paginator>
+      <mat-paginator #paginator
+                     [length]="dataSource?.data.length"
+                     [pageIndex]="0"
+                     [pageSize]="10"
+                     [pageSizeOptions]="[10, 25, 50]">
+      </mat-paginator>
+    </div>
+    <div class="row no-content" *ngIf="dataSource.data.length === 0">
+      <div class="col-md-12 my-auto text-center">
+        <img src="assets/no-content.jpeg" alt="No items fount">
+        <h2>No items found</h2>
+      </div>
+    </div>
   </div>
+
 </div>

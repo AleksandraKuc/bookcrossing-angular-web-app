@@ -1,24 +1,31 @@
-<mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container class="sidenav-container" style="font-size: 18px">
   <mat-sidenav #drawer class="sidenav" fixedInViewport
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'push' : 'side'"
       [opened]="(isHandset$ | async) === false">
-    <mat-toolbar color="primary" routerLink="/">Menu</mat-toolbar>
+    <mat-toolbar color="primary" routerLink="/" style="outline: none">Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item routerLink="about">What is Bookcrossing?</a>
-      <a mat-list-item routerLink="books">Books</a>
-      <a mat-list-item routerLink="books/favourites" *ngIf="isLoggedUser">Favourite Books</a>
-      <a mat-list-item routerLink="books/myBooks" *ngIf="isLoggedUser">My Books</a>
-      <a mat-list-item routerLink="conversations" *ngIf="isLoggedUser">Messages</a>
-      <a mat-list-item routerLink="users">Users</a>
-      <a mat-list-item routerLink="users/profile" *ngIf="isLoggedUser">My profile</a>
-      <a mat-list-item routerLink="contact">Contact</a>
-      <a mat-list-item routerLink="reports" *ngIf="isAdmin()">Reports</a>
-      <a mat-list-item routerLink="account/login" *ngIf="!isLoggedUser">Log In</a>
-      <button mat-raised-button color="accent" *ngIf="isLoggedUser" (click)="logout()">Log out</button>
-      <a mat-list-item routerLink="books/handOver" *ngIf="isLoggedUser">Hand over book</a>
+      <a mat-list-item routerLink="about" class="item">What is Bookcrossing?</a>
+      <a mat-list-item routerLink="books" class="item">Books</a>
+      <a mat-list-item routerLink="books/favourites" *ngIf="isLoggedUser" class="item">Favourite Books</a>
+      <a mat-list-item routerLink="books/myBooks" *ngIf="isLoggedUser" class="item">My Books</a>
+      <a mat-list-item routerLink="conversations" *ngIf="isLoggedUser" class="item">Messages</a>
+      <a mat-list-item routerLink="users" class="item">Users</a>
+      <a mat-list-item routerLink="users/profile" *ngIf="isLoggedUser" class="item">My profile</a>
+      <a mat-list-item routerLink="contact" *ngIf="!isAdmin()" class="item">Contact</a>
+      <a mat-list-item routerLink="reports" *ngIf="isAdmin()" class="item">Reports</a>
+      <div style="text-align: right">
+        <button mat-raised-button color="accent" routerLink="account/login" *ngIf="!isLoggedUser" class="login-button">Log In</button>
+      </div>
+      <div style="text-align: right">
+        <button mat-raised-button color="accent" routerLink="books/handOver" *ngIf="isLoggedUser" class="button">
+          Hand over book
+        </button>
+      </div>
+      <div style="text-align: right">
+        <button mat-raised-button color="accent" *ngIf="isLoggedUser" (click)="logout()" class="button">Log out</button>
+      </div>
     </mat-nav-list>
-    <span class="spacer"></span>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">
@@ -27,10 +34,11 @@
         aria-label="Toggle sidenav"
         mat-icon-button
         (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
+        *ngIf="isHandset$ | async"
+        style="outline: none">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span routerLink="/">BOOKCROSSING</span>
+      <span routerLink="/" style="outline: none">BOOKCROSSING</span>
     </mat-toolbar>
     <ng-content></ng-content>
   </mat-sidenav-content>

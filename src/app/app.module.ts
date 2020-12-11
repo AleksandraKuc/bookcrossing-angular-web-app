@@ -9,12 +9,14 @@ import { AboutBookcrossingComponent } from './about-bookcrossing/about-bookcross
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ContactComponent } from './contact/contact.component';
+import { httpAuthInterceptorProvider } from "./shared/helpers/interceptors/auth-interceptor";
+import { httpOverlayInterceptorProvider } from "./shared/helpers/interceptors/spinner-overlay.interceptor";
 import { MainNavigationComponent } from './main-navigation/main-navigation.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { SharedModule } from "./shared/shared.module";
-import { httpAuthInterceptorProvider } from "./shared/helpers/interceptors/auth-interceptor";
-import { SpinnerOverlayComponent } from './shared/components/spinner-overlay/spinner-overlay.component';
-import { httpOverlayInterceptorProvider } from "./shared/helpers/interceptors/spinner-overlay.interceptor";
+import { SpinnerOverlayComponent } from "./shared/components/spinner-overlay/spinner-overlay.component";
+import {BooksModule} from "./books/books.module";
+import {MatCardModule} from "@angular/material/card";
 
 @NgModule({
   declarations: [
@@ -32,7 +34,8 @@ import { httpOverlayInterceptorProvider } from "./shared/helpers/interceptors/sp
     HttpClientModule,
     SharedModule.forRoot(),
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BooksModule
   ],
   providers: [
     httpAuthInterceptorProvider,

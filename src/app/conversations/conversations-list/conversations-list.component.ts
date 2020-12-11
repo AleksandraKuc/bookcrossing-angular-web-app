@@ -67,14 +67,33 @@ export class ConversationsListComponent implements OnInit, AfterViewInit {
 
   getLastMessageDate(messages: MessageDefinition[]): Date {
     if (messages) {
-      return messages[messages.length-1].date;
+      return messages[messages.length-1]?.date;
     }
   }
 
   getLastMessageContent(messages: MessageDefinition[]): string {
     if (messages) {
-      return messages[messages.length-1].content;
+      return messages[messages.length-1]?.content;
     }
+  }
+
+  sortData(sort: any){
+    const data = this.dataSource.data;
+    if (!sort.active || sort.direction == '') {
+      this.dataSource.data = data;
+      return;
+    }
+
+    this.dataSource.data = data.sort((a, b) => {
+      let isAsc = sort.direction == 'asc';
+      switch (sort.active) {
+        case 'name': return compare(a.recipient.firstname, b.recipient.firstname, isAsc);
+        case 'username': return compare(a.recipient.username, b.recipient.username, isAsc);
+        case 'date': return compare(a.getLastMessageDate(), b.getLastMessageDate(), isAsc);
+        case 'message': return compare(a.getLastMessageContent(), b.getLastMessageContent(), isAsc);
+        default: return 0;
+      }
+    });
   }
 
   /* this method well be called for each row in table  */
@@ -119,4 +138,8 @@ export class ConversationsListComponent implements OnInit, AfterViewInit {
       this.dataSource.paginator.firstPage();
     }
   }
+}
+
+function compare(a, b, isAsc) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

@@ -1,9 +1,10 @@
+import { ActivatedRoute, Router } from "@angular/router";
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router } from "@angular/router";
 
-import {AuthLoginInfo} from "../../shared/models/login-info";
-import {AuthService} from "../../shared/helpers/services/auth.service";
-import {TokenStorageService} from "../../shared/helpers/services/token-storage.service";
+import { AuthLoginInfo } from "../../shared/models/login-info";
+import { AuthService } from "../../shared/helpers/services/auth.service";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { TokenStorageService } from "../../shared/helpers/services/token-storage.service";
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,11 @@ import {TokenStorageService} from "../../shared/helpers/services/token-storage.s
 })
 export class LoginComponent implements OnInit {
 
-  form: any = {};
+  form = new FormGroup({
+      username: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required)
+    }
+  );
   isLoggedIn = false;
   isLoginFailed = false;
   errorMessage = '';
@@ -42,8 +47,8 @@ export class LoginComponent implements OnInit {
   onSubmit() {
 
     this.loginInfo = new AuthLoginInfo(
-      this.form.username,
-      this.form.password);
+      this.form.get('username').value,
+      this.form.get('password').value);
 
     this.authService.attemptAuth(this.loginInfo).subscribe(
       data => {

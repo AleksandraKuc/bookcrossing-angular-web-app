@@ -10,7 +10,6 @@ import { BooksService } from "../../core/services/books.service";
 import { TokenStorageService } from "../../shared/helpers/services/token-storage.service";
 import {Observable} from "rxjs";
 import {switchMap, take} from "rxjs/operators";
-import {SearchParamsInfo} from "../../shared/models/searchParams-info";
 
 @Component({
   selector: 'app-books-list',
@@ -18,14 +17,14 @@ import {SearchParamsInfo} from "../../shared/models/searchParams-info";
   styleUrls: ['./books-list.component.css']
 })
 export class BooksListComponent implements AfterViewInit, OnInit {
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator; //co robi static?
-  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   dataSource = new MatTableDataSource<BookDefinition>();
 
   listIsFavourites: Array<{ bookId: number, status: boolean }> = new Array<{bookId: number; status: boolean}>();
 
-  displayedColumns = ['id', 'title', 'author', 'category', 'description'];
+  displayedColumns = ['title', 'author', 'description', 'isbn', 'category', 'releaseDate'];
 
   @Input() listMode: string = '';
   @Input() isAccount: boolean = false;
@@ -74,9 +73,21 @@ export class BooksListComponent implements AfterViewInit, OnInit {
 
   setDisplayedColumns(): void {
     if (this.listMode !== 'handOver' && this.isLoggedIn() && (this.listMode !== 'own' && !this.username)){
-      this.displayedColumns = ['id', 'title', 'author', 'category', 'description', 'favourites'];
+      this.displayedColumns = ['title', 'author', 'description', 'isbn', 'category', 'releaseDate', 'favourites'];
     } else if (this.listMode === 'handOver' && this.isLoggedIn()) {
-      this.displayedColumns = ['id', 'title', 'author', 'category', 'description', 'handOver'];
+      this.displayedColumns = ['title', 'author', 'description', 'isbn', 'category', 'releaseDate', 'handOver'];
+    }
+  }
+
+  get pageTitle(): string {
+    switch(this.listMode) {
+      case 'all': { return "All books" }
+      case 'fav': { return "Your favourites books" }
+      case 'my': { return "Your owned books" }
+      case 'handOver': { return "Hand over book" }
+      case 'own': { return "User owned books" }
+      case 'added': { return "User added book" }
+      default : { return "All books" }
     }
   }
 
@@ -106,9 +117,9 @@ export class BooksListComponent implements AfterViewInit, OnInit {
   }
 
   refreshTable(data: BookDefinition[]){
+    this.dataSource = new MatTableDataSource(data);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.dataSource = new MatTableDataSource(data);
   }
 
   getBooks() {
@@ -190,7 +201,7 @@ export class BooksListComponent implements AfterViewInit, OnInit {
   }
 
   checkIsFavourite(id: number): boolean {
-    return (this.listIsFavourites.find( element => element.bookId === id)).status;
+    return (this.listIsFavourites.find( element => element.bookId === id))?.status;
   }
 
   isLoggedIn(): boolean {
@@ -198,7 +209,32 @@ export class BooksListComponent implements AfterViewInit, OnInit {
   }
 
   get showAddButton():boolean {
-    return !this.isAccount;
+    return !this.isAccount && this.listMode === 'all';
+  }
+
+  bookIsbn(isbn: string): string {
+    return isbn !== '' ? isbn : '---';
+  }
+
+  sortData(sort: any){
+    const data = this.dataSource.data;
+    if (!sort.active || sort.direction == '') {
+      this.dataSource.data = data;
+      return;
+    }
+
+    this.dataSource.data = data.sort((a, b) => {
+      let isAsc = sort.direction == 'asc';
+      switch (sort.active) {
+        case 'title': return compare(a.title, b.title, isAsc);
+        case 'author': return compare(a.author, b.author, isAsc);
+        case 'description': return compare(a.description, b.description, isAsc);
+        case 'isbn': return compare(a.isbn, b.isbn, isAsc);
+        case 'category': return compare(a.category, b.category, isAsc);
+        case 'releaseDate': return compare(a.history.start_date, b.history.start_date, isAsc);
+        default: return 0;
+      }
+    });
   }
 
   /* this method well be called for each row in table  */
@@ -248,4 +284,8 @@ export class BooksListComponent implements AfterViewInit, OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+}
+
+function compare(a, b, isAsc) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

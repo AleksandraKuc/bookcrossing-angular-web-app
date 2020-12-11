@@ -1,84 +1,113 @@
-<button mat-raised-button color="accent" *ngIf="isLoggedIn() && showAddButton" (click)="addNewBook()">Add new book</button>
+<div id="cms">
+  <div class="row">
+    <div class="col-md-12 text-center align-content-center">
+      <h1 class="section-heading text-center">{{pageTitle}}</h1>
+      <hr class="primary">
+      <h2 class="text-center" *ngIf="listMode==='handOver'">
+        Choose book you want to hand over to next customer
+      </h2>
+    </div>
+  </div>
+  <div *ngIf="!isAccount && dataSource.data.length !== 0" [formGroup]="searchForm" class="row">
+    <div class="col-md-9">
+      <mat-form-field class="col-md-3 mx-auto">
+        <mat-label>Book title</mat-label>
+        <input matInput
+               type="text"
+               formControlName="title"
+               aria-label="Book title"
+               (keyup)="applyFilter()"/>
+      </mat-form-field>
 
-<div>
-  <form *ngIf="!isAccount" [formGroup]="searchForm" class="search__form">
+      <mat-form-field class="col-md-3 mx-auto">
+        <mat-label>Book author</mat-label>
+        <input matInput
+               type="text"
+               formControlName="author"
+               aria-label="Book author"
+               (keyup)="applyFilter()"/>
+      </mat-form-field>
 
-    <mat-form-field class="search__form_field" appearance="outline">
-      <mat-label>Book title</mat-label>
-      <input type="text"
-             aria-label="Book title"
-             matInput
-             formControlName="title"
-             (keyup)="applyFilter()"
-      >
-    </mat-form-field>
+      <mat-form-field class="col-md-3 mx-auto">
+        <mat-label>Book category</mat-label>
+        <input matInput
+               type="text"
+               formControlName="category"
+               aria-label="Book category"
+               (keyup)="applyFilter()"/>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field class="search__form_field" appearance="outline">
-      <mat-label>Book author</mat-label>
-      <input type="text"
-             aria-label="Book author"
-             matInput
-             formControlName="author"
-             (keyup)="applyFilter()"
-      >
-    </mat-form-field>
-
-    <mat-form-field class="search__form_field" appearance="outline">
-      <mat-label>Book category</mat-label>
-      <input type="text"
-             aria-label="Book category"
-             matInput
-             formControlName="category"
-             (keyup)="applyFilter()"
-      >
-    </mat-form-field>
-  </form>
+    <div class="col-md-3 create-section">
+      <button mat-raised-button class="create-button" color="accent"
+              *ngIf="isLoggedIn() && showAddButton" (click)="addNewBook()">
+        Add new book
+      </button>
+    </div>
+  </div>
 
   <div *ngIf="dataSource.data.length !== 0" class="mat-elevation-z8 books-table">
 
-    <table mat-table [dataSource]="dataSource" matSort class="full-width-table" aria-label="Elements">
-      <!-- idBook Column -->
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
-        <td mat-cell *matCellDef="let element">{{element.id_book}}</td>
-      </ng-container>
-
+    <table mat-table [dataSource]="dataSource" matSort class="full-width-table table-hover" aria-label="Elements"
+           (matSortChange)="sortData($event)">
       <!-- Title Column -->
       <ng-container matColumnDef="title">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
-        <td mat-cell *matCellDef="let element">{{element.title}}</td>
+        <td mat-cell *matCellDef="let element" class="table-content">{{element.title}}</td>
       </ng-container>
 
       <!-- Author Column -->
       <ng-container matColumnDef="author">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Author</th>
-        <td mat-cell *matCellDef="let element">{{element.author}}</td>
+        <td mat-cell *matCellDef="let element" class="table-content">{{element.author}}</td>
       </ng-container>
 
       <!-- Category Column -->
       <ng-container matColumnDef="category">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
-        <td mat-cell *matCellDef="let element">{{element.category}}</td>
+        <td mat-cell *matCellDef="let element" class="table-content">{{element.category}}</td>
       </ng-container>
 
       <!-- Description Column -->
       <ng-container matColumnDef="description">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
-        <td mat-cell *matCellDef="let element">{{element.description}}</td>
+        <td mat-cell *matCellDef="let element" class="table-content">{{element.description}}</td>
+      </ng-container>
+
+      <!-- ISBN Column -->
+      <ng-container matColumnDef="isbn">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ISBN</th>
+        <td mat-cell *matCellDef="let element" class="table-content">{{bookIsbn(element.isbn)}}</td>
+      </ng-container>
+
+      <!-- Date of release Column -->
+      <ng-container matColumnDef="releaseDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date of release</th>
+        <td mat-cell *matCellDef="let element"
+            class="table-content">{{element.history.start_date | date: 'dd-MM-yyyy' }}</td>
       </ng-container>
 
       <ng-container matColumnDef="favourites">
-        <th mat-header-cell *matHeaderCellDef > Favourites </th>
-        <td mat-cell *matCellDef="let element" >
-          <button mat-button *ngIf="!checkIsFavourite(element.id_book)" (click)="addToFavourites(element.id_book); $event.stopPropagation()">Add to favourites</button>
-          <button mat-button *ngIf="checkIsFavourite(element.id_book)" (click)="removeFromFavourites(element.id_book); $event.stopPropagation()">Remove from favourites</button>
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button *ngIf="!checkIsFavourite(element.id_book)" class="fav-button"
+                  (click)="addToFavourites(element.id_book); $event.stopPropagation()">
+            <span class="material-icons">favorite_border</span>
+          </button>
+          <button mat-icon-button *ngIf="checkIsFavourite(element.id_book)" class="fav-button"
+                  (click)="removeFromFavourites(element.id_book); $event.stopPropagation()">
+            <span class="material-icons">favorite</span>
+          </button>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="handOver">
-        <th mat-header-cell *matHeaderCellDef > Select book </th>
-        <td mat-cell *matCellDef="let element" >
-          <button mat-button (click)="selectToHandOver(element.id_book); $event.stopPropagation()">Select</button>
+        <th mat-header-cell *matHeaderCellDef> Select book</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-raised-button class="action-button" color="accent"
+                  (click)="selectToHandOver(element.id_book); $event.stopPropagation()">
+            Select
+          </button>
         </td>
       </ng-container>
 
@@ -93,7 +122,10 @@
                    [pageSizeOptions]="[10, 25, 50]">
     </mat-paginator>
   </div>
-
-  <span *ngIf="dataSource.data.length === 0"> No items :( </span>
-
+  <div class="row no-content" *ngIf="dataSource.data.length === 0">
+    <div class="col-md-12 my-auto text-center">
+      <img src="assets/no-content.jpeg" alt="No items fount">
+      <h2>No items found</h2>
+    </div>
+  </div>
 </div>
