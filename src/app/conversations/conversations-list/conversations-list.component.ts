@@ -133,7 +133,6 @@ export class ConversationsListComponent implements OnInit, AfterViewInit {
     // create string of our searching values and split if by '$'
     const filterValue = this.firstName + '$' + this.username;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-    console.log(filterValue);
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }

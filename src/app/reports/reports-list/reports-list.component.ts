@@ -8,6 +8,9 @@ import { Router } from "@angular/router";
 import { ReportDefinition } from "../../core/models/report-definition.model";
 import { ReportService } from "../../core/services/report.service";
 import { TokenStorageService } from "../../shared/helpers/services/token-storage.service";
+import {DeleteConfirmationComponent} from "../../shared/components/delete-confirmation/delete-confirmation.component";
+import {MatSnackBar, MatSnackBarConfig} from "@angular/material/snack-bar";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-reports-list',
@@ -29,7 +32,9 @@ export class ReportsListComponent implements AfterViewInit, OnInit {
 
   constructor(private reportService: ReportService,
               private tokenStorage: TokenStorageService,
-              protected router: Router) { }
+              protected router: Router,
+              protected snackBar: MatSnackBar,
+              protected dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.reportService.getReports().subscribe(response => {
@@ -58,10 +63,33 @@ export class ReportsListComponent implements AfterViewInit, OnInit {
 
   deleteReport(idReport: number): void {
     this.reportService.deleteReport(idReport).subscribe( response => {
+      this.openDeletedSnackBar();
       let index = this.dataSource.data.findIndex( _report => _report.id_report === idReport);
       this.dataSource.data.splice(index, 1);
       this.refreshTable(this.dataSource.data);
     })
+  }
+
+  openDeleteDialog(idReport: number) {
+    const dialogRef = this.dialog.open(DeleteConfirmationComponent, {
+      data: {
+        title: `delete this report`,
+        button: `Delete`
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteReport(idReport);
+      }
+    });
+  }
+
+  openDeletedSnackBar(): void {
+    let config = new MatSnackBarConfig();
+    config.duration = 5000;
+    let message = "Report deleted";
+    this.snackBar.open(message, "x", config);
   }
 
   refreshTable(data: ReportDefinition[]){
@@ -71,7 +99,6 @@ export class ReportsListComponent implements AfterViewInit, OnInit {
   }
 
   sortData(sort: any){
-    console.log(sort);
     const data = this.dataSource.data;
     if (!sort.active || sort.direction == '') {
       this.dataSource.data = data;

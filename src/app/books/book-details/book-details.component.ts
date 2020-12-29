@@ -9,6 +9,9 @@ import {UsersService} from "../../core/services/users.service";
 import {UserDefinition} from "../../core/models/user-definition.model";
 import {TokenStorageService} from "../../shared/helpers/services/token-storage.service";
 import {ConversationsService} from "../../core/services/conversations.service";
+import {MatSnackBar, MatSnackBarConfig} from "@angular/material/snack-bar";
+import {MatDialog} from "@angular/material/dialog";
+import {DeleteConfirmationComponent} from "../../shared/components/delete-confirmation/delete-confirmation.component";
 
 @Component({
   selector: 'app-book-details',
@@ -29,7 +32,9 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
               protected userService: UsersService,
               protected route: ActivatedRoute,
               protected router: Router,
-              protected cdr: ChangeDetectorRef) {
+              protected cdr: ChangeDetectorRef,
+              protected snackBar: MatSnackBar,
+              protected dialog: MatDialog) {
     super(route);
 
     this.booksService.getBook(this.id).subscribe(book => {
@@ -84,8 +89,24 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
 
   deleteBook(): void {
     this.booksService.deleteBook(this.getDetails().id_book).subscribe( () => {
+      this.openDeletedSnackBar();
       this.router.navigate([`/books`]);
     })
+  }
+
+  openDeleteDialog() {
+    const dialogRef = this.dialog.open(DeleteConfirmationComponent, {
+      data: {
+        title: `delete book ${this.getDetails().title}`,
+        button: `Delete`
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteBook();
+      }
+    });
   }
 
   protected userLink(username: string): string {
@@ -110,19 +131,21 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
   addToFavourites(): void {
     this.booksService.addToFavourites(this.getDetails().id_book).subscribe(() => {
       this.isFavourite = true;
+      this.openFavouritesSnackBar(true);
     })
   }
 
   removeFromFavourites(): void {
     this.booksService.removeFromFavourites(this.getDetails().id_book).subscribe(() => {
       this.isFavourite = false;
+      this.openFavouritesSnackBar(false);
     })
   }
 
   reserveBook(): void {
     let message = "Hi, I want to reserve book \"" + this.getDetails().title + "\"";
     if (this.getDetails().isbn !== null) {
-      message += " with isbn code " + this.getDetails();
+      message += " with isbn code " + this.getDetails().isbn;
     }
     let username = this.currentUser.username;
     this.conversationsService.checkIfExists(this.currentUser.username)
@@ -132,11 +155,11 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
             this.conversationsService.createConversation(this.currentUser.username)
               .subscribe(
                 conversation => {
-                  this.router.navigate([`conversations/${this.currentUser.username}`],
+                  this.router.navigate([`conversations`],
                     { state: { conversationId: conversation.id_conversation, message: message } });
             })
           } else {
-            this.router.navigate([`conversations/${this.currentUser.username}`],
+            this.router.navigate([`conversations`],
               { state: { message: message }});
           }
     })
@@ -149,4 +172,19 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
   get isMyBook(): boolean {
     return this.tokenStorage.areUsernameEquals(this.currentUser?.username);
   }
+
+  openFavouritesSnackBar(favourite: boolean): void {
+    let config = new MatSnackBarConfig();
+    config.duration = 5000;
+    let message = favourite ? "Book added to favourites" : 'Book removed from favourites';
+    this.snackBar.open(message, "x", config);
+  }
+
+  openDeletedSnackBar(): void {
+    let config = new MatSnackBarConfig();
+    config.duration = 5000;
+    let message = "Book deleted";
+    this.snackBar.open(message, "x", config);
+  }
+
 }

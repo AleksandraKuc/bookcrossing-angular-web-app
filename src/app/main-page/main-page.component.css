@@ -1,5 +1,5 @@
 #cms {
-  padding: 95px 0 50px;
+  padding: 55px 0 50px;
 }
 
 .main-page {
@@ -46,15 +46,16 @@ hr.primary {
 }
 
 .image-add {
-  background-image: url(src/assets/book-image.jpg);
+  background-image: url(src/assets/book-main-page/leaves-1076307_19201.jpg);
+  /*background-image: url(src/assets/book-main-page/pexels-lucie-liz-3193647.jpg);*/
   background-position: center;
   background-repeat: no-repeat;
-  min-height: 300px;
+  min-height: 350px;
 
   background-color: #cccccc;
   background-size: cover;
   position: relative;
-  color: white;
+  color: black;
 }
 
 .join-section {

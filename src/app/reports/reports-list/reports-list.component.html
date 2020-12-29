@@ -72,7 +72,7 @@
           <th mat-header-cell *matHeaderCellDef> Delete report </th>
           <td mat-cell *matCellDef="let element">
             <button mat-raised-button class="action-button" color="accent"
-                    (click)="deleteReport(element.idReport); $event.stopPropagation()">
+                    (click)="openDeleteDialog(element.idReport); $event.stopPropagation()">
               Delete
             </button>
           </td>
@@ -91,7 +91,7 @@
     </div>
     <div class="row no-content" *ngIf="dataSource.data.length === 0">
       <div class="col-md-12 my-auto text-center">
-        <img src="assets/no-content.jpeg" alt="No items fount">
+        <i class="material-icons" style="font-size: 150px"> search_off </i>
         <h2>No items found</h2>
       </div>
     </div>

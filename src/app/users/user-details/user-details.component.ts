@@ -8,6 +8,8 @@ import {ConversationsService} from "../../core/services/conversations.service";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 import {ReportItemComponent} from "../../reports/report-item/report-item.component";
 import {UserResetPasswordComponent} from "../user-reset-password/user-reset-password.component";
+import {MatSnackBar, MatSnackBarConfig} from "@angular/material/snack-bar";
+import {DeleteConfirmationComponent} from "../../shared/components/delete-confirmation/delete-confirmation.component";
 
 @Component({
   selector: 'app-user-details',
@@ -26,8 +28,9 @@ export class UserDetailsComponent implements OnInit {
               protected activatedRoute: ActivatedRoute,
               protected router: Router,
               protected tokenStorage: TokenStorageService,
-              private dialog: MatDialog) {
-    this.username = this.route.snapshot.paramMap.get('id');
+              protected snackBar: MatSnackBar,
+              protected dialog: MatDialog) {
+    this.username = this.route.snapshot.paramMap.get('username');
     this.form = this.generateForm();
     this.userService.getUser(this.username).subscribe( user => {
       this.setFormValues(user);
@@ -73,18 +76,41 @@ export class UserDetailsComponent implements OnInit {
     if (this.isProfileView()) {
       this.userService.deleteAccount().subscribe(
         response => {
+          this.openDeletedSnackBar();
           this.logout();
-
           this.router.navigate([`/`]);
         }
       );
     } else {
       this.userService.deleteAccount(this.username).subscribe(
         result => {
+          this.openDeletedSnackBar();
           this.router.navigate(['/users']);
         }
       );
     }
+  }
+
+  openDeleteDialog() {
+    const dialogRef = this.dialog.open(DeleteConfirmationComponent, {
+      data: {
+        title: `${this.form.get('username').value} user`,
+        button: `Delete`
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteAccount();
+      }
+    });
+  }
+
+  openDeletedSnackBar(): void {
+    let config = new MatSnackBarConfig();
+    config.duration = 5000;
+    let message = "Account deleted";
+    this.snackBar.open(message, "x", config);
   }
 
   logout(): void {
@@ -99,20 +125,43 @@ export class UserDetailsComponent implements OnInit {
           if (!response) {
             this.conversationsService.createConversation(this.form.get('username').value)
               .subscribe( conversation => {
-                this.router.navigate([`conversations/${this.form.get('username').value}`],
-                  { state: { conversationId: conversation.id_conversation } });
+                this.router.navigate([`conversations`],
+                  { state: { conversationId: conversation.id_conversation, username: this.form.get('username').value } });
             })
           } else {
-            this.router.navigate([`conversations/${this.form.get('username').value}`]);
+            this.router.navigate([`conversations`], { state: { username: this.form.get('username').value } });
           }
     })
   }
 
-  changeStatus(): void {
+  changeStatus(blocked: boolean): void {
     this.userService.changeStatus(this.username).subscribe( user => {
+      this.openChangeStatusSnackBar(blocked);
       this.setFormValues(user);
       this.user = user;
     })
+  }
+
+  openChangeStatusDialog(blocked: boolean) {
+    const dialogRef = this.dialog.open(DeleteConfirmationComponent, {
+      data: {
+        title: blocked ? `block ${this.form.get('username').value}` : `unblock ${this.form.get('username').value}`,
+        button: blocked ? `Block` : `Unblock`
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.changeStatus(blocked);
+      }
+    });
+  }
+
+  openChangeStatusSnackBar(blocked: boolean): void {
+    let config = new MatSnackBarConfig();
+    config.duration = 5000;
+    let message = blocked ? "Account blocked" : "Account unblocked";
+    this.snackBar.open(message, "x", config);
   }
 
   isProfileView(): boolean {

@@ -13,7 +13,7 @@ const USERS_ROUTES: Routes = [
     path: '', component: UsersLayoutComponent,
     children: [
       { path: '', component: UsersListComponent },
-      { path: 'details/:id', component: UserDetailsComponent },
+      { path: 'details/:username', component: UserDetailsComponent },
       { path: 'profile', component: UserDetailsComponent, canActivate: [ AuthGuard ] },
       { path: 'edit', component: UsersAddModifyComponent, canActivate: [ AuthGuard ] },
       { path: 'change-password', component: UserResetPasswordComponent, canActivate: [ AuthGuard ] },

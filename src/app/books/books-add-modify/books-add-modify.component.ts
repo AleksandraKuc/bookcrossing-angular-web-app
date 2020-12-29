@@ -7,6 +7,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { BooksService } from "../../core/services/books.service";
 import { BookDefinition } from "../../core/models/book-definition.model";
 import { TokenStorageService } from "../../shared/helpers/services/token-storage.service";
+import {MatSnackBar, MatSnackBarConfig} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-books-add-modify',
@@ -29,7 +30,8 @@ export class BooksAddModifyComponent implements OnInit {
   constructor(protected route: ActivatedRoute,
               protected bookService: BooksService,
               protected router: Router,
-              protected tokenStorage: TokenStorageService) {
+              protected tokenStorage: TokenStorageService,
+              protected snackBar: MatSnackBar) {
     this.bookId = +this.route.snapshot.paramMap.get('id');
     this.viewMode = this.bookId ? 'edit' : 'add';
 
@@ -92,6 +94,7 @@ export class BooksAddModifyComponent implements OnInit {
 
   private addBook(book: BookDefinition) {
     this.bookService.createBook(book).subscribe(_book => {
+      this.openSuccessSnackBar();
         this.router.navigate([`/books/details/${encodeURIComponent(_book.id_book)}`]);
       },
       error => {
@@ -106,6 +109,7 @@ export class BooksAddModifyComponent implements OnInit {
     book.setId(this.form.get('id_book').value);
 
     this.bookService.updateBook(book).subscribe((data) => {
+      this.openSuccessSnackBar();
       this.router.navigate([`/books/details/${encodeURIComponent(book.id_book)}`]);
     },
     error => {
@@ -134,4 +138,10 @@ export class BooksAddModifyComponent implements OnInit {
     return this.viewMode === 'add' ? "Add book" : "Save changes";
   }
 
+  openSuccessSnackBar(): void {
+    let config = new MatSnackBarConfig();
+    config.duration = 5000;
+    let message = this.viewMode === 'add' ? "Book added successfully" : 'Book modified successfully';
+    this.snackBar.open(message, "x", config);
+  }
 }

@@ -10,6 +10,7 @@ import { ConversationsService } from "../../core/services/conversations.service"
 import { TokenStorageService } from "../../shared/helpers/services/token-storage.service";
 import { UserDefinition } from "../../core/models/user-definition.model";
 import { UsersService } from "../../core/services/users.service";
+import {MatSnackBar, MatSnackBarConfig} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-users-list',
@@ -17,7 +18,7 @@ import { UsersService } from "../../core/services/users.service";
   styleUrls: ['./users-list.component.css']
 })
 export class UsersListComponent implements AfterViewInit, OnInit {
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   dataSource = new MatTableDataSource<UserDefinition>();
@@ -36,7 +37,8 @@ export class UsersListComponent implements AfterViewInit, OnInit {
               private bookService: BooksService,
               private conversationsService: ConversationsService,
               private tokenStorage: TokenStorageService,
-              protected router: Router) {
+              protected router: Router,
+              protected snackBar: MatSnackBar) {
     this.isHandOverMode = !!history.state.bookId;
     this.bookToHandOver = history.state.bookId;
   }
@@ -49,7 +51,6 @@ export class UsersListComponent implements AfterViewInit, OnInit {
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
   }
 
   setDisplayedColumns(): void {
@@ -71,8 +72,10 @@ export class UsersListComponent implements AfterViewInit, OnInit {
   getUsersList(): void {
     let filterResult = !this.isAdmin();
     this.usersService.getAllUsers(filterResult).subscribe(response => {
-
       this.dataSource.data = response.users;
+      setTimeout(() => {
+        this.dataSource.paginator = this.paginator
+      });
       this.dataSource.filterPredicate = this.getFilterPredicate;
     });
   }
@@ -98,7 +101,15 @@ export class UsersListComponent implements AfterViewInit, OnInit {
       delete this.bookToHandOver;
       this.isHandOverMode = false;
       window.location.reload();
+      this.openSuccessSnackBar();
     })
+  }
+
+  openSuccessSnackBar(): void {
+    let config = new MatSnackBarConfig();
+    config.duration = 10000;
+    let message = "Book successfully hand over";
+    this.snackBar.open(message, "x", config);
   }
 
   isAdmin(): boolean {

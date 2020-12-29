@@ -10,6 +10,7 @@ import { BooksService } from "../../core/services/books.service";
 import { TokenStorageService } from "../../shared/helpers/services/token-storage.service";
 import {Observable} from "rxjs";
 import {switchMap, take} from "rxjs/operators";
+import {MatSnackBar, MatSnackBarConfig} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-books-list',
@@ -17,7 +18,7 @@ import {switchMap, take} from "rxjs/operators";
   styleUrls: ['./books-list.component.css']
 })
 export class BooksListComponent implements AfterViewInit, OnInit {
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   dataSource = new MatTableDataSource<BookDefinition>();
@@ -38,7 +39,8 @@ export class BooksListComponent implements AfterViewInit, OnInit {
   constructor(private booksService: BooksService,
               private activatedRoute: ActivatedRoute,
               private tokenStorage: TokenStorageService,
-              private router: Router) {}
+              private router: Router,
+              protected snackBar: MatSnackBar) {}
 
   ngOnInit() {
     if (this.listMode === '') {
@@ -56,7 +58,6 @@ export class BooksListComponent implements AfterViewInit, OnInit {
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
   }
 
   getDetailsLink(id: any) {
@@ -94,6 +95,7 @@ export class BooksListComponent implements AfterViewInit, OnInit {
   addToFavourites(id: number): void {
     this.booksService.addToFavourites(id).subscribe( () => {
       this.setFavouritesList(id, true);
+      this.openFavouritesSnackBar(true);
     });
   }
 
@@ -105,6 +107,7 @@ export class BooksListComponent implements AfterViewInit, OnInit {
         this.refreshTable(this.dataSource.data);
       }
       this.setFavouritesList(id, false);
+      this.openFavouritesSnackBar(false);
     })
   }
 
@@ -136,6 +139,7 @@ export class BooksListComponent implements AfterViewInit, OnInit {
 
   setTable(response: BookDefinition[]): void {
     this.dataSource.data = response;
+    this.setPaginator();
     this.dataSource.filterPredicate = this.getFilterPredicate;
   }
 
@@ -165,6 +169,7 @@ export class BooksListComponent implements AfterViewInit, OnInit {
       this.booksService.getUserOwnedBooks(user)
     )).subscribe(response => {
       this.dataSource.data = response;
+      this.setPaginator();
       this.setFavBooks();
     });
   }
@@ -174,6 +179,7 @@ export class BooksListComponent implements AfterViewInit, OnInit {
       this.booksService.getUserAddedBooks(user)
     )).subscribe( response => {
       this.dataSource.data = response;
+      this.setPaginator();
       this.setFavBooks();
     });
   }
@@ -200,6 +206,12 @@ export class BooksListComponent implements AfterViewInit, OnInit {
     });
   }
 
+  setPaginator(): void {
+    setTimeout(() => {
+      this.dataSource.paginator = this.paginator
+    });
+  }
+
   checkIsFavourite(id: number): boolean {
     return (this.listIsFavourites.find( element => element.bookId === id))?.status;
   }
@@ -214,6 +226,13 @@ export class BooksListComponent implements AfterViewInit, OnInit {
 
   bookIsbn(isbn: string): string {
     return isbn !== '' ? isbn : '---';
+  }
+
+  openFavouritesSnackBar(favourite: boolean): void {
+    let config = new MatSnackBarConfig();
+    config.duration = 5000;
+    let message = favourite ? "Book added to favourites books" : 'Book removed from favourites books';
+    this.snackBar.open(message, "x", config);
   }
 
   sortData(sort: any){

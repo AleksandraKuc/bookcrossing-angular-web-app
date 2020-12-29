@@ -17,7 +17,7 @@
               <span class="material-icons">favorite</span>
             </button>
             <button mat-raised-button class="action-button" color="accent" *ngIf="isLoggedUser && isMyBook" (click)="editBook()">Edit book</button>
-            <button mat-raised-button class="action-button" color="accent" *ngIf="isLoggedUser && isMyBook" (click)="deleteBook()">Delete book</button>
+            <button mat-raised-button class="action-button" color="accent" *ngIf="isLoggedUser && isMyBook" (click)="openDeleteDialog()">Delete book</button>
             <button mat-raised-button class="action-button" color="accent" *ngIf="isLoggedUser && !isMyBook" (click)="reserveBook()">Reserve book</button>
           </div>
         </div>

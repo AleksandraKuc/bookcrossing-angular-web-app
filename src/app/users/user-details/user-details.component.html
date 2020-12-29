@@ -25,15 +25,15 @@
               Report User
             </button>
             <button mat-raised-button class="action-button" color="accent"
-                    *ngIf="isLoggedIn() && isAdmin() && !isProfileView() && isBlocked()" (click)="changeStatus()">
+                    *ngIf="isLoggedIn() && isAdmin() && !isProfileView() && isBlocked()" (click)="openChangeStatusDialog(false)">
               Unblock account
             </button>
             <button mat-raised-button class="action-button" color="accent"
-                    *ngIf="isLoggedIn() && isAdmin() && !isProfileView() && !isBlocked()" (click)="changeStatus()">
+                    *ngIf="isLoggedIn() && isAdmin() && !isProfileView() && !isBlocked()" (click)="openChangeStatusDialog(true)">
               Block account
             </button>
             <button mat-raised-button class="action-button" color="accent"
-                    *ngIf="isLoggedIn() && (isProfileView() || isAdmin())" (click)="deleteAccount()">
+                    *ngIf="isLoggedIn() && (isProfileView() || isAdmin())" (click)="openDeleteDialog()">
               Delete account
             </button>
           </div>

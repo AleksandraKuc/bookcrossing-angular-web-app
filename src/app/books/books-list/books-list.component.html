@@ -8,7 +8,7 @@
       </h2>
     </div>
   </div>
-  <div *ngIf="!isAccount && dataSource.data.length !== 0" [formGroup]="searchForm" class="row">
+  <div *ngIf="!isAccount " [formGroup]="searchForm" class="row">
     <div class="col-md-9">
       <mat-form-field class="col-md-3 mx-auto">
         <mat-label>Book title</mat-label>
@@ -124,7 +124,7 @@
   </div>
   <div class="row no-content" *ngIf="dataSource.data.length === 0">
     <div class="col-md-12 my-auto text-center">
-      <img src="assets/no-content.jpeg" alt="No items fount">
+      <i class="material-icons" style="font-size: 150px"> search_off </i>
       <h2>No items found</h2>
     </div>
   </div>

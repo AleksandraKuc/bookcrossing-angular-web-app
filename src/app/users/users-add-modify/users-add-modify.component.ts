@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {UsersService} from "../../core/services/users.service";
 import {UserDefinition} from "../../core/models/user-definition.model";
 import {SignUpInfo} from "../../shared/models/signup-info";
+import {MatSnackBar, MatSnackBarConfig} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-users-add-modify',
@@ -21,7 +22,7 @@ export class UsersAddModifyComponent implements OnInit {
               private route: ActivatedRoute,
               private router: Router,
               private usersService: UsersService,
-  ) { }
+              protected snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.form = this.generateForm();
@@ -42,7 +43,7 @@ export class UsersAddModifyComponent implements OnInit {
         city: new FormControl('', [Validators.required]),
         province: new FormControl('', [Validators.required]),
         phoneNumber: new FormControl(0, [Validators.pattern("^[0-9]+$")]),
-        startDate: new FormControl('', [Validators.required]),
+        startDate: new FormControl(''),
         addedBooks: new FormControl('', [Validators.required]),
       },
     );
@@ -83,15 +84,23 @@ export class UsersAddModifyComponent implements OnInit {
 
     this.usersService.updateUser(signupInfo)
       .subscribe(() => {
-          this.router.navigate([`/users/profile`]);
-        },
-        error => {
-          console.log(error);
-          this.loading = false;
-      });
+        this.openSuccessSnackBar();
+        this.router.navigate([`/users/profile`]);
+      },
+      error => {
+        console.log(error);
+        this.loading = false;
+    });
   }
 
   cancel() {
     this.router.navigate([`/users/profile`]);
+  }
+
+  openSuccessSnackBar(): void {
+    let config = new MatSnackBarConfig();
+    config.duration = 5000;
+    let message = "Account data changed";
+    this.snackBar.open(message, "x", config);
   }
 }

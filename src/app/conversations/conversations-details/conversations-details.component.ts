@@ -6,6 +6,9 @@ import { ConversationsService } from "../../core/services/conversations.service"
 import { MessageDefinition } from "../../core/models/message-definition.model";
 import { TokenStorageService } from "../../shared/helpers/services/token-storage.service";
 import {ConversationDefinition, ConvUser} from "../../core/models/conversation-definition.model";
+import {MatDialog} from "@angular/material/dialog";
+import {DeleteConfirmationComponent} from "../../shared/components/delete-confirmation/delete-confirmation.component";
+import {MatSnackBar, MatSnackBarConfig} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-conversations-details',
@@ -30,7 +33,9 @@ export class ConversationsDetailsComponent implements OnInit, AfterViewInit {
   constructor(protected conversationsService: ConversationsService,
               protected tokenStorage: TokenStorageService,
               protected route: ActivatedRoute,
-              protected router: Router) {
+              protected router: Router,
+              protected snackBar: MatSnackBar,
+              protected dialog: MatDialog) {
     this.setContentMessage();
     this.conversationId = history.state.conversationId;
     this.getConversations();
@@ -72,8 +77,11 @@ export class ConversationsDetailsComponent implements OnInit, AfterViewInit {
   getConversations(): void {
     this.conversationsService.getConversations().subscribe( data => {
       this.conversations = data;
-      this.conversationId = this.conversationId ? this.conversationId : this.conversations[0].id_conversation;
-      this.getConversationByUser();
+      this.conversationId = this.conversationId ? this.conversationId :
+        this.conversations.length > 0 ? this.conversations[0].id_conversation : null;
+      if (this.conversationId) {
+        this.getConversationByUser();
+      }
     });
   }
 
@@ -122,11 +130,27 @@ export class ConversationsDetailsComponent implements OnInit, AfterViewInit {
 
   removeConversation(){
     this.conversationsService.deleteConversation(this.conversationId).subscribe( () => {
+      this.openDeletedSnackBar();
       this.conversationId = null;
       this.recipient = null;
       this.messages = null;
       this.getConversations();
     })
+  }
+
+  openDeleteDialog() {
+    const dialogRef = this.dialog.open(DeleteConfirmationComponent, {
+      data: {
+        title: `delete conversation with ${this.recipient.username}`,
+        button: `Delete`
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.removeConversation();
+      }
+    });
   }
 
   get recipientName() {
@@ -152,5 +176,12 @@ export class ConversationsDetailsComponent implements OnInit, AfterViewInit {
 
   amIRecipient(sender: string): boolean {
     return sender === this.recipient.username
+  }
+
+  openDeletedSnackBar(): void {
+    let config = new MatSnackBarConfig();
+    config.duration = 5000;
+    let message = "Conversation deleted";
+    this.snackBar.open(message, "x", config);
   }
 }

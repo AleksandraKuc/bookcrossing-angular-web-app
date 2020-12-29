@@ -5,6 +5,7 @@ import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {TokenStorageService} from "../shared/helpers/services/token-storage.service";
 import {UsersService} from "../core/services/users.service";
 import {UserDefinition} from "../core/models/user-definition.model";
+import {MatSnackBar, MatSnackBarConfig} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-contact',
@@ -19,7 +20,8 @@ export class ContactComponent implements OnInit {
 
   constructor(protected contactService: ContactService,
               protected usersService: UsersService,
-              protected tokenStorage: TokenStorageService) { }
+              protected tokenStorage: TokenStorageService,
+              protected snackBar: MatSnackBar,) { }
 
   ngOnInit(): void {
     this.setFormValues();
@@ -62,11 +64,10 @@ export class ContactComponent implements OnInit {
 
       this.contactService.sendEmail(contact).subscribe(
         () => {
-          console.log('Email Sent successfully');
           this.reloadPage();
+          this.openSuccessSnackBar();
         },
         error => {
-          console.log('could not send email')
           this.loading = false;
         });
     }
@@ -80,4 +81,10 @@ export class ContactComponent implements OnInit {
     window.location.reload();
   }
 
+  openSuccessSnackBar(): void {
+    let config = new MatSnackBarConfig();
+    config.duration = 5000;
+    let message = "Email sent successfully.";
+    this.snackBar.open(message, "x", config);
+  }
 }

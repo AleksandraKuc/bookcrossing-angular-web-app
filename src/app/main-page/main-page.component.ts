@@ -24,4 +24,8 @@ export class MainPageComponent implements OnInit {
     this.token.signOut();
     window.location.reload();
   }
+
+  isLogged(): boolean {
+    return this.token.isLoggedIn();
+  }
 }

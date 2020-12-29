@@ -16,7 +16,7 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { SharedModule } from "./shared/shared.module";
 import { SpinnerOverlayComponent } from "./shared/components/spinner-overlay/spinner-overlay.component";
 import {BooksModule} from "./books/books.module";
-import {MatCardModule} from "@angular/material/card";
+import {DeleteConfirmationComponent} from "./shared/components/delete-confirmation/delete-confirmation.component";
 
 @NgModule({
   declarations: [
@@ -26,6 +26,7 @@ import {MatCardModule} from "@angular/material/card";
     MainNavigationComponent,
     MainPageComponent,
     SpinnerOverlayComponent,
+    DeleteConfirmationComponent
   ],
   imports: [
     AppRoutingModule,
