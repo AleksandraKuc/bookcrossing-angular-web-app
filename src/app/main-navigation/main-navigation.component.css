@@ -39,3 +39,7 @@ mat-nav-list {
   width: fit-content;
   margin-right: 20px;
 }
+
+img {
+  height: 50px;
+}

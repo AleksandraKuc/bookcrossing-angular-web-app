@@ -94,7 +94,7 @@ export class UserDetailsComponent implements OnInit {
   openDeleteDialog() {
     const dialogRef = this.dialog.open(DeleteConfirmationComponent, {
       data: {
-        title: `${this.form.get('username').value} user`,
+        title: this.isProfileView() ? `delete account` : `delete ${this.form.get('username').value} user`,
         button: `Delete`
       }
     });

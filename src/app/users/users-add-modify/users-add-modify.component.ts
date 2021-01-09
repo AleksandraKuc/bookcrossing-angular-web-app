@@ -43,8 +43,8 @@ export class UsersAddModifyComponent implements OnInit {
         city: new FormControl('', [Validators.required]),
         province: new FormControl('', [Validators.required]),
         phoneNumber: new FormControl(0, [Validators.pattern("^[0-9]+$")]),
-        startDate: new FormControl(''),
-        addedBooks: new FormControl('', [Validators.required]),
+        startDate: new FormControl({ value: '', disabled: true }),
+        addedBooks: new FormControl({ value: '', disabled: true }),
       },
     );
   }
