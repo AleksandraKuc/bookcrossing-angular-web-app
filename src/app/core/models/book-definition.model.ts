@@ -5,11 +5,11 @@ export class BookDefinition {
   title: string;
   description: string;
   author: string;
-  isbn: number;
+  isbn: string;
   category: string;
   history: BookHistoryDefinition;
 
-  constructor(title: string, description: string, author: string, isbn: number, category: string) {
+  constructor(title: string, description: string, author: string, isbn: string, category: string) {
     this.title = title;
     this.description = description;
     this.author = author;

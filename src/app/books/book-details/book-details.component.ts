@@ -144,7 +144,7 @@ export class BookDetailsComponent extends DetailsComponent<BookDefinition> imple
 
   reserveBook(): void {
     let message = "Hi, I want to reserve book \"" + this.getDetails().title + "\"";
-    if (this.getDetails().isbn !== null) {
+    if (this.getDetails().isbn !== null && this.getDetails().isbn != '') {
       message += " with isbn code " + this.getDetails().isbn;
     }
     let username = this.currentUser.username;

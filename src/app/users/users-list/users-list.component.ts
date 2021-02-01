@@ -100,15 +100,15 @@ export class UsersListComponent implements AfterViewInit, OnInit {
     this.bookService.updateBookHired(this.bookToHandOver, username).subscribe( () => {
       delete this.bookToHandOver;
       this.isHandOverMode = false;
-      window.location.reload();
-      this.openSuccessSnackBar();
+      this.router.navigate([`books`]);
+      this.openSuccessSnackBar(username);
     })
   }
 
-  openSuccessSnackBar(): void {
+  openSuccessSnackBar(username: string): void {
     let config = new MatSnackBarConfig();
     config.duration = 10000;
-    let message = "Book successfully hand over";
+    let message = `Book successfully hand over to ${username}`;
     this.snackBar.open(message, "x", config);
   }
 

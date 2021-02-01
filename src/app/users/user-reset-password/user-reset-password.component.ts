@@ -5,6 +5,7 @@ import { Router } from "@angular/router";
 import { UsersService } from "../../core/services/users.service";
 import {TokenStorageService} from "../../shared/helpers/services/token-storage.service";
 import {MatSnackBar, MatSnackBarConfig} from "@angular/material/snack-bar";
+import {MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-user-reset-password',
@@ -23,7 +24,8 @@ export class UserResetPasswordComponent implements OnInit {
   isSignUpFailed = false;
   errorMessage = '';
 
-  constructor(protected usersService: UsersService,
+  constructor(private dialogRef: MatDialogRef<UserResetPasswordComponent>,
+              protected usersService: UsersService,
               protected router: Router,
               protected tokenStorage: TokenStorageService,
               protected snackBar: MatSnackBar) { }
@@ -39,6 +41,7 @@ export class UserResetPasswordComponent implements OnInit {
           this.tokenStorage.saveToken(data.accessToken);
           this.tokenStorage.saveUsername(data.username);
           this.tokenStorage.saveAuthorities(data.authorities);
+          this.dialogRef.close();
           this.openResetPasswordSnackBar();
           this.isSignUpFailed = false;
           this.router.navigate(['/users/profile']);
@@ -60,7 +63,7 @@ export class UserResetPasswordComponent implements OnInit {
   openResetPasswordSnackBar(): void {
     let config = new MatSnackBarConfig();
     config.duration = 5000;
-    let message = "Report sent";
+    let message = "Password changed successfully";
     this.snackBar.open(message, "x", config);
   }
 }
